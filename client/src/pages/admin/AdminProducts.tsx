@@ -53,7 +53,7 @@ export default function AdminProducts() {
     setForm({
       name: p.name, nameEs: (p as any).nameEs || '', slug: p.slug,
       description: p.description, descriptionEs: (p as any).descriptionEs || '',
-      priceUSD: p.price, priceEUR: (p as any).priceEUR || 0, priceGBP: (p as any).priceGBP || 0, priceCRC: (p as any).priceCRC || 0,
+      priceUSD: Number((p as any).priceUSD) || 0, priceEUR: (p as any).priceEUR || 0, priceGBP: (p as any).priceGBP || 0, priceCRC: (p as any).priceCRC || 0,
       compareAtUSD: p.compareAtUSD || 0, categoryId: p.categoryId, sku: p.sku,
       stock: p.stock, weight: p.weight || 0,
       isActive: p.isActive, isFeatured: p.isFeatured,
@@ -264,7 +264,7 @@ export default function AdminProducts() {
                     </div>
                   </td>
                   <td className="px-4 py-3 text-gray-600">{product.category?.name}</td>
-                  <td className="px-4 py-3 text-right font-medium">${Number(product.price).toFixed(2)}</td>
+                  <td className="px-4 py-3 text-right font-medium">${Number((product as any).priceUSD ?? product.price ?? 0).toFixed(2)}</td>
                   <td className="px-4 py-3 text-right">
                     <span className={product.stock <= 0 ? 'text-red-600 font-medium' : product.stock < 10 ? 'text-yellow-600' : 'text-gray-700'}>
                       {product.stock}

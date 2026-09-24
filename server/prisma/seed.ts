@@ -378,6 +378,23 @@ async function main() {
   ]);
 
   console.log(`Created ${zones.length} shipping zones`);
+
+  // Remove legacy demo catalog (products + categories no longer sold)
+  const legacySkus = [
+    'ACC-CALAB-4', 'PS-OGOG-500', 'PW-FRESH-5L', 'PS-BRANDY-700',
+    'PO-RED-1L', 'PW-AGED-750', 'PO-RED-500', 'PW-FRESH-1L',
+  ];
+  const legacyCategorySlugs = ['palm-wine', 'palm-oil', 'palm-accessories'];
+  try {
+    const removedProducts = await prisma.product.deleteMany({ where: { sku: { in: legacySkus } } });
+    const removedCategories = await prisma.category.deleteMany({ where: { slug: { in: legacyCategorySlugs } } });
+    if (removedProducts.count || removedCategories.count) {
+      console.log(`Cleaned up ${removedProducts.count} legacy products, ${removedCategories.count} legacy categories`);
+    }
+  } catch (err) {
+    console.warn('Legacy catalog cleanup skipped:', err);
+  }
+
   console.log('Seed completed successfully!');
 }
 
