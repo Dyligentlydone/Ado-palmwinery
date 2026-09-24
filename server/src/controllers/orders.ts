@@ -247,7 +247,7 @@ export const adminGetAnalytics = async (req: Request, res: Response): Promise<vo
     const dateFrom = new Date();
     dateFrom.setDate(dateFrom.getDate() - daysBack);
 
-    const [orders, topProducts, revenueByDay] = await Promise.all([
+    const [orders, topProducts] = await Promise.all([
       prisma.order.findMany({
         where: { createdAt: { gte: dateFrom }, status: { not: 'CANCELLED' } },
         select: { total: true, status: true, createdAt: true },
@@ -259,16 +259,6 @@ export const adminGetAnalytics = async (req: Request, res: Response): Promise<vo
         orderBy: { _sum: { totalPrice: 'desc' } },
         take: 10,
       }),
-      prisma.$queryRaw`
-        SELECT DATE(created_at) as date,
-               SUM(total::numeric) as revenue,
-               COUNT(*) as orders
-        FROM orders
-        WHERE created_at >= ${dateFrom}
-          AND status != 'CANCELLED'
-        GROUP BY DATE(created_at)
-        ORDER BY date ASC
-      ` as Promise<Array<{ date: Date; revenue: number; orders: bigint }>>,
     ]);
 
     const totalRevenue = orders.reduce((sum, o) => sum + Number(o.total), 0);
@@ -276,9 +266,18 @@ export const adminGetAnalytics = async (req: Request, res: Response): Promise<vo
     const averageOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0;
 
     const ordersByStatus: Record<string, number> = {};
+    const revenueByDayMap: Record<string, { revenue: number; orders: number }> = {};
     orders.forEach(o => {
       ordersByStatus[o.status] = (ordersByStatus[o.status] || 0) + 1;
+      const day = o.createdAt.toISOString().split('T')[0];
+      if (!revenueByDayMap[day]) revenueByDayMap[day] = { revenue: 0, orders: 0 };
+      revenueByDayMap[day].revenue += Number(o.total);
+      revenueByDayMap[day].orders += 1;
     });
+
+    const revenueByDay = Object.entries(revenueByDayMap)
+      .map(([date, data]) => ({ date, revenue: Math.round(data.revenue * 100) / 100, orders: data.orders }))
+      .sort((a, b) => a.date.localeCompare(b.date));
 
     res.json({
       totalRevenue: Math.round(totalRevenue * 100) / 100,
@@ -291,11 +290,7 @@ export const adminGetAnalytics = async (req: Request, res: Response): Promise<vo
         revenue: Number(p._sum.totalPrice || 0),
       })),
       ordersByStatus,
-      revenueByDay: revenueByDay.map(r => ({
-        date: r.date.toISOString().split('T')[0],
-        revenue: Number(r.revenue),
-        orders: Number(r.orders),
-      })),
+      revenueByDay,
     });
   } catch (error) {
     console.error('Admin get analytics error:', error);
