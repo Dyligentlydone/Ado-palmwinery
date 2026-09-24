@@ -10,9 +10,13 @@ const DIVE_MS = 2200;         // how long the dive into the sun takes
 
 type Phase = 'gate' | 'diving' | 'denied' | 'done';
 
+// Module-level: persists across client-side navigations but resets on a real page load,
+// so the gate shows on every visit without kicking users back out mid-session.
+let hasEntered = false;
+
 export default function SunsetIntro() {
   const { t } = useTranslation();
-  const [phase, setPhase] = useState<Phase>('gate');
+  const [phase, setPhase] = useState<Phase>(hasEntered ? 'done' : 'gate');
   const [p, setP] = useState(0);
   const reducedMotion = useRef(
     window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -36,7 +40,7 @@ export default function SunsetIntro() {
       const eased = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
       setP(eased);
       if (t < 1) requestAnimationFrame(tick);
-      else setPhase('done');
+      else { hasEntered = true; setPhase('done'); }
     };
     requestAnimationFrame(tick);
   };
