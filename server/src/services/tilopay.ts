@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { TiloPayCreatePaymentRequest, TiloPayPaymentResponse } from '../types';
 
 const TILO_PAY_BASE_URL = process.env.TILO_PAY_BASE_URL || 'https://api.tilopay.com/v1';
@@ -97,7 +98,6 @@ class TiloPayService {
   }
 
   verifyWebhookSignature(payload: string, signature: string): boolean {
-    const crypto = require('crypto');
     const webhookSecret = process.env.TILO_PAY_WEBHOOK_SECRET || '';
     const expectedSignature = crypto
       .createHmac('sha256', webhookSecret)
