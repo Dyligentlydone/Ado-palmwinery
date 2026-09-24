@@ -44,10 +44,10 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('currency', curr);
   };
 
-  const formatPrice = (amount: number, curr?: Currency) => {
+  const formatPrice = (amount: number | string, curr?: Currency) => {
     const c = curr || currency;
     const symbol = CURRENCY_SYMBOLS[c];
-    return `${symbol}${amount.toFixed(2)}`;
+    return `${symbol}${Number(amount).toFixed(2)}`;
   };
 
   return (
