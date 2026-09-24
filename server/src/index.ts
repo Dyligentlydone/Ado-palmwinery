@@ -67,19 +67,19 @@ app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// 404 handler for API routes
+app.use('/api/{*path}', (_req, res) => {
+  res.status(404).json({ error: 'Route not found' });
+});
+
 // Serve frontend in production
 if (isProduction) {
   const clientDist = path.join(__dirname, '../../client/dist');
   app.use(express.static(clientDist));
-  app.get('*', (_req, res) => {
+  app.get('{*path}', (_req, res) => {
     res.sendFile(path.join(clientDist, 'index.html'));
   });
 }
-
-// 404 handler for API routes
-app.use('/api/*', (_req, res) => {
-  res.status(404).json({ error: 'Route not found' });
-});
 
 // Global error handler
 app.use((err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
