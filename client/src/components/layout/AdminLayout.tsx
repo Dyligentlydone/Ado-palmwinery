@@ -26,7 +26,10 @@ export default function AdminLayout() {
       {/* Sidebar */}
       <aside className="w-64 bg-primary-950 text-white flex flex-col">
         <div className="p-6">
-          <h1 className="text-xl font-bold font-[family-name:var(--font-heading)]">ADO Admin</h1>
+          <div className="bg-white rounded-lg p-2 inline-block mb-3">
+            <img src="/images/logo.png" alt="ADO Palmwinery" className="h-16 w-auto" />
+          </div>
+          <h1 className="text-lg font-bold">Admin Panel</h1>
           <p className="text-primary-300 text-sm mt-1">{user.email}</p>
         </div>
 

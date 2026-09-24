@@ -30,6 +30,7 @@ export default function Login() {
     <div className="min-h-[80vh] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
+          <img src="/images/logo.png" alt="ADO Palmwinery" className="h-24 w-auto mx-auto mb-4" />
           <h1 className="text-3xl font-bold text-gray-900 font-[family-name:var(--font-heading)]">
             {t('auth.login')}
           </h1>

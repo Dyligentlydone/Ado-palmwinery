@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Shield } from 'lucide-react';
 
 export default function AdminLogin() {
   const { login } = useAuth();
@@ -29,11 +28,8 @@ export default function AdminLogin() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Shield size={32} className="text-primary-700" />
-          </div>
+          <img src="/images/logo.png" alt="ADO Palmwinery" className="h-24 w-auto mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-gray-900 font-[family-name:var(--font-heading)]">Admin Login</h1>
-          <p className="text-gray-500 text-sm mt-1">ADO Palmwinery Administration</p>
         </div>
 
         <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">

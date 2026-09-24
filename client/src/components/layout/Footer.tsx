@@ -9,9 +9,9 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-xl font-bold mb-3 font-[family-name:var(--font-heading)]">
-              ADO Palmwinery
-            </h3>
+            <div className="bg-white rounded-lg p-2 inline-block mb-3">
+              <img src="/images/logo.png" alt="ADO Palmwinery" className="h-16 w-auto" />
+            </div>
             <p className="text-primary-200 text-sm leading-relaxed">
               {t('footer.aboutText')}
             </p>
