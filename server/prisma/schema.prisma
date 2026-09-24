@@ -33,6 +33,7 @@ enum Currency {
   USD
   EUR
   GBP
+  CRC
 }
 
 model User {
@@ -103,6 +104,7 @@ model Product {
   priceUSD      Decimal   @db.Decimal(10, 2)
   priceEUR      Decimal?  @db.Decimal(10, 2)
   priceGBP      Decimal?  @db.Decimal(10, 2)
+  priceCRC      Decimal?  @db.Decimal(10, 2)
   compareAtUSD  Decimal?  @db.Decimal(10, 2) // Original price for sales
   images        String[]  // Array of image URLs
   categoryId    String

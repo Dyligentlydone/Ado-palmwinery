@@ -176,7 +176,7 @@ export const adminCreateProduct = async (req: Request, res: Response): Promise<v
   try {
     const {
       name, nameEs, slug, description, descriptionEs,
-      priceUSD, priceEUR, priceGBP, compareAtUSD,
+      priceUSD, priceEUR, priceGBP, priceCRC, compareAtUSD,
       images, categoryId, sku, stock, weight,
       isActive, isFeatured, tags,
     } = req.body;
@@ -184,7 +184,7 @@ export const adminCreateProduct = async (req: Request, res: Response): Promise<v
     const product = await prisma.product.create({
       data: {
         name, nameEs, slug, description, descriptionEs,
-        priceUSD, priceEUR, priceGBP, compareAtUSD,
+        priceUSD, priceEUR, priceGBP, priceCRC, compareAtUSD,
         images: images || [],
         categoryId, sku, stock: stock || 0,
         weight, isActive: isActive ?? true,

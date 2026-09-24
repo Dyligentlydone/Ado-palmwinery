@@ -40,6 +40,7 @@ class ShippingService {
       USD: 1,
       EUR: 1.10,
       GBP: 1.27,
+      CRC: 0.0019,
     };
 
     const usdAmount = amount * toUSD[from];

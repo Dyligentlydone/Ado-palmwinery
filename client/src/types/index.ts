@@ -107,7 +107,7 @@ export interface Order {
   user?: Pick<User, 'id' | 'email' | 'firstName' | 'lastName'>;
 }
 
-export type Currency = 'USD' | 'EUR' | 'GBP';
+export type Currency = 'USD' | 'EUR' | 'GBP' | 'CRC';
 export type Language = 'en' | 'es';
 export type OrderStatus = 'PENDING' | 'CONFIRMED' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED' | 'REFUNDED';
 export type PaymentStatus = 'PENDING' | 'COMPLETED' | 'FAILED' | 'REFUNDED';
@@ -151,4 +151,5 @@ export const CURRENCY_SYMBOLS: Record<Currency, string> = {
   USD: '$',
   EUR: '\u20ac',
   GBP: '\u00a3',
+  CRC: '\u20a1',
 };

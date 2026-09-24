@@ -1,4 +1,4 @@
-export const SUPPORTED_CURRENCIES = ['USD', 'EUR', 'GBP'] as const;
+export const SUPPORTED_CURRENCIES = ['USD', 'EUR', 'GBP', 'CRC'] as const;
 export type SupportedCurrency = typeof SUPPORTED_CURRENCIES[number];
 
 export const SUPPORTED_LANGUAGES = ['en', 'es'] as const;
@@ -11,6 +11,7 @@ export const CURRENCY_SYMBOLS: Record<SupportedCurrency, string> = {
   USD: '$',
   EUR: '€',
   GBP: '£',
+  CRC: '₡',
 };
 
 export const ORDER_STATUSES = [

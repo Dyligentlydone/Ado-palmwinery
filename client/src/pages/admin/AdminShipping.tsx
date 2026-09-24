@@ -105,7 +105,7 @@ export default function AdminShipping() {
                 <div>
                   <label className="block text-xs font-medium text-gray-500 mb-1">Currency</label>
                   <select value={form.currency} onChange={e => setForm({ ...form, currency: e.target.value })} className="w-full px-3 py-2 border rounded-lg text-sm">
-                    <option>USD</option><option>EUR</option><option>GBP</option>
+                    <option>USD</option><option>EUR</option><option>GBP</option><option>CRC</option>
                   </select>
                 </div>
               </div>

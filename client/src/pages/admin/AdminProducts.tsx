@@ -5,14 +5,14 @@ import { Product, Category } from '../../types';
 
 interface ProductForm {
   name: string; nameEs: string; slug: string; description: string; descriptionEs: string;
-  priceUSD: number; priceEUR: number; priceGBP: number; compareAtUSD: number;
+  priceUSD: number; priceEUR: number; priceGBP: number; priceCRC: number; compareAtUSD: number;
   categoryId: string; sku: string; stock: number; weight: number;
   isActive: boolean; isFeatured: boolean; tags: string; images: string;
 }
 
 const emptyForm: ProductForm = {
   name: '', nameEs: '', slug: '', description: '', descriptionEs: '',
-  priceUSD: 0, priceEUR: 0, priceGBP: 0, compareAtUSD: 0,
+  priceUSD: 0, priceEUR: 0, priceGBP: 0, priceCRC: 0, compareAtUSD: 0,
   categoryId: '', sku: '', stock: 0, weight: 0,
   isActive: true, isFeatured: false, tags: '', images: '',
 };
@@ -53,7 +53,7 @@ export default function AdminProducts() {
     setForm({
       name: p.name, nameEs: (p as any).nameEs || '', slug: p.slug,
       description: p.description, descriptionEs: (p as any).descriptionEs || '',
-      priceUSD: p.price, priceEUR: (p as any).priceEUR || 0, priceGBP: (p as any).priceGBP || 0,
+      priceUSD: p.price, priceEUR: (p as any).priceEUR || 0, priceGBP: (p as any).priceGBP || 0, priceCRC: (p as any).priceCRC || 0,
       compareAtUSD: p.compareAtUSD || 0, categoryId: p.categoryId, sku: p.sku,
       stock: p.stock, weight: p.weight || 0,
       isActive: p.isActive, isFeatured: p.isFeatured,
@@ -156,7 +156,7 @@ export default function AdminProducts() {
                 <textarea value={form.descriptionEs} onChange={e => updateField('descriptionEs', e.target.value)} rows={3} className="w-full px-3 py-2 border rounded-lg text-sm" />
               </div>
 
-              <div className="grid grid-cols-4 gap-4">
+              <div className="grid grid-cols-5 gap-4">
                 <div>
                   <label className="block text-xs font-medium text-gray-500 mb-1">Price USD</label>
                   <input type="number" step="0.01" value={form.priceUSD} onChange={e => updateField('priceUSD', +e.target.value)} required className="w-full px-3 py-2 border rounded-lg text-sm" />
@@ -168,6 +168,10 @@ export default function AdminProducts() {
                 <div>
                   <label className="block text-xs font-medium text-gray-500 mb-1">Price GBP</label>
                   <input type="number" step="0.01" value={form.priceGBP} onChange={e => updateField('priceGBP', +e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1">Price CRC</label>
+                  <input type="number" step="0.01" value={form.priceCRC} onChange={e => updateField('priceCRC', +e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" />
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-gray-500 mb-1">Compare USD</label>

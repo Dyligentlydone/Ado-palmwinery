@@ -37,7 +37,7 @@ export const createOrder = async (req: AuthRequest, res: Response): Promise<void
     }
 
     // Verify stock and calculate subtotal
-    const priceField = `price${currency}` as 'priceUSD' | 'priceEUR' | 'priceGBP';
+    const priceField = `price${currency}` as 'priceUSD' | 'priceEUR' | 'priceGBP' | 'priceCRC';
     let subtotal = 0;
     let totalWeight = 0;
 
