@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import {
   calculateShipping, getShippingZones,
-  adminCreateShippingZone, adminUpdateShippingZone,
+  adminCreateShippingZone, adminUpdateShippingZone, adminDeleteShippingZone,
 } from '../controllers/shipping';
 import { authenticate, requireAdmin } from '../middleware/auth';
 
@@ -13,5 +13,6 @@ router.get('/zones', getShippingZones);
 // Admin routes
 router.post('/zones', authenticate, requireAdmin, adminCreateShippingZone);
 router.put('/zones/:id', authenticate, requireAdmin, adminUpdateShippingZone);
+router.delete('/zones/:id', authenticate, requireAdmin, adminDeleteShippingZone);
 
 export default router;

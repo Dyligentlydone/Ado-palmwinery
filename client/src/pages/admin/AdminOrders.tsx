@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { adminAPI } from '../../services/api';
 import { Order } from '../../types';
 
@@ -95,8 +95,8 @@ export default function AdminOrders() {
             </thead>
             <tbody className="divide-y divide-gray-50">
               {orders.map(order => (
-                <>
-                  <tr key={order.id} className="hover:bg-gray-50 cursor-pointer" onClick={() => setExpandedId(expandedId === order.id ? null : order.id)}>
+                <Fragment key={order.id}>
+                  <tr className="hover:bg-gray-50 cursor-pointer" onClick={() => setExpandedId(expandedId === order.id ? null : order.id)}>
                     <td className="px-4 py-3 font-medium text-gray-900">{order.orderNumber}</td>
                     <td className="px-4 py-3 text-gray-600">
                       {order.user?.firstName} {order.user?.lastName}
@@ -122,7 +122,7 @@ export default function AdminOrders() {
                     </td>
                   </tr>
                   {expandedId === order.id && (
-                    <tr key={order.id + '-detail'}>
+                    <tr>
                       <td colSpan={6} className="px-4 py-4 bg-gray-50">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                           <div>
@@ -165,7 +165,7 @@ export default function AdminOrders() {
                       </td>
                     </tr>
                   )}
-                </>
+                </Fragment>
               ))}
             </tbody>
           </table>

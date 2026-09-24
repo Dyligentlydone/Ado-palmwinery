@@ -247,7 +247,7 @@ export const adminGetAnalytics = async (req: Request, res: Response): Promise<vo
     const dateFrom = new Date();
     dateFrom.setDate(dateFrom.getDate() - daysBack);
 
-    const [orders, topProducts] = await Promise.all([
+    const [orders, topProducts, unitsSold] = await Promise.all([
       prisma.order.findMany({
         where: { createdAt: { gte: dateFrom }, status: { not: 'CANCELLED' } },
         select: { total: true, status: true, createdAt: true },
@@ -258,6 +258,10 @@ export const adminGetAnalytics = async (req: Request, res: Response): Promise<vo
         where: { order: { createdAt: { gte: dateFrom }, status: { not: 'CANCELLED' } } },
         orderBy: { _sum: { totalPrice: 'desc' } },
         take: 10,
+      }),
+      prisma.orderItem.aggregate({
+        _sum: { quantity: true },
+        where: { order: { createdAt: { gte: dateFrom }, status: { not: 'CANCELLED' } } },
       }),
     ]);
 
@@ -282,6 +286,7 @@ export const adminGetAnalytics = async (req: Request, res: Response): Promise<vo
     res.json({
       totalRevenue: Math.round(totalRevenue * 100) / 100,
       totalOrders,
+      totalUnitsSold: unitsSold._sum.quantity || 0,
       averageOrderValue: Math.round(averageOrderValue * 100) / 100,
       topProducts: topProducts.map(p => ({
         productId: p.productId,

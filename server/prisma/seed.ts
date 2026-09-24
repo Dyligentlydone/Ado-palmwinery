@@ -313,7 +313,18 @@ async function main() {
 
   console.log(`Created ${products.length} products`);
 
-  // Create shipping zones
+  // Create shipping zones — replace seeded zones so redeploys don't stack duplicates
+  const seededZoneNames = [
+    'United States', 'Canada', 'United Kingdom',
+    'European Union', 'Costa Rica', 'Mexico & Central America',
+  ];
+  const removedZones = await prisma.shippingZone.deleteMany({
+    where: { name: { in: seededZoneNames } },
+  });
+  if (removedZones.count > 0) {
+    console.log(`Replaced ${removedZones.count} existing seeded shipping zones`);
+  }
+
   const zones = await Promise.all([
     prisma.shippingZone.create({
       data: {

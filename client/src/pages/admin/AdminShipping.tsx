@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Plus, Edit2, X } from 'lucide-react';
+import { Plus, Edit2, X, Trash2 } from 'lucide-react';
 import { adminAPI } from '../../services/api';
 
 interface ShippingZone {
@@ -62,6 +62,16 @@ export default function AdminShipping() {
       console.error('Save failed:', err);
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Delete this shipping zone?')) return;
+    try {
+      await adminAPI.deleteShippingZone(id);
+      fetchZones();
+    } catch (err) {
+      console.error('Delete failed:', err);
     }
   };
 
@@ -159,9 +169,14 @@ export default function AdminShipping() {
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right">
-                    <button onClick={() => openEdit(z)} className="p-1.5 text-gray-400 hover:text-primary-600">
-                      <Edit2 size={16} />
-                    </button>
+                    <div className="flex items-center justify-end gap-2">
+                      <button onClick={() => openEdit(z)} className="p-1.5 text-gray-400 hover:text-primary-600">
+                        <Edit2 size={16} />
+                      </button>
+                      <button onClick={() => handleDelete(z.id)} className="p-1.5 text-gray-400 hover:text-red-600">
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

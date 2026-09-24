@@ -31,7 +31,7 @@ export default function Dashboard() {
     { label: 'Total Revenue', value: `$${data.totalRevenue.toLocaleString()}`, icon: DollarSign, color: 'bg-green-50 text-green-600' },
     { label: 'Total Orders', value: data.totalOrders, icon: ShoppingBag, color: 'bg-blue-50 text-blue-600' },
     { label: 'Avg Order Value', value: `$${data.averageOrderValue.toFixed(2)}`, icon: TrendingUp, color: 'bg-purple-50 text-purple-600' },
-    { label: 'Products Sold', value: data.topProducts.reduce((s, p) => s + p.totalSold, 0), icon: Package, color: 'bg-orange-50 text-orange-600' },
+    { label: 'Products Sold', value: data.totalUnitsSold, icon: Package, color: 'bg-orange-50 text-orange-600' },
   ];
 
   return (

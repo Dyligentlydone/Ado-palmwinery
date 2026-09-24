@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Plus, Edit2, Trash2, X } from 'lucide-react';
-import { adminAPI, productsAPI } from '../../services/api';
+import { Plus, Edit2, Trash2, X, FolderOpen } from 'lucide-react';
+import { adminAPI } from '../../services/api';
 import { Product, Category } from '../../types';
+
+interface AdminCategory extends Category {
+  nameEs?: string;
+  isActive: boolean;
+  sortOrder: number;
+}
 
 interface ProductForm {
   name: string; nameEs: string; slug: string; description: string; descriptionEs: string;
@@ -28,6 +34,11 @@ export default function AdminProducts() {
   const [form, setForm] = useState<ProductForm>(emptyForm);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [showCats, setShowCats] = useState(false);
+  const [catForm, setCatForm] = useState({ name: '', nameEs: '', slug: '', sortOrder: 0, isActive: true });
+  const [catEditingId, setCatEditingId] = useState<string | null>(null);
+  const [catSaving, setCatSaving] = useState(false);
+  const [catError, setCatError] = useState('');
 
   const fetchProducts = () => {
     setLoading(true);
@@ -39,8 +50,12 @@ export default function AdminProducts() {
       .finally(() => setLoading(false));
   };
 
+  const fetchCategories = () => {
+    adminAPI.getCategories().then(r => setCategories(r.data)).catch(() => {});
+  };
+
   useEffect(() => { fetchProducts(); }, [page]);
-  useEffect(() => { productsAPI.getCategories().then(r => setCategories(r.data)); }, []);
+  useEffect(() => { fetchCategories(); }, []);
 
   const openCreate = () => {
     setForm(emptyForm);
@@ -101,17 +116,118 @@ export default function AdminProducts() {
   const updateField = (field: keyof ProductForm, value: unknown) =>
     setForm(prev => ({ ...prev, [field]: value }));
 
+  const openCatEdit = (c: AdminCategory) => {
+    setCatForm({ name: c.name, nameEs: c.nameEs || '', slug: c.slug, sortOrder: c.sortOrder ?? 0, isActive: c.isActive });
+    setCatEditingId(c.id);
+    setCatError('');
+  };
+
+  const resetCatForm = () => {
+    setCatForm({ name: '', nameEs: '', slug: '', sortOrder: 0, isActive: true });
+    setCatEditingId(null);
+    setCatError('');
+  };
+
+  const handleCatSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setCatSaving(true);
+    setCatError('');
+    try {
+      if (catEditingId) {
+        await adminAPI.updateCategory(catEditingId, catForm);
+      } else {
+        await adminAPI.createCategory(catForm);
+      }
+      resetCatForm();
+      fetchCategories();
+    } catch (err: any) {
+      setCatError(err.response?.data?.error || 'Failed to save category');
+    } finally {
+      setCatSaving(false);
+    }
+  };
+
+  const handleCatDelete = async (id: string) => {
+    if (!confirm('Delete this category?')) return;
+    setCatError('');
+    try {
+      await adminAPI.deleteCategory(id);
+      fetchCategories();
+    } catch (err: any) {
+      setCatError(err.response?.data?.error || 'Failed to delete category');
+    }
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Products</h1>
-        <button
-          onClick={openCreate}
-          className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 text-sm font-medium"
-        >
-          <Plus size={16} /> Add Product
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => { setShowCats(true); resetCatForm(); }}
+            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 text-sm font-medium"
+          >
+            <FolderOpen size={16} /> Categories
+          </button>
+          <button
+            onClick={openCreate}
+            className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 text-sm font-medium"
+          >
+            <Plus size={16} /> Add Product
+          </button>
+        </div>
       </div>
+
+      {/* Categories Modal */}
+      {showCats && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold">Categories</h2>
+              <button onClick={() => setShowCats(false)} className="text-gray-400 hover:text-gray-600"><X size={20} /></button>
+            </div>
+
+            {catError && <p className="text-sm text-red-600 mb-3">{catError}</p>}
+
+            <div className="divide-y divide-gray-100 mb-5">
+              {(categories as AdminCategory[]).map(c => (
+                <div key={c.id} className="py-2.5 flex items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-gray-900 truncate">{c.name}
+                      {!c.isActive && <span className="ml-2 text-xs text-gray-400">(inactive)</span>}
+                    </p>
+                    <p className="text-xs text-gray-400">{c.slug} · {c.productCount ?? 0} products</p>
+                  </div>
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button onClick={() => openCatEdit(c)} className="p-1.5 text-gray-400 hover:text-primary-600"><Edit2 size={15} /></button>
+                    <button onClick={() => handleCatDelete(c.id)} className="p-1.5 text-gray-400 hover:text-red-600"><Trash2 size={15} /></button>
+                  </div>
+                </div>
+              ))}
+              {categories.length === 0 && <p className="text-sm text-gray-500 py-4">No categories yet</p>}
+            </div>
+
+            <form onSubmit={handleCatSubmit} className="border-t border-gray-100 pt-4 space-y-3">
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{catEditingId ? 'Edit Category' : 'New Category'}</p>
+              <div className="grid grid-cols-2 gap-3">
+                <input value={catForm.name} onChange={e => setCatForm({ ...catForm, name: e.target.value })} required placeholder="Name" className="px-3 py-2 border rounded-lg text-sm" />
+                <input value={catForm.nameEs} onChange={e => setCatForm({ ...catForm, nameEs: e.target.value })} placeholder="Name (Spanish)" className="px-3 py-2 border rounded-lg text-sm" />
+                <input value={catForm.slug} onChange={e => setCatForm({ ...catForm, slug: e.target.value })} required placeholder="slug" className="px-3 py-2 border rounded-lg text-sm" />
+                <input type="number" value={catForm.sortOrder} onChange={e => setCatForm({ ...catForm, sortOrder: +e.target.value })} placeholder="Sort order" className="px-3 py-2 border rounded-lg text-sm" />
+              </div>
+              <label className="flex items-center gap-2 text-sm">
+                <input type="checkbox" checked={catForm.isActive} onChange={e => setCatForm({ ...catForm, isActive: e.target.checked })} /> Active
+              </label>
+              <div className="flex justify-end gap-3">
+                {catEditingId && <button type="button" onClick={resetCatForm} className="px-4 py-2 text-sm text-gray-600">Cancel edit</button>}
+                <button type="submit" disabled={catSaving} className="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium disabled:opacity-50">
+                  {catSaving ? 'Saving...' : catEditingId ? 'Update' : 'Create'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Product Form Modal */}
       {showForm && (

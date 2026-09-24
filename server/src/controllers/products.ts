@@ -238,6 +238,19 @@ export const adminDeleteProduct = async (req: Request, res: Response): Promise<v
   }
 };
 
+export const adminGetCategories = async (_req: Request, res: Response): Promise<void> => {
+  try {
+    const categories = await prisma.category.findMany({
+      orderBy: { sortOrder: 'asc' },
+      include: { _count: { select: { products: true } } },
+    });
+    res.json(categories.map(c => ({ ...c, productCount: c._count.products })));
+  } catch (error) {
+    console.error('Admin get categories error:', error);
+    res.status(500).json({ error: 'Failed to fetch categories' });
+  }
+};
+
 export const adminCreateCategory = async (req: Request, res: Response): Promise<void> => {
   try {
     const { name, nameEs, slug, description, descriptionEs, image, sortOrder } = req.body;
@@ -269,5 +282,26 @@ export const adminUpdateCategory = async (req: Request, res: Response): Promise<
     }
     console.error('Admin update category error:', error);
     res.status(500).json({ error: 'Failed to update category' });
+  }
+};
+
+export const adminDeleteCategory = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const productCount = await prisma.product.count({
+      where: { categoryId: req.params.id as string },
+    });
+    if (productCount > 0) {
+      res.status(400).json({ error: `Category still has ${productCount} product(s) — reassign or delete them first` });
+      return;
+    }
+    await prisma.category.delete({ where: { id: req.params.id as string } });
+    res.json({ message: 'Category deleted' });
+  } catch (error: any) {
+    if (error.code === 'P2025') {
+      res.status(404).json({ error: 'Category not found' });
+      return;
+    }
+    console.error('Admin delete category error:', error);
+    res.status(500).json({ error: 'Failed to delete category' });
   }
 };

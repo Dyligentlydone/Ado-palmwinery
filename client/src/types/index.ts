@@ -125,6 +125,7 @@ export interface PaginatedResponse<T> {
 export interface AnalyticsData {
   totalRevenue: number;
   totalOrders: number;
+  totalUnitsSold: number;
   averageOrderValue: number;
   topProducts: Array<{
     productId: string;

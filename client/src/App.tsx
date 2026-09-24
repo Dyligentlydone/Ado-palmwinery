@@ -23,6 +23,7 @@ import Dashboard from './pages/admin/Dashboard';
 import AdminOrders from './pages/admin/AdminOrders';
 import AdminProducts from './pages/admin/AdminProducts';
 import AdminShipping from './pages/admin/AdminShipping';
+import AdminCustomers from './pages/admin/AdminCustomers';
 
 export default function App() {
   return (
@@ -51,6 +52,7 @@ export default function App() {
                 <Route path="orders" element={<AdminOrders />} />
                 <Route path="products" element={<AdminProducts />} />
                 <Route path="shipping" element={<AdminShipping />} />
+                <Route path="customers" element={<AdminCustomers />} />
               </Route>
             </Routes>
           </CartProvider>

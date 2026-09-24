@@ -66,3 +66,17 @@ export const adminUpdateShippingZone = async (req: Request, res: Response): Prom
     res.status(500).json({ error: 'Failed to update shipping zone' });
   }
 };
+
+export const adminDeleteShippingZone = async (req: Request, res: Response): Promise<void> => {
+  try {
+    await prisma.shippingZone.delete({ where: { id: req.params.id as string } });
+    res.json({ message: 'Shipping zone deleted' });
+  } catch (error: any) {
+    if (error.code === 'P2025') {
+      res.status(404).json({ error: 'Shipping zone not found' });
+      return;
+    }
+    console.error('Delete shipping zone error:', error);
+    res.status(500).json({ error: 'Failed to delete shipping zone' });
+  }
+};

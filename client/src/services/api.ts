@@ -103,10 +103,14 @@ export const adminAPI = {
     api.put(`/products/admin/${id}`, data),
   deleteProduct: (id: string) =>
     api.delete(`/products/admin/${id}`),
+  getCategories: () =>
+    api.get('/products/admin/categories'),
   createCategory: (data: Record<string, unknown>) =>
     api.post('/products/admin/categories', data),
   updateCategory: (id: string, data: Record<string, unknown>) =>
     api.put(`/products/admin/categories/${id}`, data),
+  deleteCategory: (id: string) =>
+    api.delete(`/products/admin/categories/${id}`),
   getOrders: (params?: Record<string, string | number>) =>
     api.get('/orders/admin/all', { params }),
   updateOrder: (id: string, data: Record<string, unknown>) =>
@@ -119,6 +123,9 @@ export const adminAPI = {
     api.post('/shipping/zones', data),
   updateShippingZone: (id: string, data: Record<string, unknown>) =>
     api.put(`/shipping/zones/${id}`, data),
+  deleteShippingZone: (id: string) =>
+    api.delete(`/shipping/zones/${id}`),
+  getUsers: () => api.get('/auth/admin/users'),
 };
 
 export default api;

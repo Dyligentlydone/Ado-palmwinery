@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { register, login, getProfile, updateProfile } from '../controllers/auth';
-import { authenticate } from '../middleware/auth';
+import { register, login, getProfile, updateProfile, adminGetUsers } from '../controllers/auth';
+import { authenticate, requireAdmin } from '../middleware/auth';
 import { validate, emailRegex } from '../middleware/validate';
 
 const router = Router();
@@ -19,5 +19,6 @@ router.post('/login', validate({
 
 router.get('/profile', authenticate, getProfile);
 router.put('/profile', authenticate, updateProfile);
+router.get('/admin/users', authenticate, requireAdmin, adminGetUsers);
 
 export default router;
