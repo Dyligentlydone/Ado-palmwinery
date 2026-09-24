@@ -1,37 +1,46 @@
 {
+  "intro": {
+    "headline": "Completa Tu Atardecer",
+    "legal": "Debes tener la edad legal para beber para ingresar",
+    "question": "¿Tienes 18 años o más?",
+    "yes": "Sí",
+    "no": "No",
+    "denied": "Lo sentimos, debes tener la edad legal para beber para visitar este sitio.",
+    "goBack": "Volver"
+  },
   "nav": {
     "home": "Inicio",
     "products": "Productos",
     "cart": "Carrito",
-    "login": "Iniciar Sesion",
+    "login": "Iniciar Sesión",
     "register": "Registrarse",
     "myOrders": "Mis Pedidos",
     "profile": "Perfil",
     "admin": "Administrador",
-    "logout": "Cerrar Sesion"
+    "logout": "Cerrar Sesión"
   },
   "home": {
     "hero": {
       "title": "Conquista Cada Atardecer",
-      "subtitle": "Tres generaciones de tradicion familiar. Vino de Coyol natural y probiotico, gin de palma El Fuego de Coyol y cocteles de playa — embotellados en Liberia, Costa Rica desde 1979.",
+      "subtitle": "Tres generaciones de tradición familiar. Vino de Coyol natural y probiótico, gin de palma El Fuego de Coyol y cócteles de playa — embotellados en Liberia, Costa Rica desde 1979.",
       "cta": "Comprar Ahora",
-      "secondary": "Saber Mas"
+      "secondary": "Saber Más"
     },
     "featured": {
       "title": "Productos Destacados",
-      "subtitle": "Nuestras selecciones mas populares, elegidas para ti"
+      "subtitle": "Nuestras selecciones más populares, elegidas para ti"
     },
     "categories": {
-      "title": "Explorar por Categoria",
+      "title": "Explorar por Categoría",
       "subtitle": "Explora nuestra gama completa de productos de palma"
     },
     "about": {
       "title": "Nuestra Historia",
-      "text": "Fundada en 1979 por el Profesor Benedict Onochie — el Ononenyi de Onitsha — Ado Palm Winery fue pionera en embotellar el sabor rico, dulce y terroso de la savia de palma fermentada naturalmente. Hoy, bajo la direccion de Francis N. Onochie, Director General de tercera generacion, y con sede en Liberia, Costa Rica, llevamos el Vino de Coyol — una bebida natural, probiotica y patrimonio nacional de Costa Rica — a playas y hogares de todo el mundo.",
+      "text": "Fundada en 1979 por el Profesor Benedict Onochie — el Ononenyi de Onitsha — Ado Palm Winery fue pionera en embotellar el sabor rico, dulce y terroso de la savia de palma fermentada naturalmente. Hoy, bajo la dirección de Francis N. Onochie, Director General de tercera generación, y con sede en Liberia, Costa Rica, llevamos el Vino de Coyol — una bebida natural, probiótica y patrimonio nacional de Costa Rica — a playas y hogares de todo el mundo.",
       "quality": "Tres Generaciones de Herencia",
-      "qualityText": "Dirigida por la familia desde 1979 — de Onitsha, Nigeria a nuestra sede en la Costa Pacifica de Liberia, Costa Rica.",
-      "sustainable": "Natural y Probiotico",
-      "sustainableText": "El Vino de Coyol es una bebida totalmente natural y probiotica elaborada de savia de palma fermentada — patrimonio nacional de Costa Rica.",
+      "qualityText": "Dirigida por la familia desde 1979 — de Onitsha, Nigeria a nuestra sede en la Costa Pacífica de Liberia, Costa Rica.",
+      "sustainable": "Natural y Probiótico",
+      "sustainableText": "El Vino de Coyol es una bebida totalmente natural y probiótica elaborada de savia de palma fermentada — patrimonio nacional de Costa Rica.",
       "worldwide": "De Costa Rica al Mundo",
       "worldwideText": "Llevando nuestro atardecer a playas de todo el mundo — de Ibiza y Phuket a Ipanema."
     }
@@ -46,16 +55,16 @@
     "outOfStock": "Agotado",
     "inStock": "En Stock",
     "details": "Ver Detalles",
-    "category": "Categoria",
+    "category": "Categoría",
     "price": "Precio",
     "featured": "Destacado"
   },
   "cart": {
     "title": "Carrito de Compras",
-    "empty": "Tu carrito esta vacio",
+    "empty": "Tu carrito está vacío",
     "continueShopping": "Seguir Comprando",
     "subtotal": "Subtotal",
-    "shipping": "Envio",
+    "shipping": "Envío",
     "total": "Total",
     "checkout": "Proceder al Pago",
     "remove": "Eliminar",
@@ -63,17 +72,17 @@
   },
   "checkout": {
     "title": "Pago",
-    "shipping": "Direccion de Envio",
+    "shipping": "Dirección de Envío",
     "payment": "Pago",
     "review": "Revisar Pedido",
     "placeOrder": "Realizar Pedido",
     "processing": "Procesando...",
-    "orderPlaced": "Pedido Realizado con Exito!",
-    "orderNumber": "Numero de Pedido",
+    "orderPlaced": "Pedido Realizado con Éxito!",
+    "orderNumber": "Número de Pedido",
     "trackOrder": "Rastrear Pedido",
     "estimatedDelivery": "Entrega Estimada",
-    "selectAddress": "Selecciona una direccion de envio",
-    "addAddress": "Agregar Nueva Direccion"
+    "selectAddress": "Selecciona una dirección de envío",
+    "addAddress": "Agregar Nueva Dirección"
   },
   "orders": {
     "title": "Mis Pedidos",
@@ -82,35 +91,35 @@
     "status": "Estado",
     "total": "Total",
     "details": "Ver Detalles",
-    "noOrders": "Aun no has realizado ningun pedido",
+    "noOrders": "Aún no has realizado ningún pedido",
     "tracking": "Rastreo",
-    "items": "Articulos"
+    "items": "Artículos"
   },
   "auth": {
-    "login": "Iniciar Sesion",
+    "login": "Iniciar Sesión",
     "register": "Crear Cuenta",
-    "email": "Correo Electronico",
-    "password": "Contrasena",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
     "firstName": "Nombre",
     "lastName": "Apellido",
-    "phone": "Telefono",
-    "noAccount": "No tienes una cuenta?",
-    "hasAccount": "Ya tienes una cuenta?",
+    "phone": "Teléfono",
+    "noAccount": "¿No tienes una cuenta?",
+    "hasAccount": "¿Ya tienes una cuenta?",
     "signUp": "Registrarse",
-    "signIn": "Iniciar Sesion"
+    "signIn": "Iniciar Sesión"
   },
   "footer": {
     "about": "Sobre ADO Palmwinery",
     "aboutText": "Productor familiar de Vino de Coyol natural y licores de palma desde 1979. Con sede en Liberia, Costa Rica.",
-    "quickLinks": "Enlaces Rapidos",
-    "contact": "Contactanos",
+    "quickLinks": "Enlaces Rápidos",
+    "contact": "Contáctanos",
     "rights": "Todos los derechos reservados.",
-    "privacy": "Politica de Privacidad",
-    "terms": "Terminos de Servicio"
+    "privacy": "Política de Privacidad",
+    "terms": "Términos de Servicio"
   },
   "common": {
     "loading": "Cargando...",
-    "error": "Algo salio mal",
+    "error": "Algo salió mal",
     "retry": "Intentar de Nuevo",
     "save": "Guardar",
     "cancel": "Cancelar",

@@ -10,33 +10,38 @@ interface LocaleContextType {
   formatPrice: (amount: number, curr?: Currency) => string;
 }
 
+const isCostaRica = () => {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone === 'America/Costa_Rica';
+  } catch {
+    return false;
+  }
+};
+
 const LocaleContext = createContext<LocaleContextType | undefined>(undefined);
 
 export function LocaleProvider({ children }: { children: ReactNode }) {
   const { i18n } = useTranslation();
-  const [language, setLanguageState] = useState<Language>(
-    () => (localStorage.getItem('language') as Language) || 'en'
+  const [language, setLanguageState] = useState<Language>(() =>
+    i18n.language?.startsWith('es') ? 'es' : 'en'
   );
-  const [currency, setCurrencyState] = useState<Currency>(
-    () => (localStorage.getItem('currency') as Currency) || 'USD'
-  );
+  const [currency, setCurrencyState] = useState<Currency>(() => {
+    const saved = localStorage.getItem('currency') as Currency | null;
+    if (saved) return saved;
+    return isCostaRica() ? 'CRC' : 'USD';
+  });
 
-  // Auto-detect from browser on first visit
+  // Keep context in sync if i18n changes language elsewhere
   useEffect(() => {
-    if (!localStorage.getItem('language')) {
-      const browserLang = navigator.language.split('-')[0];
-      if (browserLang === 'es') {
-        setLanguageState('es');
-        localStorage.setItem('language', 'es');
-        i18n.changeLanguage('es');
-      }
-    }
+    const onChange = (lng: string) => setLanguageState(lng.startsWith('es') ? 'es' : 'en');
+    i18n.on('languageChanged', onChange);
+    return () => { i18n.off('languageChanged', onChange); };
   }, [i18n]);
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
     localStorage.setItem('language', lang);
-    i18n.changeLanguage(lang);
+    i18n.changeLanguage(lang); // detector caches write the cookie + localStorage
   };
 
   const setCurrency = (curr: Currency) => {

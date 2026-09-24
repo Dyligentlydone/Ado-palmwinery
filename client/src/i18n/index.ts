@@ -4,8 +4,27 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import en from './locales/en.json';
 import es from './locales/es.json';
 
+// Country hint without any GeoIP API: Costa Rica timezone → Spanish
+const timezoneDetector = {
+  name: 'timezone',
+  lookup() {
+    try {
+      if (Intl.DateTimeFormat().resolvedOptions().timeZone === 'America/Costa_Rica') {
+        return 'es';
+      }
+    } catch {
+      // timezone unavailable — ignore
+    }
+    return undefined;
+  },
+  cacheUserLanguage() {},
+};
+
+const languageDetector = new LanguageDetector();
+languageDetector.addDetector(timezoneDetector);
+
 i18n
-  .use(LanguageDetector)
+  .use(languageDetector)
   .use(initReactI18next)
   .init({
     resources: {
@@ -16,9 +35,11 @@ i18n
     supportedLngs: ['en', 'es'],
     interpolation: { escapeValue: false },
     detection: {
-      order: ['localStorage', 'navigator'],
+      // Saved choice always wins: cookie → localStorage → CR timezone → browser language → fallback en
+      order: ['cookie', 'localStorage', 'timezone', 'navigator'],
+      lookupCookie: 'language',
       lookupLocalStorage: 'language',
-      caches: ['localStorage'],
+      caches: ['cookie', 'localStorage'],
     },
   });
 

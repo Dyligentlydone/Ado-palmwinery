@@ -1,4 +1,13 @@
 {
+  "intro": {
+    "headline": "Complete Your Sunset",
+    "legal": "You must be of legal drinking age to enter",
+    "question": "Are you 18 or older?",
+    "yes": "Yes",
+    "no": "No",
+    "denied": "Sorry, you must be of legal drinking age to visit this site.",
+    "goBack": "Go back"
+  },
   "nav": {
     "home": "Home",
     "products": "Products",

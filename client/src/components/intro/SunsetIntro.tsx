@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 // Tuning constants
 const SUN_X = 50;             // sun center, % across image width
@@ -10,6 +11,7 @@ const DIVE_MS = 2200;         // how long the dive into the sun takes
 type Phase = 'gate' | 'diving' | 'denied' | 'done';
 
 export default function SunsetIntro() {
+  const { t } = useTranslation();
   const [phase, setPhase] = useState<Phase>('gate');
   const [p, setP] = useState(0);
   const reducedMotion = useRef(
@@ -71,28 +73,28 @@ export default function SunsetIntro() {
       >
         <div className="absolute inset-x-0 top-[34%] flex justify-center px-4">
           <h1 className="text-4xl md:text-6xl font-bold text-white drop-shadow-lg font-[family-name:var(--font-heading)] tracking-wide text-center">
-            Complete Your Sunset
+            {t('intro.headline')}
           </h1>
         </div>
 
         {phase === 'gate' && (
           <div className="absolute inset-x-0 top-[57%] flex flex-col items-center px-4 text-center">
             <p className="text-black text-base md:text-lg font-semibold tracking-[0.2em] uppercase">
-              You must be of legal drinking age to enter
+              {t('intro.legal')}
             </p>
-            <p className="text-black/80 mt-1.5 text-base md:text-lg">Are you 18 or older?</p>
+            <p className="text-black/80 mt-1.5 text-base md:text-lg">{t('intro.question')}</p>
             <div className="flex gap-3 mt-4">
               <button
                 onClick={startDive}
                 className="px-8 py-2 bg-black text-white text-sm font-bold rounded-full hover:bg-gray-800 transition-colors"
               >
-                Yes
+                {t('intro.yes')}
               </button>
               <button
                 onClick={() => setPhase('denied')}
                 className="px-8 py-2 border-2 border-black/70 text-black text-sm font-bold rounded-full hover:bg-black/10 transition-colors"
               >
-                No
+                {t('intro.no')}
               </button>
             </div>
           </div>
@@ -101,13 +103,13 @@ export default function SunsetIntro() {
         {phase === 'denied' && (
           <div className="absolute inset-x-0 top-[57%] flex flex-col items-center px-4 text-center">
             <p className="text-black font-semibold">
-              Sorry, you must be of legal drinking age to visit this site.
+              {t('intro.denied')}
             </p>
             <button
               onClick={() => setPhase('gate')}
               className="mt-3 text-black/70 text-sm underline hover:text-black transition-colors"
             >
-              Go back
+              {t('intro.goBack')}
             </button>
           </div>
         )}
