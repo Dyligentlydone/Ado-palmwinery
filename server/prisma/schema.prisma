@@ -1,0 +1,223 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  CUSTOMER
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum Currency {
+  USD
+  EUR
+  GBP
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  passwordHash  String
+  firstName     String
+  lastName      String
+  role          Role     @default(CUSTOMER)
+  phone         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  addresses     Address[]
+  orders        Order[]
+  cart          Cart?
+
+  @@map("users")
+}
+
+model Address {
+  id            String   @id @default(uuid())
+  userId        String
+  label         String?  // e.g., "Home", "Work"
+  firstName     String
+  lastName      String
+  street        String
+  city          String
+  state         String?
+  postalCode    String
+  country       String
+  phone         String?
+  isDefault     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orders        Order[]
+
+  @@map("addresses")
+}
+
+model Category {
+  id            String    @id @default(uuid())
+  name          String    @unique
+  nameEs        String?   // Spanish name
+  slug          String    @unique
+  description   String?
+  descriptionEs String?   // Spanish description
+  image         String?
+  sortOrder     Int       @default(0)
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  products      Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id            String    @id @default(uuid())
+  name          String
+  nameEs        String?   // Spanish name
+  slug          String    @unique
+  description   String    @db.Text
+  descriptionEs String?   @db.Text // Spanish description
+  priceUSD      Decimal   @db.Decimal(10, 2)
+  priceEUR      Decimal?  @db.Decimal(10, 2)
+  priceGBP      Decimal?  @db.Decimal(10, 2)
+  compareAtUSD  Decimal?  @db.Decimal(10, 2) // Original price for sales
+  images        String[]  // Array of image URLs
+  categoryId    String
+  sku           String    @unique
+  stock         Int       @default(0)
+  weight        Decimal?  @db.Decimal(8, 2) // Weight in kg for shipping
+  isActive      Boolean   @default(true)
+  isFeatured    Boolean   @default(false)
+  tags          String[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  category      Category  @relation(fields: [categoryId], references: [id])
+  cartItems     CartItem[]
+  orderItems    OrderItem[]
+
+  @@map("products")
+}
+
+model Cart {
+  id            String     @id @default(uuid())
+  userId        String     @unique
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items         CartItem[]
+
+  @@map("carts")
+}
+
+model CartItem {
+  id            String   @id @default(uuid())
+  cartId        String
+  productId     String
+  quantity      Int      @default(1)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  cart          Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product       Product  @relation(fields: [productId], references: [id])
+
+  @@unique([cartId, productId])
+  @@map("cart_items")
+}
+
+model Order {
+  id              String        @id @default(uuid())
+  orderNumber     String        @unique
+  userId          String
+  addressId       String
+  status          OrderStatus   @default(PENDING)
+  currency        Currency      @default(USD)
+  subtotal        Decimal       @db.Decimal(10, 2)
+  shippingCost    Decimal       @db.Decimal(10, 2)
+  tax             Decimal       @db.Decimal(10, 2) @default(0)
+  total           Decimal       @db.Decimal(10, 2)
+  notes           String?
+  trackingNumber  String?
+  shippingCarrier String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  user            User          @relation(fields: [userId], references: [id])
+  address         Address       @relation(fields: [addressId], references: [id])
+  items           OrderItem[]
+  payment         Payment?
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id            String   @id @default(uuid())
+  orderId       String
+  productId     String
+  productName   String   // Snapshot of product name at time of order
+  quantity      Int
+  unitPrice     Decimal  @db.Decimal(10, 2)
+  totalPrice    Decimal  @db.Decimal(10, 2)
+  createdAt     DateTime @default(now())
+
+  order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product       Product  @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+}
+
+model Payment {
+  id                String        @id @default(uuid())
+  orderId           String        @unique
+  tiloPaymentId     String?       @unique // Tilo Pay transaction ID
+  amount            Decimal       @db.Decimal(10, 2)
+  currency          Currency      @default(USD)
+  status            PaymentStatus @default(PENDING)
+  method            String?       // e.g., "card", "bank_transfer"
+  tiloPayResponse   Json?         // Full response from Tilo Pay
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  order             Order         @relation(fields: [orderId], references: [id])
+
+  @@map("payments")
+}
+
+model ShippingZone {
+  id            String   @id @default(uuid())
+  name          String
+  countries     String[] // ISO country codes
+  baseCost      Decimal  @db.Decimal(10, 2)
+  perKgCost     Decimal  @db.Decimal(10, 2)
+  currency      Currency @default(USD)
+  estimatedDays String   // e.g., "5-7 business days"
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("shipping_zones")
+}

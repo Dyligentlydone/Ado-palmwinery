@@ -1,0 +1,123 @@
+{
+  "nav": {
+    "home": "Home",
+    "products": "Products",
+    "cart": "Cart",
+    "login": "Login",
+    "register": "Register",
+    "myOrders": "My Orders",
+    "profile": "Profile",
+    "admin": "Admin",
+    "logout": "Logout"
+  },
+  "home": {
+    "hero": {
+      "title": "Experience the Finest Palm Products",
+      "subtitle": "From the heart of Africa to your table. Discover our premium selection of palm wines, oils, and artisanal spirits.",
+      "cta": "Shop Now",
+      "secondary": "Learn More"
+    },
+    "featured": {
+      "title": "Featured Products",
+      "subtitle": "Our most popular selections, handpicked for you"
+    },
+    "categories": {
+      "title": "Browse by Category",
+      "subtitle": "Explore our full range of palm-based products"
+    },
+    "about": {
+      "title": "Our Story",
+      "text": "ADO Palmwinery is dedicated to bringing the authentic taste of traditional palm products to the world. We source directly from trusted tappers and producers, ensuring the highest quality from tree to table.",
+      "quality": "Premium Quality",
+      "qualityText": "Every product is carefully selected and tested for freshness and authenticity.",
+      "sustainable": "Sustainably Sourced",
+      "sustainableText": "We work with local communities to ensure sustainable harvesting practices.",
+      "worldwide": "Worldwide Shipping",
+      "worldwideText": "We deliver our products to customers across the globe with care."
+    }
+  },
+  "products": {
+    "title": "All Products",
+    "search": "Search products...",
+    "filter": "Filter",
+    "sort": "Sort by",
+    "noResults": "No products found",
+    "addToCart": "Add to Cart",
+    "outOfStock": "Out of Stock",
+    "inStock": "In Stock",
+    "details": "View Details",
+    "category": "Category",
+    "price": "Price",
+    "featured": "Featured"
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is empty",
+    "continueShopping": "Continue Shopping",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "total": "Total",
+    "checkout": "Proceed to Checkout",
+    "remove": "Remove",
+    "quantity": "Qty"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "shipping": "Shipping Address",
+    "payment": "Payment",
+    "review": "Review Order",
+    "placeOrder": "Place Order",
+    "processing": "Processing...",
+    "orderPlaced": "Order Placed Successfully!",
+    "orderNumber": "Order Number",
+    "trackOrder": "Track Order",
+    "estimatedDelivery": "Estimated Delivery",
+    "selectAddress": "Select a shipping address",
+    "addAddress": "Add New Address"
+  },
+  "orders": {
+    "title": "My Orders",
+    "orderNumber": "Order #",
+    "date": "Date",
+    "status": "Status",
+    "total": "Total",
+    "details": "View Details",
+    "noOrders": "You haven't placed any orders yet",
+    "tracking": "Tracking",
+    "items": "Items"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Create Account",
+    "email": "Email",
+    "password": "Password",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "phone": "Phone",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "signUp": "Sign Up",
+    "signIn": "Sign In"
+  },
+  "footer": {
+    "about": "About ADO Palmwinery",
+    "aboutText": "Bringing the finest palm products from Africa to the world since 2024.",
+    "quickLinks": "Quick Links",
+    "contact": "Contact Us",
+    "rights": "All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Try Again",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous"
+  }
+}

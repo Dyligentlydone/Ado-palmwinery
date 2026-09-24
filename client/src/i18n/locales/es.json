@@ -1,0 +1,123 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "products": "Productos",
+    "cart": "Carrito",
+    "login": "Iniciar Sesion",
+    "register": "Registrarse",
+    "myOrders": "Mis Pedidos",
+    "profile": "Perfil",
+    "admin": "Administrador",
+    "logout": "Cerrar Sesion"
+  },
+  "home": {
+    "hero": {
+      "title": "Descubre los Mejores Productos de Palma",
+      "subtitle": "Del corazon de Africa a tu mesa. Descubre nuestra seleccion premium de vinos de palma, aceites y licores artesanales.",
+      "cta": "Comprar Ahora",
+      "secondary": "Saber Mas"
+    },
+    "featured": {
+      "title": "Productos Destacados",
+      "subtitle": "Nuestras selecciones mas populares, elegidas para ti"
+    },
+    "categories": {
+      "title": "Explorar por Categoria",
+      "subtitle": "Explora nuestra gama completa de productos de palma"
+    },
+    "about": {
+      "title": "Nuestra Historia",
+      "text": "ADO Palmwinery se dedica a llevar el sabor autentico de los productos tradicionales de palma al mundo. Obtenemos directamente de productores de confianza, asegurando la mas alta calidad del arbol a la mesa.",
+      "quality": "Calidad Premium",
+      "qualityText": "Cada producto es cuidadosamente seleccionado y probado para frescura y autenticidad.",
+      "sustainable": "Origen Sostenible",
+      "sustainableText": "Trabajamos con comunidades locales para asegurar practicas de cosecha sostenibles.",
+      "worldwide": "Envio Mundial",
+      "worldwideText": "Entregamos nuestros productos a clientes en todo el mundo con cuidado."
+    }
+  },
+  "products": {
+    "title": "Todos los Productos",
+    "search": "Buscar productos...",
+    "filter": "Filtrar",
+    "sort": "Ordenar por",
+    "noResults": "No se encontraron productos",
+    "addToCart": "Agregar al Carrito",
+    "outOfStock": "Agotado",
+    "inStock": "En Stock",
+    "details": "Ver Detalles",
+    "category": "Categoria",
+    "price": "Precio",
+    "featured": "Destacado"
+  },
+  "cart": {
+    "title": "Carrito de Compras",
+    "empty": "Tu carrito esta vacio",
+    "continueShopping": "Seguir Comprando",
+    "subtotal": "Subtotal",
+    "shipping": "Envio",
+    "total": "Total",
+    "checkout": "Proceder al Pago",
+    "remove": "Eliminar",
+    "quantity": "Cant"
+  },
+  "checkout": {
+    "title": "Pago",
+    "shipping": "Direccion de Envio",
+    "payment": "Pago",
+    "review": "Revisar Pedido",
+    "placeOrder": "Realizar Pedido",
+    "processing": "Procesando...",
+    "orderPlaced": "Pedido Realizado con Exito!",
+    "orderNumber": "Numero de Pedido",
+    "trackOrder": "Rastrear Pedido",
+    "estimatedDelivery": "Entrega Estimada",
+    "selectAddress": "Selecciona una direccion de envio",
+    "addAddress": "Agregar Nueva Direccion"
+  },
+  "orders": {
+    "title": "Mis Pedidos",
+    "orderNumber": "Pedido #",
+    "date": "Fecha",
+    "status": "Estado",
+    "total": "Total",
+    "details": "Ver Detalles",
+    "noOrders": "Aun no has realizado ningun pedido",
+    "tracking": "Rastreo",
+    "items": "Articulos"
+  },
+  "auth": {
+    "login": "Iniciar Sesion",
+    "register": "Crear Cuenta",
+    "email": "Correo Electronico",
+    "password": "Contrasena",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "phone": "Telefono",
+    "noAccount": "No tienes una cuenta?",
+    "hasAccount": "Ya tienes una cuenta?",
+    "signUp": "Registrarse",
+    "signIn": "Iniciar Sesion"
+  },
+  "footer": {
+    "about": "Sobre ADO Palmwinery",
+    "aboutText": "Llevando los mejores productos de palma de Africa al mundo desde 2024.",
+    "quickLinks": "Enlaces Rapidos",
+    "contact": "Contactanos",
+    "rights": "Todos los derechos reservados.",
+    "privacy": "Politica de Privacidad",
+    "terms": "Terminos de Servicio"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Algo salio mal",
+    "retry": "Intentar de Nuevo",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "back": "Volver",
+    "next": "Siguiente",
+    "previous": "Anterior"
+  }
+}
