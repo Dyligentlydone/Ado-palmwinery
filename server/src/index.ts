@@ -29,7 +29,8 @@ if (isProduction) {
 
 // Security middleware
 app.use(helmet({
-  contentSecurityPolicy: isProduction ? undefined : false,
+  contentSecurityPolicy: false,
+  crossOriginEmbedderPolicy: false,
 }));
 app.use(cors({
   origin: process.env.CLIENT_URL || 'http://localhost:5173',
