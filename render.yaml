@@ -9,7 +9,7 @@ services:
     name: ado-palmwinery
     runtime: node
     plan: free
-    buildCommand: cd server && npm install --include=dev && npx prisma generate && npm run build && cd ../client && npm install --include=dev && npm run build
+    buildCommand: export NODE_ENV=development && cd server && npm install && npx prisma generate && npm run build && cd ../client && npm install && npm run build
     startCommand: cd server && npx prisma migrate deploy && node dist/index.js
     envVars:
       - key: NODE_ENV
