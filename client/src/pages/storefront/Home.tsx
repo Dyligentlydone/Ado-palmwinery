@@ -5,6 +5,7 @@ import { Award, Leaf, Globe } from 'lucide-react';
 import { productsAPI } from '../../services/api';
 import { Product, Category } from '../../types';
 import ProductCard from '../../components/product/ProductCard';
+import SunsetIntro from '../../components/intro/SunsetIntro';
 
 export default function Home() {
   const { t } = useTranslation();
@@ -21,27 +22,28 @@ export default function Home() {
 
   return (
     <div>
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-primary-950 via-primary-900 to-primary-800 text-white">
-        <div className="absolute inset-0 bg-[url('/images/hero-pattern.svg')] opacity-10" />
+      <SunsetIntro />
+
+      {/* Hero Section — continues the sun's glow you just dove through */}
+      <section className="relative bg-gradient-to-b from-[#fdf3d8] via-[#fbe8c4] to-[#fefefe]">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-36">
           <div className="max-w-2xl">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight font-[family-name:var(--font-heading)]">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight text-gray-900 font-[family-name:var(--font-heading)]">
               {t('home.hero.title')}
             </h1>
-            <p className="text-lg md:text-xl text-primary-100 mb-8 leading-relaxed">
+            <p className="text-lg md:text-xl text-gray-600 mb-8 leading-relaxed">
               {t('home.hero.subtitle')}
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
                 to="/products"
-                className="inline-flex items-center px-8 py-3 bg-white text-primary-900 font-semibold rounded-lg hover:bg-primary-50 transition-colors"
+                className="inline-flex items-center px-8 py-3 bg-gray-900 text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors"
               >
                 {t('home.hero.cta')}
               </Link>
               <a
                 href="#about"
-                className="inline-flex items-center px-8 py-3 border-2 border-white/30 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors"
+                className="inline-flex items-center px-8 py-3 border-2 border-gray-900/25 text-gray-900 font-semibold rounded-lg hover:bg-gray-900/5 transition-colors"
               >
                 {t('home.hero.secondary')}
               </a>

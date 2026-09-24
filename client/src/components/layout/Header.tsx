@@ -22,7 +22,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <img src="/images/logo.png" alt="ADO Palmwinery" className="h-14 w-auto" />
+            <img src="/images/logo.png" alt="ADO Palmwinery" className="h-12 w-auto" />
           </Link>
 
           {/* Desktop Nav */}
