@@ -12,8 +12,8 @@
   },
   "home": {
     "hero": {
-      "title": "Descubre los Mejores Productos de Palma",
-      "subtitle": "Del corazon de Africa a tu mesa. Descubre nuestra seleccion premium de vinos de palma, aceites y licores artesanales.",
+      "title": "Conquista Cada Atardecer",
+      "subtitle": "Tres generaciones de tradicion familiar. Vino de Coyol natural y probiotico, gin de palma El Fuego de Coyol y cocteles de playa — embotellados en Liberia, Costa Rica desde 1979.",
       "cta": "Comprar Ahora",
       "secondary": "Saber Mas"
     },
@@ -27,13 +27,13 @@
     },
     "about": {
       "title": "Nuestra Historia",
-      "text": "ADO Palmwinery se dedica a llevar el sabor autentico de los productos tradicionales de palma al mundo. Obtenemos directamente de productores de confianza, asegurando la mas alta calidad del arbol a la mesa.",
-      "quality": "Calidad Premium",
-      "qualityText": "Cada producto es cuidadosamente seleccionado y probado para frescura y autenticidad.",
-      "sustainable": "Origen Sostenible",
-      "sustainableText": "Trabajamos con comunidades locales para asegurar practicas de cosecha sostenibles.",
-      "worldwide": "Envio Mundial",
-      "worldwideText": "Entregamos nuestros productos a clientes en todo el mundo con cuidado."
+      "text": "Fundada en 1979 por el Profesor Benedict Onochie — el Ononenyi de Onitsha — Ado Palm Winery fue pionera en embotellar el sabor rico, dulce y terroso de la savia de palma fermentada naturalmente. Hoy, bajo la direccion de Francis N. Onochie, Director General de tercera generacion, y con sede en Liberia, Costa Rica, llevamos el Vino de Coyol — una bebida natural, probiotica y patrimonio nacional de Costa Rica — a playas y hogares de todo el mundo.",
+      "quality": "Tres Generaciones de Herencia",
+      "qualityText": "Dirigida por la familia desde 1979 — de Onitsha, Nigeria a nuestra sede en la Costa Pacifica de Liberia, Costa Rica.",
+      "sustainable": "Natural y Probiotico",
+      "sustainableText": "El Vino de Coyol es una bebida totalmente natural y probiotica elaborada de savia de palma fermentada — patrimonio nacional de Costa Rica.",
+      "worldwide": "De Costa Rica al Mundo",
+      "worldwideText": "Llevando nuestro atardecer a playas de todo el mundo — de Ibiza y Phuket a Ipanema."
     }
   },
   "products": {
@@ -101,7 +101,7 @@
   },
   "footer": {
     "about": "Sobre ADO Palmwinery",
-    "aboutText": "Llevando los mejores productos de palma de Africa al mundo desde 2024.",
+    "aboutText": "Productor familiar de Vino de Coyol natural y licores de palma desde 1979. Con sede en Liberia, Costa Rica.",
     "quickLinks": "Enlaces Rapidos",
     "contact": "Contactanos",
     "rights": "Todos los derechos reservados.",

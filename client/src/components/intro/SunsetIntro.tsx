@@ -5,7 +5,7 @@ const SUN_X = 50;             // sun center, % across image width
 const SUN_Y = 62;             // sun center, % down image height
 const SUN_COLOR = '#fdf3d8';  // sampled sun color — matches the page-top gradient
 const MAX_SCALE = 16;         // final zoom level
-const DIVE_MS = 3200;         // how long the dive into the sun takes
+const DIVE_MS = 2200;         // how long the dive into the sun takes
 
 type Phase = 'gate' | 'diving' | 'denied' | 'done';
 

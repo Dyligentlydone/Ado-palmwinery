@@ -12,8 +12,8 @@
   },
   "home": {
     "hero": {
-      "title": "Experience the Finest Palm Products",
-      "subtitle": "From the heart of Africa to your table. Discover our premium selection of palm wines, oils, and artisanal spirits.",
+      "title": "Own Every Sunset",
+      "subtitle": "Three generations of family craft. All-natural, probiotic Vino de Coyol, El Fuego de Coyol palm gin, and signature beach cocktails — bottled in Liberia, Costa Rica since 1979.",
       "cta": "Shop Now",
       "secondary": "Learn More"
     },
@@ -27,13 +27,13 @@
     },
     "about": {
       "title": "Our Story",
-      "text": "ADO Palmwinery is dedicated to bringing the authentic taste of traditional palm products to the world. We source directly from trusted tappers and producers, ensuring the highest quality from tree to table.",
-      "quality": "Premium Quality",
-      "qualityText": "Every product is carefully selected and tested for freshness and authenticity.",
-      "sustainable": "Sustainably Sourced",
-      "sustainableText": "We work with local communities to ensure sustainable harvesting practices.",
-      "worldwide": "Worldwide Shipping",
-      "worldwideText": "We deliver our products to customers across the globe with care."
+      "text": "Founded in 1979 by Chief Professor Benedict Onochie — the Ononenyi of Onitsha — Ado Palm Winery pioneered bottling the rich, sweet, earthy flavor of naturally fermented palm sap. Now led by third-generation Managing Director Francis N. Onochie and headquartered in Liberia, Costa Rica, we bring Vino de Coyol — a natural, probiotic national heritage of Costa Rica — to beach venues and homes worldwide.",
+      "quality": "Three Generations of Heritage",
+      "qualityText": "Family-led since 1979 — from Onitsha, Nigeria to our Pacific Coast headquarters in Liberia, Costa Rica.",
+      "sustainable": "Natural & Probiotic",
+      "sustainableText": "Vino de Coyol is an all-natural, probiotic beverage crafted from fermented palm sap — a national heritage of Costa Rica.",
+      "worldwide": "From Costa Rica to the World",
+      "worldwideText": "Bringing our sunset to beach venues across the globe — from Ibiza and Phuket to Ipanema Beach."
     }
   },
   "products": {
@@ -101,7 +101,7 @@
   },
   "footer": {
     "about": "About ADO Palmwinery",
-    "aboutText": "Bringing the finest palm products from Africa to the world since 2024.",
+    "aboutText": "Family-owned producer of natural Vino de Coyol and palm spirits since 1979. Headquartered in Liberia, Costa Rica.",
     "quickLinks": "Quick Links",
     "contact": "Contact Us",
     "rights": "All rights reserved.",
