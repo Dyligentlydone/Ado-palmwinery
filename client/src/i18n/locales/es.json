@@ -11,6 +11,7 @@
   "nav": {
     "home": "Inicio",
     "products": "Productos",
+    "experience": "Experiencia",
     "cart": "Carrito",
     "login": "Iniciar Sesión",
     "register": "Registrarse",
@@ -128,5 +129,11 @@
     "back": "Volver",
     "next": "Siguiente",
     "previous": "Anterior"
+  },
+  "experience": {
+    "kicker": "Comunicado de Prensa",
+    "title": "Ado Palm Winery Names Francis N. Onochie as Managing Director, Driving Global Expansion Across Three Generations of Heritage",
+    "subtitle": "Tropical craft beverage pioneer expands lineup of natural Vino de Coyol, distilled palm gin, and signature beach cocktails from its Costa Rica headquarters.",
+    "shopCta": "Explorar la Colección"
   }
 }
