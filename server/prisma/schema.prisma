@@ -209,6 +209,18 @@ model Payment {
   @@map("payments")
 }
 
+model ContactMessage {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  subject   String?
+  message   String   @db.Text
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("contact_messages")
+}
+
 model ShippingZone {
   id            String   @id @default(uuid())
   name          String

@@ -16,6 +16,7 @@ import Checkout from './pages/storefront/Checkout';
 import OrderConfirmation from './pages/storefront/OrderConfirmation';
 import Orders from './pages/storefront/Orders';
 import Experience from './pages/storefront/Experience';
+import Contact from './pages/storefront/Contact';
 
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
@@ -26,6 +27,7 @@ import AdminOrders from './pages/admin/AdminOrders';
 import AdminProducts from './pages/admin/AdminProducts';
 import AdminShipping from './pages/admin/AdminShipping';
 import AdminCustomers from './pages/admin/AdminCustomers';
+import AdminMessages from './pages/admin/AdminMessages';
 
 export default function App() {
   return (
@@ -40,6 +42,7 @@ export default function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/products" element={<Products />} />
                 <Route path="/experience" element={<Experience />} />
+                <Route path="/contact" element={<Contact />} />
                 <Route path="/products/:slug" element={<ProductDetail />} />
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/checkout" element={<Checkout />} />
@@ -57,6 +60,7 @@ export default function App() {
                 <Route path="products" element={<AdminProducts />} />
                 <Route path="shipping" element={<AdminShipping />} />
                 <Route path="customers" element={<AdminCustomers />} />
+                <Route path="messages" element={<AdminMessages />} />
               </Route>
             </Routes>
           </CartProvider>

@@ -93,6 +93,12 @@ export const shippingAPI = {
   getZones: () => api.get('/shipping/zones'),
 };
 
+// --- Contact ---
+export const contactAPI = {
+  submit: (data: { name: string; email: string; subject?: string; message: string }) =>
+    api.post('/contact', data),
+};
+
 // --- Admin ---
 export const adminAPI = {
   getProducts: (params?: Record<string, string | number>) =>
@@ -126,6 +132,11 @@ export const adminAPI = {
   deleteShippingZone: (id: string) =>
     api.delete(`/shipping/zones/${id}`),
   getUsers: () => api.get('/auth/admin/users'),
+  getMessages: () => api.get('/contact/admin'),
+  markMessageRead: (id: string, isRead: boolean = true) =>
+    api.put(`/contact/admin/${id}`, { isRead }),
+  deleteMessage: (id: string) =>
+    api.delete(`/contact/admin/${id}`),
 };
 
 export default api;

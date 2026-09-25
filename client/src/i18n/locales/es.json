@@ -12,6 +12,7 @@
     "home": "Inicio",
     "products": "Productos",
     "experience": "Experiencia",
+    "contact": "Contacto",
     "cart": "Carrito",
     "login": "Iniciar Sesión",
     "register": "Registrarse",
@@ -135,5 +136,24 @@
     "title": "Ado Palm Winery Names Francis N. Onochie as Managing Director, Driving Global Expansion Across Three Generations of Heritage",
     "subtitle": "Tropical craft beverage pioneer expands lineup of natural Vino de Coyol, distilled palm gin, and signature beach cocktails from its Costa Rica headquarters.",
     "shopCta": "Explorar la Colección"
+  },
+  "contact": {
+    "title": "Contáctanos",
+    "subtitle": "Preguntas, consultas de mayoreo, solicitudes de prensa o pedidos directos — nos encantaría escucharte.",
+    "emailLabel": "Correo Electrónico",
+    "locationLabel": "Sede Principal",
+    "locationValue": "Liberia, Guanacaste, Costa Rica",
+    "wholesaleLabel": "Mayoreo y Prensa",
+    "wholesaleValue": "Para consultas de mayoreo, solicitudes de prensa o pedidos directos, contáctanos en cualquier momento.",
+    "directLine": "Contacta a Frank Jr directamente",
+    "formTitle": "Envíanos un mensaje",
+    "name": "Nombre",
+    "email": "Correo Electrónico",
+    "subject": "Asunto (opcional)",
+    "message": "Mensaje",
+    "send": "Enviar Mensaje",
+    "sending": "Enviando...",
+    "success": "¡Mensaje enviado! Te responderemos pronto.",
+    "error": "Algo salió mal. Intenta de nuevo."
   }
 }

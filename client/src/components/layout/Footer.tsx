@@ -36,6 +36,7 @@ export default function Footer() {
               <ul className="space-y-1.5 md:space-y-2 text-[11px] md:text-sm text-white/70">
                 <li><Link to="/products" className="hover:text-white transition-colors">{t('nav.products')}</Link></li>
                 <li><Link to="/experience" className="hover:text-white transition-colors">{t('nav.experience')}</Link></li>
+                <li><Link to="/contact" className="hover:text-white transition-colors">{t('nav.contact')}</Link></li>
                 <li><Link to="/cart" className="hover:text-white transition-colors">{t('nav.cart')}</Link></li>
                 <li><Link to="/orders" className="hover:text-white transition-colors">{t('nav.myOrders')}</Link></li>
               </ul>
@@ -45,7 +46,12 @@ export default function Footer() {
               <h4 className="font-semibold mb-2 md:mb-3 text-xs md:text-base">{t('footer.contact')}</h4>
               <ul className="space-y-1.5 md:space-y-2 text-[11px] md:text-sm text-white/70">
                 <li>info@adopalmwinery.com</li>
-                <li>+1 (555) 123-4567</li>
+                <li>
+                  <a href="https://wa.me/50671577049" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+                    WhatsApp: +506 7157 7049
+                  </a>
+                  <p className="text-white/50 text-[10px] md:text-xs mt-0.5">{t('contact.directLine')}</p>
+                </li>
                 <li>
                   <Link to="/privacy" className="hover:text-white transition-colors">{t('footer.privacy')}</Link>
                   {' | '}
