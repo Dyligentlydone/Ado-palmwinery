@@ -7,9 +7,9 @@ A modern enterprise-level e-commerce website for premium palm products.
 - **Frontend**: React + TypeScript + Vite + Tailwind CSS v4
 - **Backend**: Node.js + Express + TypeScript
 - **Database**: PostgreSQL + Prisma ORM
-- **Payments**: Tilo Pay API integration
+- **Payments**: ONVO Pay hosted checkout integration
 - **i18n**: English & Spanish (auto-detected by browser language)
-- **Currencies**: USD, EUR, GBP
+- **Currencies**: USD, CRC (browse in EUR/GBP, charged in USD)
 
 ## Project Structure
 
@@ -28,7 +28,7 @@ A modern enterprise-level e-commerce website for premium palm products.
 │   │   ├── controllers/  # Route handlers
 │   │   ├── routes/       # API routes
 │   │   ├── middleware/   # Auth, locale, validation
-│   │   ├── services/     # Business logic (Tilo Pay, shipping)
+│   │   ├── services/     # Business logic (ONVO Pay, shipping)
 │   │   └── config/       # DB, constants
 │   └── prisma/           # Schema & seed data
 └── README.md
@@ -100,7 +100,7 @@ A modern enterprise-level e-commerce website for premium palm products.
 - Secure JWT authentication
 
 ### Payments
-- Tilo Pay API integration for payment processing
+- ONVO Pay hosted checkout integration for payment processing
 - Webhook handling for payment status updates
 - Multi-currency support
 - Refund capability

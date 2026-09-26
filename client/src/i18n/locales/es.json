@@ -93,7 +93,11 @@
     "state": "Estado / Provincia",
     "postalCode": "Código Postal",
     "country": "País",
-    "noShipping": "El envío aún no está disponible para esta ubicación — contáctanos para coordinar la entrega."
+    "noShipping": "El envío aún no está disponible para esta ubicación — contáctanos para coordinar la entrega.",
+    "paymentConfirmed": "Pago confirmado — ¡gracias!",
+    "paymentPending": "Pedido recibido — el pago aún está pendiente.",
+    "paymentDeclined": "El pago fue rechazado o cancelado. No se realizó ningún cargo.",
+    "chargeCurrencyNotice": "El pago se procesa en USD — tu tarjeta hace la conversión automáticamente con la tasa de tu banco."
   },
   "orders": {
     "title": "Mis Pedidos",

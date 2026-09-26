@@ -24,7 +24,7 @@ Run `npx prisma migrate dev --name init` then `npm run prisma:seed`.
 - JWT auth with Bearer tokens stored in localStorage
 - i18n: English/Spanish with browser language auto-detection
 - Multi-currency: product prices stored per-currency in DB
-- Tilo Pay: integration ready, needs API credentials in `.env`
+- ONVO Pay: hosted checkout integration ready, needs `ONVO_SECRET_KEY` + `ONVO_WEBHOOK_SECRET` in `.env`. Charges in USD/CRC only; EUR/GBP shoppers checkout in USD
 
 ## Admin Credentials (dev seed)
 - admin@adopalmwinery.com / admin123456

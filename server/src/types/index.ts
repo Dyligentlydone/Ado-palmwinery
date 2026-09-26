@@ -37,24 +37,59 @@ export interface LocaleInfo {
   country?: string;
 }
 
-export interface TiloPayCreatePaymentRequest {
-  amount: number;
-  currency: string;
+// ONVO Pay v1 contract — hosted Checkout (one-time links)
+export type OnvoCurrency = 'USD' | 'CRC';
+export type OnvoPaymentMethodType = 'card' | 'mobile_number' | 'zunify' | 'bank_deposit';
+
+export interface OnvoLineItem {
+  quantity: number;
+  unitAmount: number;        // minor units (USD cents / CRC céntimos)
+  currency: OnvoCurrency;
   description: string;
-  orderId: string;
-  customerEmail: string;
-  customerName: string;
-  redirectUrl: string;
-  callbackUrl: string;
+  priceType?: 'one_time' | 'recurring';
 }
 
-export interface TiloPayPaymentResponse {
+export interface OnvoCheckoutSessionRequest {
+  customerName: string;
+  customerEmail: string;
+  customerPhone?: string;
+  redirectUrl: string;       // success redirect (browser UX only — not trusted)
+  cancelUrl: string;         // cancel redirect
+  captureMethod?: 'automatic' | 'manual';
+  paymentMethodTypes?: OnvoPaymentMethodType[];
+  lineItems: OnvoLineItem[]; // at least one, all same currency
+  metadata?: Record<string, string>;
+}
+
+export interface OnvoCheckoutSession {
   id: string;
-  status: string;
-  amount: number;
-  currency: string;
-  paymentUrl?: string;
+  url: string;               // hosted checkout page
+  status?: 'open' | 'complete' | 'expired';
+  paymentStatus?: 'unpaid' | 'paid';
+  paymentIntentId?: string;
+  metadata?: Record<string, string>;
   [key: string]: unknown;
+}
+
+export interface OnvoPaymentIntent {
+  id: string;
+  status: 'requires_payment_method' | 'requires_action' | 'processing' | 'succeeded' | 'canceled';
+  amount: number;            // minor units
+  currency: string;
+  metadata?: Record<string, string>;
+  [key: string]: unknown;
+}
+
+// Webhook envelope: POST { type, data } with X-Webhook-Secret header
+export interface OnvoWebhookEvent {
+  type: string;              // e.g. 'payment-intent.succeeded'
+  data: {
+    id?: string;
+    status?: string;
+    metadata?: Record<string, string>;
+    paymentIntentId?: string;
+    [key: string]: unknown;
+  };
 }
 
 export interface ShippingCalculation {

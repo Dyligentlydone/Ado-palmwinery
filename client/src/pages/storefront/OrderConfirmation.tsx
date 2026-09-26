@@ -47,6 +47,15 @@ export default function OrderConfirmation() {
       <h1 className="text-3xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-heading)]">
         {t('checkout.orderPlaced')}
       </h1>
+      <p className={`inline-block text-sm font-medium px-4 py-1.5 rounded-full mb-4 ${
+        order.status === 'CONFIRMED' ? 'bg-green-100 text-green-800'
+        : order.status === 'CANCELLED' ? 'bg-red-100 text-red-800'
+        : 'bg-yellow-100 text-yellow-800'
+      }`}>
+        {order.status === 'CONFIRMED' ? t('checkout.paymentConfirmed')
+        : order.status === 'CANCELLED' ? t('checkout.paymentDeclined')
+        : t('checkout.paymentPending')}
+      </p>
       <p className="text-gray-600 mb-8">
         {t('checkout.orderNumber')}: <span className="font-bold text-gray-900">{order.orderNumber}</span>
       </p>

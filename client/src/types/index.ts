@@ -40,6 +40,10 @@ export interface Product {
   description: string;
   price: number;
   currency: Currency;
+  priceUSD?: number;
+  priceEUR?: number;
+  priceGBP?: number;
+  priceCRC?: number;
   compareAtUSD?: number;
   images: string[];
   category?: Category;

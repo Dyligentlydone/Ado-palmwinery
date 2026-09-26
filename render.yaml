@@ -26,9 +26,9 @@ services:
           property: connectionString
       - key: CLIENT_URL
         value: https://ado-palmwinery.onrender.com
-      - key: TILO_PAY_API_KEY
+      - key: ONVO_SECRET_KEY
         sync: false
-      - key: TILO_PAY_SECRET_KEY
+      - key: ONVO_WEBHOOK_SECRET
         sync: false
-      - key: TILO_PAY_BASE_URL
-        value: https://api.tilopay.com/v1
+      - key: ONVO_BASE_URL
+        value: https://api.onvopay.com

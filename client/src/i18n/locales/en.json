@@ -93,7 +93,11 @@
     "state": "State / Province",
     "postalCode": "Postal Code",
     "country": "Country",
-    "noShipping": "Shipping is not available to this location yet — contact us to arrange delivery."
+    "noShipping": "Shipping is not available to this location yet — contact us to arrange delivery.",
+    "paymentConfirmed": "Payment confirmed — thank you!",
+    "paymentPending": "Order received — payment is still pending.",
+    "paymentDeclined": "Payment was declined or cancelled. No charge was made.",
+    "chargeCurrencyNotice": "Payment is processed in USD — your card converts automatically at your bank's rate."
   },
   "orders": {
     "title": "My Orders",

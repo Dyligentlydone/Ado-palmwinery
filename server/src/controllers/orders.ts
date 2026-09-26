@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import prisma from '../config/database';
 import { AuthRequest } from '../types';
-import { tiloPayService } from '../services/tilopay';
+import { onvoPayService } from '../services/onvopay';
 import { shippingService } from '../services/shipping';
 import { SupportedCurrency } from '../config/constants';
 
@@ -11,34 +11,67 @@ function generateOrderNumber(): string {
   return `ADO-${timestamp}-${random}`;
 }
 
-async function initiateTiloPayment(order: { id: string; orderNumber: string; total: any }, currency: string, customerEmail: string, customerName: string) {
-  try {
-    const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
-    const serverUrl = process.env.SERVER_URL || process.env.CLIENT_URL || `http://localhost:${process.env.PORT || 5000}`;
+// ONVO supports USD and CRC on CR accounts — orders in any other currency are
+// charged in USD (the checkout page shows the customer USD prices in that case).
+function chargeCurrency(currency: string): 'USD' | 'CRC' {
+  return currency === 'CRC' ? 'CRC' : 'USD';
+}
 
-    const tiloResponse = await tiloPayService.createPayment({
-      amount: Number(order.total),
-      currency,
-      description: `ADO Palmwinery Order ${order.orderNumber}`,
-      orderId: order.id,
+// Creates an ONVO hosted-checkout session. The customer's browser returns to the
+// confirmation page on success; the real confirmation arrives via the signed
+// webhook (/api/payments/webhook) — the redirect itself changes nothing.
+async function initiateOnvoPayment(order: any, currency: string, customerEmail: string) {
+  try {
+    if (!onvoPayService.isConfigured()) {
+      console.warn('ONVO Pay credentials not configured — order created without payment link');
+      return null;
+    }
+
+    const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+    const addr = order.address;
+    const onvoCurrency = chargeCurrency(currency);
+    const toMinor = (n: any) => Math.round(Number(n) * 100);
+
+    const lineItems = order.items.map((item: any) => ({
+      quantity: item.quantity,
+      unitAmount: toMinor(item.unitPrice),
+      currency: onvoCurrency,
+      description: item.productName,
+      priceType: 'one_time' as const,
+    }));
+    if (Number(order.shippingCost) > 0) {
+      lineItems.push({
+        quantity: 1,
+        unitAmount: toMinor(order.shippingCost),
+        currency: onvoCurrency,
+        description: `Shipping - ${addr?.country || ''}`,
+        priceType: 'one_time' as const,
+      });
+    }
+
+    const session = await onvoPayService.createCheckoutSession({
+      customerName: `${addr?.firstName || ''} ${addr?.lastName || ''}`.trim() || 'Customer',
       customerEmail,
-      customerName,
+      customerPhone: addr?.phone || undefined,
       redirectUrl: `${clientUrl}/order-confirmation/${order.id}`,
-      callbackUrl: `${serverUrl}/api/payments/webhook`,
+      cancelUrl: `${clientUrl}/checkout`,
+      captureMethod: 'automatic',
+      paymentMethodTypes: ['card', 'mobile_number', 'zunify', 'bank_deposit'],
+      lineItems,
+      metadata: { orderId: order.id, orderNumber: order.orderNumber },
     });
 
     await prisma.payment.create({
       data: {
         orderId: order.id,
-        tiloPaymentId: tiloResponse.id,
         amount: order.total,
         currency: currency as any,
         status: 'PENDING',
-        tiloPayResponse: tiloResponse as any,
+        tiloPayResponse: { sessionId: session.id, url: session.url } as any,
       },
     });
 
-    return { paymentUrl: tiloResponse.paymentUrl, paymentId: tiloResponse.id };
+    return { paymentUrl: session.url };
   } catch (paymentError) {
     console.error('Payment initiation error:', paymentError);
     // Order is created but payment failed - admin can handle manually
@@ -48,7 +81,9 @@ async function initiateTiloPayment(order: { id: string; orderNumber: string; tot
 
 export const createOrder = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const { addressId, currency = 'USD', notes } = req.body;
+    const { addressId, notes } = req.body;
+    // Orders are stored in the currency we actually charge — ONVO takes USD/CRC only
+    const currency = req.body.currency === 'CRC' ? 'CRC' : 'USD';
     const userId = req.user!.id;
 
     // Get cart with items
@@ -137,14 +172,9 @@ export const createOrder = async (req: AuthRequest, res: Response): Promise<void
       return created;
     });
 
-    // Initiate payment with Tilo Pay
+    // Initiate payment with ONVO Pay
     const user = await prisma.user.findUnique({ where: { id: userId } });
-    const paymentData = await initiateTiloPayment(
-      order,
-      currency,
-      user!.email,
-      `${user!.firstName} ${user!.lastName}`
-    );
+    const paymentData = await initiateOnvoPayment(order, currency, user!.email);
 
     res.status(201).json({ order, payment: paymentData });
   } catch (error) {
@@ -203,8 +233,10 @@ export const createGuestOrder = async (req: Request, res: Response): Promise<voi
     const {
       email, firstName, lastName, phone,
       street, city, state, postalCode, country,
-      items, currency = 'USD', notes,
+      items, notes,
     } = req.body;
+    // Orders are stored in the currency we actually charge — ONVO takes USD/CRC only
+    const currency = req.body.currency === 'CRC' ? 'CRC' : 'USD';
 
     if (!Array.isArray(items) || items.length === 0) {
       res.status(400).json({ error: 'Cart is empty' });
@@ -290,7 +322,7 @@ export const createGuestOrder = async (req: Request, res: Response): Promise<voi
       return created;
     });
 
-    const paymentData = await initiateTiloPayment(order, currency, email, `${firstName} ${lastName}`);
+    const paymentData = await initiateOnvoPayment(order, currency, email);
 
     res.status(201).json({ order, payment: paymentData });
   } catch (error) {

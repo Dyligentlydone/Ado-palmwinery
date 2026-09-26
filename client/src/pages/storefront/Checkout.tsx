@@ -6,7 +6,7 @@ import { useCart } from '../../context/CartContext';
 import { useLocale } from '../../context/LocaleContext';
 import { useAuth } from '../../context/AuthContext';
 import { ordersAPI, shippingAPI, authAPI } from '../../services/api';
-import { Address, ShippingCalculation } from '../../types';
+import { Address, ShippingCalculation, CartItem } from '../../types';
 
 // Countries covered by the seeded shipping zones
 const COUNTRIES: { code: string; name: string }[] = [
@@ -42,7 +42,7 @@ const emptyGuest = {
 export default function Checkout() {
   const { t } = useTranslation();
   const { cart, refreshCart, clearCart } = useCart();
-  const { formatPrice, currency } = useLocale();
+  const { currency } = useLocale();
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -70,13 +70,21 @@ export default function Checkout() {
     ? addresses.find(a => a.id === selectedAddress)?.country
     : guest.country;
 
+  // ONVO only charges USD or CRC — EUR/GBP shoppers see and pay in USD here
+  const chargeCurrency: 'USD' | 'CRC' = currency === 'CRC' ? 'CRC' : 'USD';
+  const converted = chargeCurrency !== currency;
+  const chargePrice = (item: CartItem) =>
+    Number(item.product[`price${chargeCurrency}` as 'priceUSD' | 'priceCRC'] ?? item.product.price);
+  const fmtCharge = (n: number) =>
+    new Intl.NumberFormat(chargeCurrency === 'CRC' ? 'es-CR' : 'en-US', { style: 'currency', currency: chargeCurrency }).format(n);
+
   useEffect(() => {
     if (!shipCountry || !cart?.items.length) { setShipping(null); return; }
     const totalWeight = cart.items.reduce((sum, item) => sum + (item.product.weight || 0.5) * item.quantity, 0);
-    shippingAPI.calculate({ countryCode: shipCountry, weight: totalWeight, currency })
+    shippingAPI.calculate({ countryCode: shipCountry, weight: totalWeight, currency: chargeCurrency })
       .then(r => setShipping(r.data))
       .catch(() => setShipping(null));
-  }, [shipCountry, cart, currency]);
+  }, [shipCountry, cart, chargeCurrency]);
 
   if (!cart || cart.items.length === 0) {
     return (
@@ -87,7 +95,7 @@ export default function Checkout() {
     );
   }
 
-  const subtotal = cart.items.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+  const subtotal = cart.items.reduce((sum, item) => sum + chargePrice(item) * item.quantity, 0);
   const shippingCost = shipping?.cost || 0;
   const total = subtotal + shippingCost;
 
@@ -103,14 +111,14 @@ export default function Checkout() {
     try {
       let order, payment;
       if (user) {
-        const res = await ordersAPI.create({ addressId: selectedAddress, currency, notes: notes || undefined });
+        const res = await ordersAPI.create({ addressId: selectedAddress, currency: chargeCurrency, notes: notes || undefined });
         await refreshCart();
         ({ order, payment } = res.data);
       } else {
         const res = await ordersAPI.createGuest({
           ...guest,
           items: cart.items.map(i => ({ productId: i.productId, quantity: i.quantity })),
-          currency,
+          currency: chargeCurrency,
           notes: notes || undefined,
         });
         await clearCart();
@@ -220,7 +228,7 @@ export default function Checkout() {
                   <p className="font-medium text-accent-800">
                     {shipping.zoneName} - {shipping.estimatedDays}
                   </p>
-                  <p className="text-accent-700">Shipping: {formatPrice(shipping.cost)}</p>
+                  <p className="text-accent-700">Shipping: {fmtCharge(shipping.cost)}</p>
                 </>
               ) : (
                 <p className="text-yellow-800">{t('checkout.noShipping')}</p>
@@ -234,8 +242,8 @@ export default function Checkout() {
               <CreditCard size={20} className="text-primary-600" /> {t('checkout.payment')}
             </h2>
             <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-600">
-              <p className="font-medium text-gray-900 mb-1">Secure Payment via Tilo Pay</p>
-              <p>You will be redirected to Tilo Pay's secure payment page after placing your order.</p>
+              <p className="font-medium text-gray-900 mb-1">Secure Payment via ONVO Pay</p>
+              <p>You will be redirected to ONVO's secure payment page after placing your order. Cards, SINPE Móvil and bank transfer accepted.</p>
             </div>
           </div>
 
@@ -255,13 +263,18 @@ export default function Checkout() {
         {/* Order Summary */}
         <div className="bg-white rounded-xl border border-gray-100 p-6 h-fit sticky top-24">
           <h3 className="font-semibold text-gray-900 mb-4">{t('checkout.review')}</h3>
+          {converted && (
+            <p className="text-xs bg-yellow-50 text-yellow-800 rounded-lg px-3 py-2 mb-4">
+              {t('checkout.chargeCurrencyNotice')}
+            </p>
+          )}
           <div className="space-y-3 mb-4">
             {cart.items.map(item => (
               <div key={item.id} className="flex justify-between text-sm">
                 <span className="text-gray-600 truncate flex-1 mr-2">
                   {item.product.name} x{item.quantity}
                 </span>
-                <span className="font-medium shrink-0">{formatPrice(item.product.price * item.quantity)}</span>
+                <span className="font-medium shrink-0">{fmtCharge(chargePrice(item) * item.quantity)}</span>
               </div>
             ))}
           </div>
@@ -269,16 +282,16 @@ export default function Checkout() {
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
               <span className="text-gray-600">{t('cart.subtotal')}</span>
-              <span className="font-medium">{formatPrice(subtotal)}</span>
+              <span className="font-medium">{fmtCharge(subtotal)}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">{t('cart.shipping')}</span>
-              <span className="font-medium">{shipping ? formatPrice(shippingCost) : '...'}</span>
+              <span className="font-medium">{shipping ? fmtCharge(shippingCost) : '...'}</span>
             </div>
             <hr />
             <div className="flex justify-between text-lg font-bold">
               <span>{t('cart.total')}</span>
-              <span>{formatPrice(total)}</span>
+              <span>{fmtCharge(total)}</span>
             </div>
           </div>
 
