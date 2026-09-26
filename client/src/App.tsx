@@ -15,6 +15,7 @@ import CartPage from './pages/storefront/CartPage';
 import Checkout from './pages/storefront/Checkout';
 import OrderConfirmation from './pages/storefront/OrderConfirmation';
 import Orders from './pages/storefront/Orders';
+import Account from './pages/storefront/Account';
 import Experience from './pages/storefront/Experience';
 import Contact from './pages/storefront/Contact';
 
@@ -48,6 +49,7 @@ export default function App() {
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/order-confirmation/:id" element={<OrderConfirmation />} />
                 <Route path="/orders" element={<Orders />} />
+                <Route path="/account" element={<Account />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
               </Route>

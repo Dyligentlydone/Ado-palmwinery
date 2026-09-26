@@ -4,7 +4,6 @@ import { ShoppingCart } from 'lucide-react';
 import { Product } from '../../types';
 import { useLocale } from '../../context/LocaleContext';
 import { useCart } from '../../context/CartContext';
-import { useAuth } from '../../context/AuthContext';
 import { useState } from 'react';
 
 interface ProductCardProps {
@@ -15,18 +14,13 @@ export default function ProductCard({ product }: ProductCardProps) {
   const { t } = useTranslation();
   const { formatPrice } = useLocale();
   const { addToCart } = useCart();
-  const { user } = useAuth();
   const [adding, setAdding] = useState(false);
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
-    if (!user) {
-      window.location.href = '/login';
-      return;
-    }
     setAdding(true);
     try {
-      await addToCart(product.id);
+      await addToCart(product);
     } catch (err) {
       console.error('Failed to add to cart:', err);
     } finally {

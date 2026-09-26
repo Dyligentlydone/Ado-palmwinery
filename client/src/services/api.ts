@@ -44,6 +44,12 @@ export const authAPI = {
   getProfile: () => api.get('/auth/profile'),
   updateProfile: (data: { firstName?: string; lastName?: string; phone?: string }) =>
     api.put('/auth/profile', data),
+  createAddress: (data: Record<string, unknown>) =>
+    api.post('/auth/addresses', data),
+  updateAddress: (id: string, data: Record<string, unknown>) =>
+    api.put(`/auth/addresses/${id}`, data),
+  deleteAddress: (id: string) =>
+    api.delete(`/auth/addresses/${id}`),
 };
 
 // --- Products ---
@@ -74,10 +80,14 @@ export const cartAPI = {
 export const ordersAPI = {
   create: (data: { addressId: string; currency?: string; notes?: string }) =>
     api.post('/orders', data),
+  createGuest: (data: Record<string, unknown>) =>
+    api.post('/orders/guest', data),
   getMy: (params?: Record<string, string | number>) =>
     api.get('/orders/my', { params }),
   getById: (id: string) =>
     api.get(`/orders/my/${id}`),
+  getGuestById: (id: string) =>
+    api.get(`/orders/guest/${id}`),
 };
 
 // --- Payments ---

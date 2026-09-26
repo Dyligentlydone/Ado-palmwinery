@@ -6,14 +6,12 @@ import { productsAPI } from '../../services/api';
 import { Product } from '../../types';
 import { useLocale } from '../../context/LocaleContext';
 import { useCart } from '../../context/CartContext';
-import { useAuth } from '../../context/AuthContext';
 
 export default function ProductDetail() {
   const { slug } = useParams<{ slug: string }>();
   const { t } = useTranslation();
   const { formatPrice } = useLocale();
   const { addToCart } = useCart();
-  const { user } = useAuth();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
@@ -31,11 +29,10 @@ export default function ProductDetail() {
   }, [slug]);
 
   const handleAddToCart = async () => {
-    if (!user) { window.location.href = '/login'; return; }
     if (!product) return;
     setAdding(true);
     try {
-      await addToCart(product.id, quantity);
+      await addToCart(product, quantity);
       setAdded(true);
       setTimeout(() => setAdded(false), 2000);
     } catch (err) {

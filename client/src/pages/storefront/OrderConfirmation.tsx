@@ -5,21 +5,28 @@ import { CheckCircle, Package } from 'lucide-react';
 import { ordersAPI } from '../../services/api';
 import { Order } from '../../types';
 import { useLocale } from '../../context/LocaleContext';
+import { useAuth } from '../../context/AuthContext';
 
 export default function OrderConfirmation() {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
   const { formatPrice } = useLocale();
+  const { user, isLoading: authLoading } = useAuth();
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!id) return;
-    ordersAPI.getById(id)
+    if (!id || authLoading) return;
+    // Members fetch via the authed endpoint; fall back to the guest link
+    // (covers guest orders re-opened after logging in)
+    const fetch = user
+      ? ordersAPI.getById(id).catch(() => ordersAPI.getGuestById(id))
+      : ordersAPI.getGuestById(id);
+    fetch
       .then(r => setOrder(r.data))
       .catch(() => setOrder(null))
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [id, user, authLoading]);
 
   if (loading) {
     return <div className="max-w-2xl mx-auto px-4 py-16 text-center text-gray-500">{t('common.loading')}</div>;
@@ -29,7 +36,7 @@ export default function OrderConfirmation() {
     return (
       <div className="max-w-2xl mx-auto px-4 py-16 text-center">
         <p className="text-gray-500">Order not found</p>
-        <Link to="/orders" className="text-primary-600 font-medium hover:underline mt-4 inline-block">View My Orders</Link>
+        {user && <Link to="/orders" className="text-primary-600 font-medium hover:underline mt-4 inline-block">View My Orders</Link>}
       </div>
     );
   }
@@ -71,9 +78,11 @@ export default function OrderConfirmation() {
       </div>
 
       <div className="flex flex-wrap justify-center gap-4">
-        <Link to="/orders" className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700">
-          <Package size={18} /> {t('orders.title')}
-        </Link>
+        {user && (
+          <Link to="/orders" className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700">
+            <Package size={18} /> {t('orders.title')}
+          </Link>
+        )}
         <Link to="/products" className="inline-flex items-center px-6 py-3 border-2 border-primary-600 text-primary-600 font-semibold rounded-lg hover:bg-primary-50">
           {t('cart.continueShopping')}
         </Link>

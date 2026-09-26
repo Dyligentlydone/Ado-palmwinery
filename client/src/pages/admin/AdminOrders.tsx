@@ -3,6 +3,7 @@ import { adminAPI } from '../../services/api';
 import { Order } from '../../types';
 
 const STATUS_OPTIONS = ['PENDING', 'CONFIRMED', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED', 'REFUNDED'];
+const CUR_SYM: Record<string, string> = { USD: '$', EUR: '\u20ac', GBP: '\u00a3', CRC: '\u20a1' };
 const STATUS_COLORS: Record<string, string> = {
   PENDING: 'bg-yellow-100 text-yellow-800',
   CONFIRMED: 'bg-blue-100 text-blue-800',
@@ -99,8 +100,13 @@ export default function AdminOrders() {
                   <tr className="hover:bg-gray-50 cursor-pointer" onClick={() => setExpandedId(expandedId === order.id ? null : order.id)}>
                     <td className="px-4 py-3 font-medium text-gray-900">{order.orderNumber}</td>
                     <td className="px-4 py-3 text-gray-600">
-                      {order.user?.firstName} {order.user?.lastName}
-                      <br /><span className="text-xs text-gray-400">{order.user?.email}</span>
+                      {order.user ? (
+                        <>{order.user.firstName} {order.user.lastName}
+                        <br /><span className="text-xs text-gray-400">{order.user.email}</span></>
+                      ) : (
+                        <>{order.guestName || 'Guest'}
+                        <br /><span className="text-xs text-gray-400">{order.guestEmail} · Guest checkout</span></>
+                      )}
                     </td>
                     <td className="px-4 py-3 text-gray-600">{new Date(order.createdAt).toLocaleDateString()}</td>
                     <td className="px-4 py-3">
@@ -108,7 +114,7 @@ export default function AdminOrders() {
                         {order.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-right font-bold">${Number(order.total).toFixed(2)}</td>
+                    <td className="px-4 py-3 text-right font-bold">{CUR_SYM[order.currency] || '$'}{Number(order.total).toFixed(2)}</td>
                     <td className="px-4 py-3 text-right">
                       <select
                         value={order.status}
@@ -129,7 +135,7 @@ export default function AdminOrders() {
                             <h4 className="text-xs font-semibold text-gray-500 mb-2">Items</h4>
                             {order.items.map(item => (
                               <p key={item.id} className="text-sm text-gray-700">
-                                {item.productName} x{item.quantity} = ${Number(item.totalPrice).toFixed(2)}
+                                {item.productName} x{item.quantity} = {CUR_SYM[order.currency] || '$'}{Number(item.totalPrice).toFixed(2)}
                               </p>
                             ))}
                           </div>
@@ -160,7 +166,7 @@ export default function AdminOrders() {
                           </div>
                         </div>
                         <div className="mt-3 text-xs text-gray-500">
-                          Payment: {order.payment?.status || 'N/A'} | Subtotal: ${Number(order.subtotal).toFixed(2)} | Shipping: ${Number(order.shippingCost).toFixed(2)}
+                          Payment: {order.payment?.status || 'N/A'} | Subtotal: {CUR_SYM[order.currency] || '$'}{Number(order.subtotal).toFixed(2)} | Shipping: {CUR_SYM[order.currency] || '$'}{Number(order.shippingCost).toFixed(2)}
                         </div>
                       </td>
                     </tr>

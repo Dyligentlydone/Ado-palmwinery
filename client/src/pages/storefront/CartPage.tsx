@@ -3,26 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { Trash2, ShoppingBag, Minus, Plus } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { useLocale } from '../../context/LocaleContext';
-import { useAuth } from '../../context/AuthContext';
 
 export default function CartPage() {
   const { t } = useTranslation();
   const { cart, updateItem, removeItem, isLoading } = useCart();
   const { formatPrice } = useLocale();
-  const { user } = useAuth();
-
-  if (!user) {
-    return (
-      <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-        <ShoppingBag size={64} className="mx-auto text-gray-300 mb-4" />
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">{t('cart.title')}</h2>
-        <p className="text-gray-500 mb-6">Please login to view your cart</p>
-        <Link to="/login" className="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700">
-          {t('nav.login')}
-        </Link>
-      </div>
-    );
-  }
 
   if (isLoading) {
     return (

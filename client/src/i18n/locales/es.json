@@ -18,6 +18,7 @@
     "register": "Registrarse",
     "myOrders": "Mis Pedidos",
     "profile": "Perfil",
+    "account": "Mi Cuenta",
     "admin": "Administrador",
     "logout": "Cerrar Sesión"
   },
@@ -84,7 +85,15 @@
     "trackOrder": "Rastrear Pedido",
     "estimatedDelivery": "Entrega Estimada",
     "selectAddress": "Selecciona una dirección de envío",
-    "addAddress": "Agregar Nueva Dirección"
+    "addAddress": "Agregar Nueva Dirección",
+    "fillDetails": "Por favor complete sus datos de contacto y envío",
+    "optional": "Opcional",
+    "street": "Dirección",
+    "city": "Ciudad",
+    "state": "Estado / Provincia",
+    "postalCode": "Código Postal",
+    "country": "País",
+    "noShipping": "El envío aún no está disponible para esta ubicación — contáctanos para coordinar la entrega."
   },
   "orders": {
     "title": "Mis Pedidos",
@@ -109,6 +118,21 @@
     "hasAccount": "¿Ya tienes una cuenta?",
     "signUp": "Registrarse",
     "signIn": "Iniciar Sesión"
+  },
+  "account": {
+    "title": "Mi Cuenta",
+    "profile": "Perfil",
+    "profileSaved": "Perfil actualizado",
+    "addresses": "Direcciones Guardadas",
+    "addAddress": "Agregar Dirección",
+    "editAddress": "Editar Dirección",
+    "newAddress": "Nueva Dirección",
+    "noAddresses": "Aún no tienes direcciones guardadas. Agrega una para hacer el pago más rápido.",
+    "default": "Predeterminada",
+    "setDefault": "Establecer como predeterminada",
+    "addressDeleted": "Dirección eliminada",
+    "cannotDelete": "Esta dirección está usada por pedidos existentes y no se puede eliminar.",
+    "label": "Etiqueta (ej. Casa, Trabajo)"
   },
   "footer": {
     "about": "Sobre ADO Palmwinery",

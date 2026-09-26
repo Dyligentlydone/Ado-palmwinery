@@ -11,6 +11,41 @@ function generateOrderNumber(): string {
   return `ADO-${timestamp}-${random}`;
 }
 
+async function initiateTiloPayment(order: { id: string; orderNumber: string; total: any }, currency: string, customerEmail: string, customerName: string) {
+  try {
+    const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+    const serverUrl = process.env.SERVER_URL || process.env.CLIENT_URL || `http://localhost:${process.env.PORT || 5000}`;
+
+    const tiloResponse = await tiloPayService.createPayment({
+      amount: Number(order.total),
+      currency,
+      description: `ADO Palmwinery Order ${order.orderNumber}`,
+      orderId: order.id,
+      customerEmail,
+      customerName,
+      redirectUrl: `${clientUrl}/order-confirmation/${order.id}`,
+      callbackUrl: `${serverUrl}/api/payments/webhook`,
+    });
+
+    await prisma.payment.create({
+      data: {
+        orderId: order.id,
+        tiloPaymentId: tiloResponse.id,
+        amount: order.total,
+        currency: currency as any,
+        status: 'PENDING',
+        tiloPayResponse: tiloResponse as any,
+      },
+    });
+
+    return { paymentUrl: tiloResponse.paymentUrl, paymentId: tiloResponse.id };
+  } catch (paymentError) {
+    console.error('Payment initiation error:', paymentError);
+    // Order is created but payment failed - admin can handle manually
+    return null;
+  }
+}
+
 export const createOrder = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { addressId, currency = 'USD', notes } = req.body;
@@ -60,81 +95,56 @@ export const createOrder = async (req: AuthRequest, res: Response): Promise<void
     const shippingCost = shipping?.cost || 0;
     const total = subtotal + shippingCost;
 
-    // Create order
-    const order = await prisma.order.create({
-      data: {
-        orderNumber: generateOrderNumber(),
-        userId,
-        addressId,
-        status: 'PENDING',
-        currency: currency as any,
-        subtotal,
-        shippingCost,
-        tax: 0,
-        total,
-        notes,
-        items: {
-          create: cart.items.map(item => {
-            const price = Number(item.product[priceField] || item.product.priceUSD);
-            return {
-              productId: item.product.id,
-              productName: item.product.name,
-              quantity: item.quantity,
-              unitPrice: price,
-              totalPrice: price * item.quantity,
-            };
-          }),
+    // Create order, decrement stock, and clear cart atomically
+    const order = await prisma.$transaction(async (tx) => {
+      const created = await tx.order.create({
+        data: {
+          orderNumber: generateOrderNumber(),
+          userId,
+          addressId,
+          status: 'PENDING',
+          currency: currency as any,
+          subtotal,
+          shippingCost,
+          tax: 0,
+          total,
+          notes,
+          items: {
+            create: cart.items.map(item => {
+              const price = Number(item.product[priceField] || item.product.priceUSD);
+              return {
+                productId: item.product.id,
+                productName: item.product.name,
+                quantity: item.quantity,
+                unitPrice: price,
+                totalPrice: price * item.quantity,
+              };
+            }),
+          },
         },
-      },
-      include: { items: true, address: true },
-    });
-
-    // Decrement stock
-    for (const item of cart.items) {
-      await prisma.product.update({
-        where: { id: item.productId },
-        data: { stock: { decrement: item.quantity } },
+        include: { items: true, address: true },
       });
-    }
 
-    // Clear cart
-    await prisma.cartItem.deleteMany({ where: { cartId: cart.id } });
+      for (const item of cart.items) {
+        await tx.product.update({
+          where: { id: item.productId },
+          data: { stock: { decrement: item.quantity } },
+        });
+      }
+
+      await tx.cartItem.deleteMany({ where: { cartId: cart.id } });
+
+      return created;
+    });
 
     // Initiate payment with Tilo Pay
     const user = await prisma.user.findUnique({ where: { id: userId } });
-    let paymentData = null;
-
-    try {
-      const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
-      const serverUrl = `http://localhost:${process.env.PORT || 5000}`;
-
-      const tiloResponse = await tiloPayService.createPayment({
-        amount: total,
-        currency,
-        description: `ADO Palmwinery Order ${order.orderNumber}`,
-        orderId: order.id,
-        customerEmail: user!.email,
-        customerName: `${user!.firstName} ${user!.lastName}`,
-        redirectUrl: `${clientUrl}/order-confirmation/${order.id}`,
-        callbackUrl: `${serverUrl}/api/payments/webhook`,
-      });
-
-      await prisma.payment.create({
-        data: {
-          orderId: order.id,
-          tiloPaymentId: tiloResponse.id,
-          amount: total,
-          currency: currency as any,
-          status: 'PENDING',
-          tiloPayResponse: tiloResponse as any,
-        },
-      });
-
-      paymentData = { paymentUrl: tiloResponse.paymentUrl, paymentId: tiloResponse.id };
-    } catch (paymentError) {
-      console.error('Payment initiation error:', paymentError);
-      // Order is created but payment failed - admin can handle manually
-    }
+    const paymentData = await initiateTiloPayment(
+      order,
+      currency,
+      user!.email,
+      `${user!.firstName} ${user!.lastName}`
+    );
 
     res.status(201).json({ order, payment: paymentData });
   } catch (error) {
@@ -182,6 +192,134 @@ export const getOrderById = async (req: AuthRequest, res: Response): Promise<voi
     res.json(order);
   } catch (error) {
     console.error('Get order error:', error);
+    res.status(500).json({ error: 'Failed to fetch order' });
+  }
+};
+
+// --- GUEST CHECKOUT (no account required) ---
+
+export const createGuestOrder = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const {
+      email, firstName, lastName, phone,
+      street, city, state, postalCode, country,
+      items, currency = 'USD', notes,
+    } = req.body;
+
+    if (!Array.isArray(items) || items.length === 0) {
+      res.status(400).json({ error: 'Cart is empty' });
+      return;
+    }
+
+    // Load products and validate stock — prices always come from the DB, never the client
+    const productIds = items.map((i: any) => i.productId);
+    const products = await prisma.product.findMany({
+      where: { id: { in: productIds }, isActive: true },
+    });
+    const productMap = new Map(products.map(p => [p.id, p]));
+
+    const priceField = `price${currency}` as 'priceUSD' | 'priceEUR' | 'priceGBP' | 'priceCRC';
+    let subtotal = 0;
+    let totalWeight = 0;
+    const lineItems: { product: (typeof products)[number]; quantity: number; price: number }[] = [];
+
+    for (const item of items) {
+      const product = productMap.get(item.productId);
+      const quantity = Math.max(1, Math.floor(Number(item.quantity) || 0));
+      if (!product) {
+        res.status(400).json({ error: 'A product in your cart is no longer available' });
+        return;
+      }
+      if (quantity > product.stock) {
+        res.status(400).json({ error: `Insufficient stock for ${product.name}` });
+        return;
+      }
+      const price = Number(product[priceField] || product.priceUSD);
+      subtotal += price * quantity;
+      totalWeight += Number(product.weight || 0) * quantity;
+      lineItems.push({ product, quantity, price });
+    }
+
+    const shipping = await shippingService.calculateShipping(
+      country,
+      totalWeight,
+      currency as SupportedCurrency
+    );
+    const shippingCost = shipping?.cost || 0;
+    const total = subtotal + shippingCost;
+
+    // Create address, order, and decrement stock atomically
+    const order = await prisma.$transaction(async (tx) => {
+      const address = await tx.address.create({
+        data: { firstName, lastName, street, city, state, postalCode, country, phone: phone || null },
+      });
+
+      const created = await tx.order.create({
+        data: {
+          orderNumber: generateOrderNumber(),
+          guestEmail: email,
+          guestName: `${firstName} ${lastName}`,
+          addressId: address.id,
+          status: 'PENDING',
+          currency: currency as any,
+          subtotal,
+          shippingCost,
+          tax: 0,
+          total,
+          notes,
+          items: {
+            create: lineItems.map(({ product, quantity, price }) => ({
+              productId: product.id,
+              productName: product.name,
+              quantity,
+              unitPrice: price,
+              totalPrice: price * quantity,
+            })),
+          },
+        },
+        include: { items: true, address: true },
+      });
+
+      for (const { product, quantity } of lineItems) {
+        await tx.product.update({
+          where: { id: product.id },
+          data: { stock: { decrement: quantity } },
+        });
+      }
+
+      return created;
+    });
+
+    const paymentData = await initiateTiloPayment(order, currency, email, `${firstName} ${lastName}`);
+
+    res.status(201).json({ order, payment: paymentData });
+  } catch (error) {
+    console.error('Create guest order error:', error);
+    res.status(500).json({ error: 'Failed to create order' });
+  }
+};
+
+export const getGuestOrder = async (req: Request, res: Response): Promise<void> => {
+  try {
+    // ID is an unguessable UUID — acts as the order's secret link for guests
+    const order = await prisma.order.findUnique({
+      where: { id: req.params.id as string },
+      select: {
+        id: true, orderNumber: true, status: true, currency: true, userId: true,
+        subtotal: true, shippingCost: true, tax: true, total: true,
+        createdAt: true,
+        items: { select: { id: true, productName: true, quantity: true, unitPrice: true, totalPrice: true } },
+      },
+    });
+
+    if (!order || order.userId) {
+      res.status(404).json({ error: 'Order not found' });
+      return;
+    }
+
+    res.json(order);
+  } catch (error) {
+    console.error('Get guest order error:', error);
     res.status(500).json({ error: 'Failed to fetch order' });
   }
 };

@@ -40,6 +40,11 @@ export default function Header() {
               {t('nav.contact')}
             </Link>
             {user && (
+              <Link to="/account" className="text-gray-700 hover:text-primary-600 transition-colors font-medium">
+                {t('nav.account')}
+              </Link>
+            )}
+            {user && (
               <Link to="/orders" className="text-gray-700 hover:text-primary-600 transition-colors font-medium">
                 {t('nav.myOrders')}
               </Link>
@@ -145,6 +150,11 @@ export default function Header() {
               <Link to="/contact" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
                 {t('nav.contact')}
               </Link>
+              {user && (
+                <Link to="/account" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
+                  {t('nav.account')}
+                </Link>
+              )}
               {user && (
                 <Link to="/orders" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
                   {t('nav.myOrders')}

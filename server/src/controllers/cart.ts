@@ -1,6 +1,38 @@
 import { Response } from 'express';
 import prisma from '../config/database';
 import { AuthRequest } from '../types';
+import { SupportedCurrency, SupportedLanguage } from '../config/constants';
+
+// Match storefront product responses: localized name + `price` in the active currency
+function localizeCart(cart: any, language: SupportedLanguage, currency: SupportedCurrency) {
+  if (!cart) return cart;
+  return {
+    ...cart,
+    items: cart.items.map((item: any) => {
+      const p = item.product;
+      const priceField = `price${currency}` as keyof typeof p;
+      return {
+        ...item,
+        product: {
+          ...p,
+          name: language === 'es' && p.nameEs ? p.nameEs : p.name,
+          description: language === 'es' && p.descriptionEs ? p.descriptionEs : p.description,
+          price: p[priceField] || p.priceUSD,
+          currency,
+          category: p.category ? {
+            ...p.category,
+            name: language === 'es' && p.category.nameEs ? p.category.nameEs : p.category.name,
+          } : undefined,
+        },
+      };
+    }),
+  };
+}
+
+const localeOf = (req: AuthRequest) => ({
+  language: (req.locale?.language || 'en') as SupportedLanguage,
+  currency: (req.locale?.currency || 'USD') as SupportedCurrency,
+});
 
 export const getCart = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -26,7 +58,8 @@ export const getCart = async (req: AuthRequest, res: Response): Promise<void> =>
       });
     }
 
-    res.json(cart);
+    const { language, currency } = localeOf(req);
+    res.json(localizeCart(cart, language, currency));
   } catch (error) {
     console.error('Get cart error:', error);
     res.status(500).json({ error: 'Failed to get cart' });
@@ -82,7 +115,8 @@ export const addToCart = async (req: AuthRequest, res: Response): Promise<void> 
       },
     });
 
-    res.json(updatedCart);
+    const { language, currency } = localeOf(req);
+    res.json(localizeCart(updatedCart, language, currency));
   } catch (error) {
     console.error('Add to cart error:', error);
     res.status(500).json({ error: 'Failed to add to cart' });
@@ -127,7 +161,8 @@ export const updateCartItem = async (req: AuthRequest, res: Response): Promise<v
       },
     });
 
-    res.json(updatedCart);
+    const { language, currency } = localeOf(req);
+    res.json(localizeCart(updatedCart, language, currency));
   } catch (error) {
     console.error('Update cart item error:', error);
     res.status(500).json({ error: 'Failed to update cart item' });
@@ -160,7 +195,8 @@ export const removeFromCart = async (req: AuthRequest, res: Response): Promise<v
       },
     });
 
-    res.json(updatedCart);
+    const { language, currency } = localeOf(req);
+    res.json(localizeCart(updatedCart, language, currency));
   } catch (error) {
     console.error('Remove from cart error:', error);
     res.status(500).json({ error: 'Failed to remove from cart' });

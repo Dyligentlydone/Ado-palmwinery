@@ -88,6 +88,8 @@ export interface Payment {
 }
 
 export interface Order {
+  guestEmail?: string;
+  guestName?: string;
   id: string;
   orderNumber: string;
   userId: string;

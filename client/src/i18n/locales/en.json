@@ -18,6 +18,7 @@
     "register": "Register",
     "myOrders": "My Orders",
     "profile": "Profile",
+    "account": "My Account",
     "admin": "Admin",
     "logout": "Logout"
   },
@@ -84,7 +85,15 @@
     "trackOrder": "Track Order",
     "estimatedDelivery": "Estimated Delivery",
     "selectAddress": "Select a shipping address",
-    "addAddress": "Add New Address"
+    "addAddress": "Add New Address",
+    "fillDetails": "Please fill in your contact and shipping details",
+    "optional": "Optional",
+    "street": "Street Address",
+    "city": "City",
+    "state": "State / Province",
+    "postalCode": "Postal Code",
+    "country": "Country",
+    "noShipping": "Shipping is not available to this location yet — contact us to arrange delivery."
   },
   "orders": {
     "title": "My Orders",
@@ -109,6 +118,21 @@
     "hasAccount": "Already have an account?",
     "signUp": "Sign Up",
     "signIn": "Sign In"
+  },
+  "account": {
+    "title": "My Account",
+    "profile": "Profile",
+    "profileSaved": "Profile updated",
+    "addresses": "Saved Addresses",
+    "addAddress": "Add Address",
+    "editAddress": "Edit Address",
+    "newAddress": "New Address",
+    "noAddresses": "No saved addresses yet. Add one to make checkout faster.",
+    "default": "Default",
+    "setDefault": "Set as default",
+    "addressDeleted": "Address deleted",
+    "cannotDelete": "This address is used by existing orders and cannot be deleted.",
+    "label": "Label (e.g. Home, Work)"
   },
   "footer": {
     "about": "About ADO Palmwinery",

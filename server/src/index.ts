@@ -41,7 +41,7 @@ app.use(cors({
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100,
+  max: 300,
   standardHeaders: true,
   legacyHeaders: false,
 });
@@ -98,6 +98,9 @@ app.use((err: Error, _req: express.Request, res: express.Response, _next: expres
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  if (isProduction && (!process.env.JWT_SECRET || process.env.JWT_SECRET === 'dev-secret')) {
+    console.error('WARNING: JWT_SECRET is not set or uses the default value. All tokens are insecure!');
+  }
 });
 
 export default app;
