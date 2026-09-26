@@ -12,6 +12,7 @@
     "home": "Inicio",
     "products": "Productos",
     "experience": "Experiencia",
+    "news": "Noticias y Prensa",
     "contact": "Contacto",
     "cart": "Carrito",
     "login": "Iniciar Sesión",
@@ -122,6 +123,14 @@
     "hasAccount": "¿Ya tienes una cuenta?",
     "signUp": "Registrarse",
     "signIn": "Iniciar Sesión"
+  },
+  "news": {
+    "kicker": "Prensa y Medios",
+    "title": "Noticias y Prensa",
+    "subtitle": "Anuncios, cobertura de prensa e historias de la vinatería.",
+    "readMore": "Leer la historia completa",
+    "mediaTitle": "Consultas de Medios",
+    "mediaText": "Para kits de prensa, entrevistas, colaboraciones o consultas de medios, contacta a nuestro equipo directamente."
   },
   "account": {
     "title": "Mi Cuenta",

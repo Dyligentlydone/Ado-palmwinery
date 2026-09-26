@@ -36,6 +36,9 @@ export default function Header() {
             <Link to="/experience" className="text-gray-700 hover:text-primary-600 transition-colors font-medium">
               {t('nav.experience')}
             </Link>
+            <Link to="/news" className="text-gray-700 hover:text-primary-600 transition-colors font-medium">
+              {t('nav.news')}
+            </Link>
             <Link to="/contact" className="text-gray-700 hover:text-primary-600 transition-colors font-medium">
               {t('nav.contact')}
             </Link>
@@ -146,6 +149,9 @@ export default function Header() {
               </Link>
               <Link to="/experience" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
                 {t('nav.experience')}
+              </Link>
+              <Link to="/news" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
+                {t('nav.news')}
               </Link>
               <Link to="/contact" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
                 {t('nav.contact')}

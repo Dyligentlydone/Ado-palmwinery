@@ -12,6 +12,7 @@
     "home": "Home",
     "products": "Products",
     "experience": "Experience",
+    "news": "News & Media",
     "contact": "Contact",
     "cart": "Cart",
     "login": "Login",
@@ -122,6 +123,14 @@
     "hasAccount": "Already have an account?",
     "signUp": "Sign Up",
     "signIn": "Sign In"
+  },
+  "news": {
+    "kicker": "Press & Media",
+    "title": "News & Media",
+    "subtitle": "Announcements, press coverage, and stories from the winery.",
+    "readMore": "Read the full story",
+    "mediaTitle": "Media Inquiries",
+    "mediaText": "For press kits, interviews, collaborations, or media inquiries, reach out to our team directly."
   },
   "account": {
     "title": "My Account",
