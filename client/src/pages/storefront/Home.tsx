@@ -34,6 +34,8 @@ export default function Home() {
             aria-hidden="true"
             className="absolute inset-0 w-full h-full object-cover object-[50%_58%]"
           />
+          {/* Warm veil — mutes the image so the white copy and buttons read cleanly */}
+          <div className="absolute inset-0 bg-[#1d0a02]/[0.69]" />
           {/* Sun-glow: cream radiates from the sun so the fade follows the image's own light */}
           <div
             className="absolute inset-0"
@@ -48,14 +50,14 @@ export default function Home() {
           {/* Hero copy — overlaid on the image, biased above the sun glow */}
           <div className="absolute inset-0 flex items-center">
             <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-24">
-              <div className="max-w-2xl">
+              <div className="max-w-2xl mx-auto text-center">
                 <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight text-white drop-shadow-lg font-[family-name:var(--font-heading)]">
                   {t('home.hero.title')}
                 </h1>
                 <p className="text-lg md:text-xl text-white/85 mb-8 leading-relaxed drop-shadow">
                   {t('home.hero.subtitle')}
                 </p>
-                <div className="flex flex-wrap gap-4">
+                <div className="flex flex-wrap justify-center gap-4">
                   <Link
                     to="/products"
                     className="inline-flex items-center px-8 py-3 bg-gray-900/90 text-white font-semibold rounded-lg hover:bg-gray-900 transition-colors"
@@ -74,8 +76,42 @@ export default function Home() {
           </div>
         </div>
 
+        {/* The melt continues down behind the heritage section — no hard edge */}
         <div className="relative bg-gradient-to-b from-[#fdf3d8] via-[#fbe8c4] to-[#fefefe]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-24 md:pt-14 md:pb-36" />
+          {/* Our Heritage — palms photo left, story right, value cards below */}
+          <section id="about" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 pt-4 md:pt-6 -translate-y-12 -mb-12 md:-translate-y-20 md:-mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14 items-center mb-14">
+          <div>
+            <img
+              src="/images/palms-heritage.png"
+              alt="Palm groves at golden hour"
+              className="w-full max-w-md mx-auto md:max-w-none"
+            />
+          </div>
+          <div>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-heading)]">
+              {t('home.about.title')}
+            </h2>
+            <p className="text-gray-600 text-lg leading-relaxed">{t('home.about.text')}</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            { icon: Award, title: t('home.about.quality'), text: t('home.about.qualityText') },
+            { icon: Leaf, title: t('home.about.sustainable'), text: t('home.about.sustainableText') },
+            { icon: Globe, title: t('home.about.worldwide'), text: t('home.about.worldwideText') },
+          ].map(({ icon: Icon, title, text }) => (
+            <div key={title} className="text-center p-6">
+              <div className="w-14 h-14 bg-accent-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Icon size={28} className="text-accent-600" />
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">{title}</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">{text}</p>
+            </div>
+          ))}
+        </div>
+          </section>
         </div>
       </section>
 
@@ -137,32 +173,6 @@ export default function Home() {
               </Link>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* About section */}
-      <section id="about" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-heading)]">
-            {t('home.about.title')}
-          </h2>
-          <p className="text-gray-600 text-lg max-w-3xl mx-auto">{t('home.about.text')}</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
-            { icon: Award, title: t('home.about.quality'), text: t('home.about.qualityText') },
-            { icon: Leaf, title: t('home.about.sustainable'), text: t('home.about.sustainableText') },
-            { icon: Globe, title: t('home.about.worldwide'), text: t('home.about.worldwideText') },
-          ].map(({ icon: Icon, title, text }) => (
-            <div key={title} className="text-center p-6">
-              <div className="w-14 h-14 bg-accent-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Icon size={28} className="text-accent-600" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">{title}</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">{text}</p>
-            </div>
-          ))}
         </div>
       </section>
     </div>
