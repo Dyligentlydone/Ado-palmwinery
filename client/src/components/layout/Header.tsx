@@ -42,7 +42,7 @@ export default function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-colors duration-300 ${isHome ? '-mb-16' : ''} ${
+      className={`relative z-50 transition-colors duration-300 ${isHome ? '-mb-16' : ''} ${
         overImage ? 'bg-transparent' : 'bg-[#fdf3d8]/95 backdrop-blur-sm shadow-sm'
       }`}
     >

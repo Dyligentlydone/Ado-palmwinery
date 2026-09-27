@@ -77,9 +77,9 @@ export default function Home() {
         </div>
 
         {/* The melt continues down behind the heritage section — no hard edge */}
-        <div className="relative bg-gradient-to-b from-[#fdf3d8] via-[#fbe8c4] to-[#fefefe]">
+        <div className="relative bg-gradient-to-b from-[#fdf3d8] via-[#fbe8c4] to-[#fefefe] pt-px">
           {/* Our Heritage — palms photo left, story right, value cards below */}
-          <section id="about" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 pt-4 md:pt-6 -translate-y-12 -mb-12 md:-translate-y-20 md:-mb-20">
+          <section id="about" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 pt-4 md:pt-6 -mt-12 md:-mt-20">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14 items-center mb-14">
           <div>
             <img
@@ -149,7 +149,7 @@ export default function Home() {
       </section>
 
       {/* Categories */}
-      <section className="bg-gray-50 py-16">
+      <section className="bg-gray-50 pt-16 pb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-heading)]">
