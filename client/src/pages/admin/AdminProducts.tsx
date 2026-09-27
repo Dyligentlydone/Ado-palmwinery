@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Plus, Edit2, Trash2, X, FolderOpen } from 'lucide-react';
+import { Plus, Edit2, Trash2, X, FolderOpen, ImagePlus, Check } from 'lucide-react';
 import { adminAPI } from '../../services/api';
 import { Product, Category } from '../../types';
 
@@ -39,6 +39,29 @@ export default function AdminProducts() {
   const [catEditingId, setCatEditingId] = useState<string | null>(null);
   const [catSaving, setCatSaving] = useState(false);
   const [catError, setCatError] = useState('');
+  const [library, setLibrary] = useState<string[]>([]);
+  const [pickerOpen, setPickerOpen] = useState(false);
+
+  const imageList = form.images.split('\n').map(s => s.trim()).filter(Boolean);
+  const setImageList = (list: string[]) =>
+    setForm(prev => ({ ...prev, images: list.join('\n') }));
+
+  const togglePicker = () => {
+    if (!pickerOpen && library.length === 0) {
+      adminAPI.listProductImages()
+        .then(r => setLibrary(r.data))
+        .catch(() => {});
+    }
+    setPickerOpen(!pickerOpen);
+  };
+
+  const toggleImage = (path: string) => {
+    setImageList(
+      imageList.includes(path)
+        ? imageList.filter(i => i !== path)
+        : [...imageList, path]
+    );
+  };
 
   const fetchProducts = () => {
     setLoading(true);
@@ -314,8 +337,78 @@ export default function AdminProducts() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Image URLs (one per line)</label>
-                <textarea value={form.images} onChange={e => updateField('images', e.target.value)} rows={2} className="w-full px-3 py-2 border rounded-lg text-sm" placeholder="/images/products/example.jpg" />
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-xs font-medium text-gray-500">Images (first is the product photo)</label>
+                  <button
+                    type="button"
+                    onClick={togglePicker}
+                    className="flex items-center gap-1.5 text-xs font-medium text-primary-600 hover:text-primary-700"
+                  >
+                    <ImagePlus size={14} /> {pickerOpen ? 'Hide library' : 'Browse image library'}
+                  </button>
+                </div>
+
+                {/* Selected images */}
+                {imageList.length > 0 ? (
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    {imageList.map((img, i) => (
+                      <div key={img} className="relative group">
+                        <img src={img} alt="" className="w-16 h-16 object-cover rounded-lg border border-gray-200" />
+                        {i === 0 && (
+                          <span className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[9px] text-center rounded-b-lg py-0.5">main</span>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => setImageList(imageList.filter(x => x !== img))}
+                          className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                          title="Remove"
+                        >
+                          <X size={11} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-xs text-gray-400 mb-2">No images selected</p>
+                )}
+
+                {/* Library picker */}
+                {pickerOpen && (
+                  <div className="border border-gray-200 rounded-lg p-3 mb-2 max-h-48 overflow-y-auto">
+                    {library.length === 0 ? (
+                      <p className="text-xs text-gray-400">No images found in public/images/products</p>
+                    ) : (
+                      <div className="grid grid-cols-4 gap-2">
+                        {library.map(img => {
+                          const selected = imageList.includes(img);
+                          return (
+                            <button
+                              key={img}
+                              type="button"
+                              onClick={() => toggleImage(img)}
+                              className={`relative rounded-lg overflow-hidden border-2 transition-colors ${selected ? 'border-primary-500' : 'border-transparent hover:border-gray-300'}`}
+                              title={img}
+                            >
+                              <img src={img} alt="" className="w-full h-16 object-cover" />
+                              {selected && (
+                                <span className="absolute top-1 right-1 w-4 h-4 bg-primary-500 text-white rounded-full flex items-center justify-center">
+                                  <Check size={11} />
+                                </span>
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                <input
+                  value={form.images}
+                  onChange={e => updateField('images', e.target.value)}
+                  className="w-full px-3 py-2 border rounded-lg text-xs text-gray-500"
+                  placeholder="/images/products/example.jpg — or paste an external URL"
+                />
               </div>
 
               <div>

@@ -1,4 +1,6 @@
 import { Request, Response } from 'express';
+import fs from 'fs';
+import path from 'path';
 import prisma from '../config/database';
 import { PAGINATION } from '../config/constants';
 import { SupportedCurrency, SupportedLanguage } from '../config/constants';
@@ -148,6 +150,29 @@ export const getCategories = async (req: Request, res: Response): Promise<void> 
 };
 
 // --- ADMIN ENDPOINTS ---
+
+// Lists product images available on the server so admins can pick
+// instead of hand-typing paths. Checks both source and build dirs.
+export const adminListImages = async (_req: Request, res: Response): Promise<void> => {
+  try {
+    const dirs = [
+      path.join(__dirname, '../../../client/public/images/products'),
+      path.join(__dirname, '../../../client/dist/images/products'),
+    ];
+    const files = new Set<string>();
+    for (const dir of dirs) {
+      try {
+        for (const f of fs.readdirSync(dir)) {
+          if (/\.(jpe?g|png|webp|gif|avif)$/i.test(f)) files.add(f);
+        }
+      } catch { /* directory may not exist in this environment */ }
+    }
+    res.json([...files].sort().map(f => `/images/products/${f}`));
+  } catch (error) {
+    console.error('Admin list images error:', error);
+    res.status(500).json({ error: 'Failed to list images' });
+  }
+};
 
 export const adminGetProducts = async (req: Request, res: Response): Promise<void> => {
   try {

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import {
   getProducts, getProductBySlug, getFeaturedProducts, getCategories,
-  adminGetProducts, adminCreateProduct, adminUpdateProduct, adminDeleteProduct,
+  adminGetProducts, adminCreateProduct, adminUpdateProduct, adminDeleteProduct, adminListImages,
   adminCreateCategory, adminUpdateCategory, adminDeleteCategory, adminGetCategories,
 } from '../controllers/products';
 import { authenticate, requireAdmin } from '../middleware/auth';
@@ -16,6 +16,7 @@ router.get('/:slug', getProductBySlug);
 
 // Admin routes
 router.get('/admin/all', authenticate, requireAdmin, adminGetProducts);
+router.get('/admin/images', authenticate, requireAdmin, adminListImages);
 router.post('/admin', authenticate, requireAdmin, adminCreateProduct);
 router.put('/admin/:id', authenticate, requireAdmin, adminUpdateProduct);
 router.delete('/admin/:id', authenticate, requireAdmin, adminDeleteProduct);

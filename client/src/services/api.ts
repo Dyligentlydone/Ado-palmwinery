@@ -121,6 +121,8 @@ export const adminAPI = {
     api.delete(`/products/admin/${id}`),
   getCategories: () =>
     api.get('/products/admin/categories'),
+  listProductImages: () =>
+    api.get('/products/admin/images'),
   createCategory: (data: Record<string, unknown>) =>
     api.post('/products/admin/categories', data),
   updateCategory: (id: string, data: Record<string, unknown>) =>
