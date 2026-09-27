@@ -53,8 +53,14 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="border-t border-[#3a2413]/15 mt-4 md:mt-8 pt-3 md:pt-6 text-center text-[10px] md:text-sm text-[#3a2413]/50">
-            &copy; {new Date().getFullYear()} ADO Palmwinery. {t('footer.rights')}
+          <div className="border-t border-[#3a2413]/15 mt-4 md:mt-8 pt-3 md:pt-6 flex items-center justify-between text-[10px] md:text-sm text-[#3a2413]/50">
+            <span>&copy; {new Date().getFullYear()} ADO Palmwinery. {t('footer.rights')}</span>
+            <span>
+              Website by:&nbsp;
+              <a href="https://www.dyligent.solutions/" target="_blank" rel="noopener noreferrer" className="text-[#d7b73f] hover:text-[#c9a935] transition-colors">
+                {'{'}Dyligent{'}'}
+              </a>
+            </span>
           </div>
         </div>
       </div>
