@@ -32,7 +32,6 @@ export default function Footer() {
             </div>
 
             <div>
-              <h4 className="font-semibold mb-2 md:mb-3 text-xs md:text-base">{t('footer.quickLinks')}</h4>
               <ul className="space-y-1.5 md:space-y-2 text-[11px] md:text-sm text-white/70">
                 <li><Link to="/products" className="hover:text-white transition-colors">{t('nav.products')}</Link></li>
                 <li><Link to="/experience" className="hover:text-white transition-colors">{t('nav.experience')}</Link></li>
@@ -52,11 +51,6 @@ export default function Footer() {
                     WhatsApp: +506 7157 7049
                   </a>
                   <p className="text-white/50 text-[10px] md:text-xs mt-0.5">{t('contact.directLine')}</p>
-                </li>
-                <li>
-                  <Link to="/privacy" className="hover:text-white transition-colors">{t('footer.privacy')}</Link>
-                  {' | '}
-                  <Link to="/terms" className="hover:text-white transition-colors">{t('footer.terms')}</Link>
                 </li>
               </ul>
             </div>

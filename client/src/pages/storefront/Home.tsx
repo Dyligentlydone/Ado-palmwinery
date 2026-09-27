@@ -24,31 +24,58 @@ export default function Home() {
     <div>
       <SunsetIntro />
 
-      {/* Hero Section — continues the sun's glow you just dove through */}
-      <section className="relative bg-gradient-to-b from-[#fdf3d8] via-[#fbe8c4] to-[#fefefe]">
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-36">
-          <div className="max-w-2xl">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight text-gray-900 font-[family-name:var(--font-heading)]">
-              {t('home.hero.title')}
-            </h1>
-            <p className="text-lg md:text-xl text-gray-600 mb-8 leading-relaxed">
-              {t('home.hero.subtitle')}
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Link
-                to="/products"
-                className="inline-flex items-center px-8 py-3 bg-gray-900 text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors"
-              >
-                {t('home.hero.cta')}
-              </Link>
-              <a
-                href="#about"
-                className="inline-flex items-center px-8 py-3 border-2 border-gray-900/25 text-gray-900 font-semibold rounded-lg hover:bg-gray-900/5 transition-colors"
-              >
-                {t('home.hero.secondary')}
-              </a>
+      {/* Hero — the same sunset you dove through becomes the header backdrop,
+          its glow melting into the page cream */}
+      <section className="relative">
+        <div className="relative h-[62vh] min-h-[420px] md:h-[72vh] overflow-hidden">
+          <img
+            src="/images/sunset-intro.jpg"
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover object-[50%_58%]"
+          />
+          {/* Sun-glow: cream radiates from the sun so the fade follows the image's own light */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'radial-gradient(ellipse 55% 42% at 50% 66%, rgba(253,243,216,0.85) 0%, rgba(253,243,216,0.4) 45%, rgba(253,243,216,0) 72%)',
+            }}
+          />
+          {/* Linear finish — guarantees the bottom edge is exactly the page cream */}
+          <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-b from-transparent via-[#fdf3d8]/50 to-[#fdf3d8]" />
+
+          {/* Hero copy — overlaid on the image, biased above the sun glow */}
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-24">
+              <div className="max-w-2xl">
+                <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight text-white drop-shadow-lg font-[family-name:var(--font-heading)]">
+                  {t('home.hero.title')}
+                </h1>
+                <p className="text-lg md:text-xl text-white/85 mb-8 leading-relaxed drop-shadow">
+                  {t('home.hero.subtitle')}
+                </p>
+                <div className="flex flex-wrap gap-4">
+                  <Link
+                    to="/products"
+                    className="inline-flex items-center px-8 py-3 bg-gray-900/90 text-white font-semibold rounded-lg hover:bg-gray-900 transition-colors"
+                  >
+                    {t('home.hero.cta')}
+                  </Link>
+                  <a
+                    href="#about"
+                    className="inline-flex items-center px-8 py-3 border-2 border-white/70 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors backdrop-blur-sm"
+                  >
+                    {t('home.hero.secondary')}
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
+        </div>
+
+        <div className="relative bg-gradient-to-b from-[#fdf3d8] via-[#fbe8c4] to-[#fefefe]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-24 md:pt-14 md:pb-36" />
         </div>
       </section>
 

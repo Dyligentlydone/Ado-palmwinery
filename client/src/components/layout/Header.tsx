@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ShoppingCart, Menu, X, User, Globe, ChevronDown } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
@@ -13,45 +13,54 @@ export default function Header() {
   const { itemCount } = useCart();
   const { language, currency, setLanguage, setCurrency } = useLocale();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [localeOpen, setLocaleOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  const isHome = pathname === '/';
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // On the homepage the header floats over the sunset image until you scroll
+  const overImage = isHome && !scrolled && !mobileOpen;
+
+  const navLink = overImage
+    ? 'text-white/90 hover:text-white transition-colors font-medium drop-shadow-sm'
+    : 'text-gray-700 hover:text-primary-600 transition-colors font-medium';
+  const iconBtn = overImage
+    ? 'p-2 text-white/90 hover:text-white transition-colors'
+    : 'p-2 text-gray-600 hover:text-primary-600 transition-colors';
+  const subtleLink = overImage
+    ? 'text-sm text-white/80 hover:text-white transition-colors drop-shadow-sm'
+    : 'text-sm text-gray-600 hover:text-primary-600 transition-colors';
 
   return (
-    <header className="bg-[#fdf3d8] sticky top-0 z-50">
+    <header
+      className={`sticky top-0 z-50 transition-colors duration-300 ${isHome ? '-mb-16' : ''} ${
+        overImage ? 'bg-transparent' : 'bg-[#fdf3d8]/95 backdrop-blur-sm shadow-sm'
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <img src="/images/logo.png" alt="ADO Palmwinery" className="h-12 w-auto" />
+            <img src="/images/logo.png" alt="ADO Palmwinery" className="h-12 w-auto rounded-lg" />
           </Link>
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-6">
-            <Link to="/" className="text-gray-700 hover:text-primary-600 transition-colors font-medium">
-              {t('nav.home')}
-            </Link>
-            <Link to="/products" className="text-gray-700 hover:text-primary-600 transition-colors font-medium">
-              {t('nav.products')}
-            </Link>
-            <Link to="/experience" className="text-gray-700 hover:text-primary-600 transition-colors font-medium">
-              {t('nav.experience')}
-            </Link>
-            <Link to="/news" className="text-gray-700 hover:text-primary-600 transition-colors font-medium">
-              {t('nav.news')}
-            </Link>
-            <Link to="/contact" className="text-gray-700 hover:text-primary-600 transition-colors font-medium">
-              {t('nav.contact')}
-            </Link>
-            {user && (
-              <Link to="/account" className="text-gray-700 hover:text-primary-600 transition-colors font-medium">
-                {t('nav.account')}
-              </Link>
-            )}
-            {user && (
-              <Link to="/orders" className="text-gray-700 hover:text-primary-600 transition-colors font-medium">
-                {t('nav.myOrders')}
-              </Link>
-            )}
+            <Link to="/products" className={navLink}>{t('nav.products')}</Link>
+            <Link to="/experience" className={navLink}>{t('nav.experience')}</Link>
+            <Link to="/news" className={navLink}>{t('nav.news')}</Link>
+            <Link to="/contact" className={navLink}>{t('nav.contact')}</Link>
+            {user && <Link to="/account" className={navLink}>{t('nav.account')}</Link>}
+            {user && <Link to="/orders" className={navLink}>{t('nav.myOrders')}</Link>}
           </nav>
 
           {/* Right side */}
@@ -60,7 +69,7 @@ export default function Header() {
             <div className="relative">
               <button
                 onClick={() => setLocaleOpen(!localeOpen)}
-                className="flex items-center gap-1 text-sm text-gray-600 hover:text-primary-600 transition-colors p-2"
+                className={`${iconBtn} flex items-center gap-1 text-sm`}
               >
                 <Globe size={18} />
                 <span className="hidden sm:inline">{language.toUpperCase()} / {currency}</span>
@@ -74,7 +83,7 @@ export default function Header() {
                       <button
                         key={lang}
                         onClick={() => { setLanguage(lang); setLocaleOpen(false); }}
-                        className={`block w-full text-left px-2 py-1 rounded text-sm ${language === lang ? 'bg-primary-50 text-primary-700 font-medium' : 'hover:bg-gray-50'}`}
+                        className={`block w-full text-left px-2 py-1 rounded text-sm ${language === lang ? 'bg-primary-50 text-primary-700 font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
                       >
                         {lang === 'en' ? 'English' : 'Espanol'}
                       </button>
@@ -86,7 +95,7 @@ export default function Header() {
                       <button
                         key={curr}
                         onClick={() => { setCurrency(curr); setLocaleOpen(false); }}
-                        className={`block w-full text-left px-2 py-1 rounded text-sm ${currency === curr ? 'bg-primary-50 text-primary-700 font-medium' : 'hover:bg-gray-50'}`}
+                        className={`block w-full text-left px-2 py-1 rounded text-sm ${currency === curr ? 'bg-primary-50 text-primary-700 font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
                       >
                         {curr}
                       </button>
@@ -97,7 +106,7 @@ export default function Header() {
             </div>
 
             {/* Cart */}
-            <Link to="/cart" className="relative p-2 text-gray-600 hover:text-primary-600 transition-colors">
+            <Link to="/cart" className={`${iconBtn} relative`}>
               <ShoppingCart size={22} />
               {itemCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-primary-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
@@ -110,20 +119,20 @@ export default function Header() {
             {user ? (
               <div className="hidden md:flex items-center gap-2">
                 {isAdmin && (
-                  <Link to="/admin" className="text-sm text-primary-600 hover:text-primary-700 font-medium">
+                  <Link to="/admin" className={`text-sm font-medium ${overImage ? 'text-white hover:text-white/80 drop-shadow-sm' : 'text-primary-600 hover:text-primary-700'}`}>
                     {t('nav.admin')}
                   </Link>
                 )}
                 <button
                   onClick={() => { logout(); navigate('/'); }}
-                  className="text-sm text-gray-600 hover:text-primary-600 transition-colors"
+                  className={subtleLink}
                 >
                   {t('nav.logout')}
                 </button>
               </div>
             ) : (
               <div className="hidden md:flex items-center gap-2">
-                <Link to="/login" className="text-sm text-gray-600 hover:text-primary-600 font-medium flex items-center gap-1">
+                <Link to="/login" className={`${subtleLink} font-medium flex items-center gap-1`}>
                   <User size={18} />
                   {t('nav.login')}
                 </Link>
@@ -131,62 +140,63 @@ export default function Header() {
             )}
 
             {/* Mobile menu toggle */}
-            <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden p-2 text-gray-600">
+            <button onClick={() => setMobileOpen(!mobileOpen)} className={`md:hidden ${iconBtn}`}>
               {mobileOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
-
-        {/* Mobile menu */}
-        {mobileOpen && (
-          <div className="md:hidden py-4 border-t">
-            <div className="flex flex-col gap-3">
-              <Link to="/" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
-                {t('nav.home')}
-              </Link>
-              <Link to="/products" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
-                {t('nav.products')}
-              </Link>
-              <Link to="/experience" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
-                {t('nav.experience')}
-              </Link>
-              <Link to="/news" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
-                {t('nav.news')}
-              </Link>
-              <Link to="/contact" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
-                {t('nav.contact')}
-              </Link>
-              {user && (
-                <Link to="/account" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
-                  {t('nav.account')}
-                </Link>
-              )}
-              {user && (
-                <Link to="/orders" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
-                  {t('nav.myOrders')}
-                </Link>
-              )}
-              {user ? (
-                <>
-                  {isAdmin && (
-                    <Link to="/admin" onClick={() => setMobileOpen(false)} className="text-primary-600 font-medium">
-                      {t('nav.admin')}
-                    </Link>
-                  )}
-                  <button onClick={() => { logout(); navigate('/'); setMobileOpen(false); }} className="text-left text-gray-600">
-                    {t('nav.logout')}
-                  </button>
-                </>
-              ) : (
-                <>
-                  <Link to="/login" onClick={() => setMobileOpen(false)} className="text-gray-700 font-medium">{t('nav.login')}</Link>
-                  <Link to="/register" onClick={() => setMobileOpen(false)} className="text-primary-600 font-medium">{t('nav.register')}</Link>
-                </>
-              )}
-            </div>
-          </div>
-        )}
       </div>
+
+      {/* Mobile menu */}
+      {mobileOpen && (
+        <div className="md:hidden bg-[#fdf3d8] border-t border-black/5 shadow-lg">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col gap-3">
+            <Link to="/products" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
+              {t('nav.products')}
+            </Link>
+            <Link to="/experience" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
+              {t('nav.experience')}
+            </Link>
+            <Link to="/news" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
+              {t('nav.news')}
+            </Link>
+            <Link to="/contact" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
+              {t('nav.contact')}
+            </Link>
+            {user && (
+              <Link to="/account" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
+                {t('nav.account')}
+              </Link>
+            )}
+            {user && (
+              <Link to="/orders" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
+                {t('nav.myOrders')}
+              </Link>
+            )}
+            {user ? (
+              <>
+                {isAdmin && (
+                  <Link to="/admin" onClick={() => setMobileOpen(false)} className="text-primary-600 font-medium">
+                    {t('nav.admin')}
+                  </Link>
+                )}
+                <button onClick={() => { logout(); navigate('/'); setMobileOpen(false); }} className="text-left text-gray-600 hover:text-primary-600">
+                  {t('nav.logout')}
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
+                  {t('nav.login')}
+                </Link>
+                <Link to="/register" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
+                  {t('nav.register')}
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </header>
   );
 }
