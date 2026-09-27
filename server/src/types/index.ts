@@ -100,19 +100,22 @@ export interface ShippingCalculation {
 }
 
 export interface AnalyticsData {
-  totalRevenue: number;
   totalOrders: number;
-  averageOrderValue: number;
+  totalUnitsSold: number;
+  currencies: string[];
+  byCurrency: Array<{
+    currency: string;
+    revenue: number;
+    orders: number;
+    averageOrderValue: number;
+  }>;
   topProducts: Array<{
     productId: string;
     productName: string;
     totalSold: number;
     revenue: number;
+    currency: string;
   }>;
   ordersByStatus: Record<string, number>;
-  revenueByDay: Array<{
-    date: string;
-    revenue: number;
-    orders: number;
-  }>;
+  revenueByDay: Array<{ date: string; orders: number } & Record<string, number | string>>;
 }

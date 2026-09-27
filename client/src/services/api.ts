@@ -26,9 +26,9 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      if (!window.location.pathname.startsWith('/admin/login') &&
-          !window.location.pathname.startsWith('/login')) {
-        window.location.href = '/login';
+      const path = window.location.pathname;
+      if (!path.startsWith('/admin/login') && !path.startsWith('/login')) {
+        window.location.href = path.startsWith('/admin') ? '/admin/login' : '/login';
       }
     }
     return Promise.reject(error);

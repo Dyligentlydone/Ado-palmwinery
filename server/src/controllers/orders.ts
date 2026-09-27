@@ -416,54 +416,83 @@ export const adminGetAnalytics = async (req: Request, res: Response): Promise<vo
     const daysBack = parseInt(req.query.days as string) || 30;
     const dateFrom = new Date();
     dateFrom.setDate(dateFrom.getDate() - daysBack);
+    const orderWhere = { createdAt: { gte: dateFrom }, status: { not: 'CANCELLED' as const } };
 
-    const [orders, topProducts, unitsSold] = await Promise.all([
+    const [orders, orderItems] = await Promise.all([
       prisma.order.findMany({
-        where: { createdAt: { gte: dateFrom }, status: { not: 'CANCELLED' } },
-        select: { total: true, status: true, createdAt: true },
+        where: orderWhere,
+        select: { total: true, status: true, createdAt: true, currency: true },
       }),
-      prisma.orderItem.groupBy({
-        by: ['productId', 'productName'],
-        _sum: { quantity: true, totalPrice: true },
-        where: { order: { createdAt: { gte: dateFrom }, status: { not: 'CANCELLED' } } },
-        orderBy: { _sum: { totalPrice: 'desc' } },
-        take: 10,
-      }),
-      prisma.orderItem.aggregate({
-        _sum: { quantity: true },
-        where: { order: { createdAt: { gte: dateFrom }, status: { not: 'CANCELLED' } } },
+      prisma.orderItem.findMany({
+        where: { order: orderWhere },
+        select: {
+          productId: true,
+          productName: true,
+          quantity: true,
+          totalPrice: true,
+          order: { select: { currency: true } },
+        },
       }),
     ]);
 
-    const totalRevenue = orders.reduce((sum, o) => sum + Number(o.total), 0);
     const totalOrders = orders.length;
-    const averageOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0;
+    const totalUnitsSold = orderItems.reduce((sum, i) => sum + i.quantity, 0);
 
+    // Revenue is never summed across currencies — each currency gets its own totals
+    const currencyMap: Record<string, { revenue: number; orders: number }> = {};
     const ordersByStatus: Record<string, number> = {};
-    const revenueByDayMap: Record<string, { revenue: number; orders: number }> = {};
+    const dayMap: Record<string, { orders: number; byCurrency: Record<string, number> }> = {};
+
     orders.forEach(o => {
+      const cur = o.currency || 'USD';
+      (currencyMap[cur] ||= { revenue: 0, orders: 0 });
+      currencyMap[cur].revenue += Number(o.total);
+      currencyMap[cur].orders += 1;
       ordersByStatus[o.status] = (ordersByStatus[o.status] || 0) + 1;
       const day = o.createdAt.toISOString().split('T')[0];
-      if (!revenueByDayMap[day]) revenueByDayMap[day] = { revenue: 0, orders: 0 };
-      revenueByDayMap[day].revenue += Number(o.total);
-      revenueByDayMap[day].orders += 1;
+      (dayMap[day] ||= { orders: 0, byCurrency: {} });
+      dayMap[day].orders += 1;
+      dayMap[day].byCurrency[cur] = (dayMap[day].byCurrency[cur] || 0) + Number(o.total);
     });
 
-    const revenueByDay = Object.entries(revenueByDayMap)
-      .map(([date, data]) => ({ date, revenue: Math.round(data.revenue * 100) / 100, orders: data.orders }))
+    const byCurrency = Object.entries(currencyMap)
+      .map(([currency, d]) => ({
+        currency,
+        revenue: Math.round(d.revenue * 100) / 100,
+        orders: d.orders,
+        averageOrderValue: d.orders > 0 ? Math.round((d.revenue / d.orders) * 100) / 100 : 0,
+      }))
+      .sort((a, b) => b.revenue - a.revenue);
+    const currencies = byCurrency.map(c => c.currency);
+
+    // Top products, grouped per product + currency
+    const prodMap: Record<string, { productId: string; productName: string; totalSold: number; revenue: number; currency: string }> = {};
+    orderItems.forEach(i => {
+      const cur = i.order.currency || 'USD';
+      const key = `${i.productId}:${cur}`;
+      (prodMap[key] ||= { productId: i.productId, productName: i.productName, totalSold: 0, revenue: 0, currency: cur });
+      prodMap[key].totalSold += i.quantity;
+      prodMap[key].revenue += Number(i.totalPrice);
+    });
+    const topProducts = Object.values(prodMap)
+      .sort((a, b) => b.revenue - a.revenue)
+      .slice(0, 10)
+      .map(p => ({ ...p, revenue: Math.round(p.revenue * 100) / 100 }));
+
+    const revenueByDay = Object.entries(dayMap)
+      .map(([date, d]) => ({
+        date,
+        orders: d.orders,
+        ...Object.fromEntries(currencies.map(c => [c, Math.round((d.byCurrency[c] || 0) * 100) / 100])),
+      }))
       .sort((a, b) => a.date.localeCompare(b.date));
 
     res.json({
-      totalRevenue: Math.round(totalRevenue * 100) / 100,
       totalOrders,
-      totalUnitsSold: unitsSold._sum.quantity || 0,
-      averageOrderValue: Math.round(averageOrderValue * 100) / 100,
-      topProducts: topProducts.map(p => ({
-        productId: p.productId,
-        productName: p.productName,
-        totalSold: p._sum.quantity || 0,
-        revenue: Number(p._sum.totalPrice || 0),
-      })),
+      totalUnitsSold,
+      currencies,
+      byCurrency,
+      topProducts,
       ordersByStatus,
       revenueByDay,
     });
