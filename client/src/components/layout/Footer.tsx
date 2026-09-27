@@ -8,7 +8,7 @@ export default function Footer() {
     <footer className="relative mt-auto overflow-x-clip">
       {/* The image IS the footer — transparent top lets the page show through
           around the palms, the menu sits directly on the sand dunes. */}
-      <div className="relative left-1/2 -translate-x-1/2 w-full min-w-[900px] aspect-[163/100] -mt-[150px] md:-mt-[190px]">
+      <div className="relative left-1/2 -translate-x-1/2 w-full min-w-[900px] aspect-[163/100] -mt-[200px] md:-mt-[250px]">
         <img
           src="/images/palms.png"
           alt=""
@@ -19,12 +19,10 @@ export default function Footer() {
 
       {/* Menu overlaid on the dunes — no background, just the image */}
       <div className="absolute bottom-0 inset-x-0 text-[#3a2413]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-5 md:pb-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-3 md:pb-6">
           <div className="grid grid-cols-3 gap-3 md:gap-8">
             <div>
-              <div className="bg-white rounded-lg p-1.5 md:p-2 inline-block mb-2 md:mb-3">
-                <img src="/images/logo.png" alt="ADO Palmwinery" className="h-10 md:h-16 w-auto" />
-              </div>
+              <img src="/images/logo.png" alt="ADO Palmwinery" className="h-10 md:h-16 w-auto mb-2 md:mb-3" />
               <p className="hidden sm:block text-[#3a2413]/70 text-xs md:text-sm leading-relaxed">
                 {t('footer.aboutText')}
               </p>
