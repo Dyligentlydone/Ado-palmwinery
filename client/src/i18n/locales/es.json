@@ -61,7 +61,16 @@
     "details": "Ver Detalles",
     "category": "Categoría",
     "price": "Precio",
-    "featured": "Destacado"
+    "featured": "Destacado",
+    "tastingNotes": "Notas de Cata",
+    "nose": "Nariz",
+    "palate": "Paladar",
+    "finish": "Final",
+    "abv": "ABV",
+    "volume": "Contenido",
+    "origin": "Origen",
+    "originValue": "Liberia, Costa Rica",
+    "pairsWith": "Combina Bien Con"
   },
   "cart": {
     "title": "Carrito de Compras",

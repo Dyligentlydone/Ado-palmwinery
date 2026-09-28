@@ -11,6 +11,9 @@ function localizeProduct(product: any, language: SupportedLanguage, currency: Su
     ...product,
     name: language === 'es' && product.nameEs ? product.nameEs : product.name,
     description: language === 'es' && product.descriptionEs ? product.descriptionEs : product.description,
+    nose: language === 'es' && product.noseEs ? product.noseEs : product.nose,
+    palate: language === 'es' && product.palateEs ? product.palateEs : product.palate,
+    finish: language === 'es' && product.finishEs ? product.finishEs : product.finish,
     price: product[priceField] || product.priceUSD,
     currency,
     category: product.category ? {
@@ -203,6 +206,7 @@ export const adminCreateProduct = async (req: Request, res: Response): Promise<v
       name, nameEs, slug, description, descriptionEs,
       priceUSD, priceEUR, priceGBP, priceCRC, compareAtUSD,
       images, categoryId, sku, stock, weight,
+      abv, volumeMl, nose, noseEs, palate, palateEs, finish, finishEs,
       isActive, isFeatured, tags,
     } = req.body;
 
@@ -212,7 +216,9 @@ export const adminCreateProduct = async (req: Request, res: Response): Promise<v
         priceUSD, priceEUR, priceGBP, priceCRC, compareAtUSD,
         images: images || [],
         categoryId, sku, stock: stock || 0,
-        weight, isActive: isActive ?? true,
+        weight, abv, volumeMl,
+        nose, noseEs, palate, palateEs, finish, finishEs,
+        isActive: isActive ?? true,
         isFeatured: isFeatured ?? false,
         tags: tags || [],
       },

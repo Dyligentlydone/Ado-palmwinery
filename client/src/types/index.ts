@@ -51,6 +51,14 @@ export interface Product {
   sku: string;
   stock: number;
   weight?: number;
+  abv?: number;
+  volumeMl?: number;
+  nose?: string;
+  noseEs?: string;
+  palate?: string;
+  palateEs?: string;
+  finish?: string;
+  finishEs?: string;
   isActive: boolean;
   isFeatured: boolean;
   tags: string[];

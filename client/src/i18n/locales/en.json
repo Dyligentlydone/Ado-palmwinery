@@ -61,7 +61,16 @@
     "details": "View Details",
     "category": "Category",
     "price": "Price",
-    "featured": "Featured"
+    "featured": "Featured",
+    "tastingNotes": "Tasting Notes",
+    "nose": "Nose",
+    "palate": "Palate",
+    "finish": "Finish",
+    "abv": "ABV",
+    "volume": "Volume",
+    "origin": "Origin",
+    "originValue": "Liberia, Costa Rica",
+    "pairsWith": "Pairs Well With"
   },
   "cart": {
     "title": "Shopping Cart",

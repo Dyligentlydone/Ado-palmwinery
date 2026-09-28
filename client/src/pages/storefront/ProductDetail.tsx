@@ -6,6 +6,7 @@ import { productsAPI } from '../../services/api';
 import { Product } from '../../types';
 import { useLocale } from '../../context/LocaleContext';
 import { useCart } from '../../context/CartContext';
+import ProductCard from '../../components/product/ProductCard';
 
 export default function ProductDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -18,12 +19,25 @@ export default function ProductDetail() {
   const [adding, setAdding] = useState(false);
   const [added, setAdded] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [related, setRelated] = useState<Product[]>([]);
 
   useEffect(() => {
     if (!slug) return;
     setLoading(true);
+    setRelated([]);
+    setSelectedImage(0);
+    setQuantity(1);
     productsAPI.getBySlug(slug)
-      .then(r => setProduct(r.data))
+      .then(r => {
+        setProduct(r.data);
+        if (r.data.category) {
+          productsAPI.getAll({ category: r.data.category.slug, limit: 8 })
+            .then(rr => setRelated(
+              rr.data.products.filter((p: Product) => p.id !== r.data.id).slice(0, 4)
+            ))
+            .catch(() => {});
+        }
+      })
       .catch(() => setProduct(null))
       .finally(() => setLoading(false));
   }, [slug]);
@@ -135,6 +149,28 @@ export default function ProductDetail() {
 
           <p className="text-gray-600 leading-relaxed mb-6">{product.description}</p>
 
+          {/* Specs strip: ABV / volume / origin */}
+          {(product.abv || product.volumeMl) && (
+            <div className="flex divide-x divide-gray-200 border-y border-gray-200 py-4 mb-6">
+              {product.abv && (
+                <div className="flex-1 text-center px-2">
+                  <p className="text-xs uppercase tracking-wider text-gray-400 mb-1">{t('products.abv')}</p>
+                  <p className="font-semibold text-gray-900">{product.abv}%</p>
+                </div>
+              )}
+              {product.volumeMl && (
+                <div className="flex-1 text-center px-2">
+                  <p className="text-xs uppercase tracking-wider text-gray-400 mb-1">{t('products.volume')}</p>
+                  <p className="font-semibold text-gray-900">{product.volumeMl} ml</p>
+                </div>
+              )}
+              <div className="flex-1 text-center px-2">
+                <p className="text-xs uppercase tracking-wider text-gray-400 mb-1">{t('products.origin')}</p>
+                <p className="font-semibold text-gray-900">{t('products.originValue')}</p>
+              </div>
+            </div>
+          )}
+
           {/* Stock status */}
           <div className="mb-6">
             {isOutOfStock ? (
@@ -196,6 +232,41 @@ export default function ProductDetail() {
           <p className="text-xs text-gray-400 mt-4">SKU: {product.sku}</p>
         </div>
       </div>
+
+      {/* Tasting notes */}
+      {(product.nose || product.palate || product.finish) && (
+        <section className="mt-16">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6 font-[family-name:var(--font-heading)]">
+            {t('products.tastingNotes')}
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { label: t('products.nose'), text: product.nose },
+              { label: t('products.palate'), text: product.palate },
+              { label: t('products.finish'), text: product.finish },
+            ].filter(n => n.text).map(note => (
+              <div key={note.label} className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+                <p className="text-xs uppercase tracking-widest text-primary-600 font-semibold mb-2">{note.label}</p>
+                <p className="text-gray-600 leading-relaxed text-sm">{note.text}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Related products */}
+      {related.length > 0 && (
+        <section className="mt-16">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6 font-[family-name:var(--font-heading)]">
+            {t('products.pairsWith')}
+          </h2>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            {related.map(p => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }

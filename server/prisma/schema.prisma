@@ -111,6 +111,14 @@ model Product {
   sku           String    @unique
   stock         Int       @default(0)
   weight        Decimal?  @db.Decimal(8, 2) // Weight in kg for shipping
+  abv           Decimal?  @db.Decimal(4, 1) // Alcohol by volume %
+  volumeMl      Int?      // Bottle volume in ml
+  nose          String?   @db.Text // Tasting note: aroma
+  noseEs        String?   @db.Text
+  palate        String?   @db.Text // Tasting note: taste
+  palateEs      String?   @db.Text
+  finish        String?   @db.Text // Tasting note: aftertaste
+  finishEs      String?   @db.Text
   isActive      Boolean   @default(true)
   isFeatured    Boolean   @default(false)
   tags          String[]

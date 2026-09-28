@@ -13,6 +13,8 @@ interface ProductForm {
   name: string; nameEs: string; slug: string; description: string; descriptionEs: string;
   priceUSD: number; priceEUR: number; priceGBP: number; priceCRC: number; compareAtUSD: number;
   categoryId: string; sku: string; stock: number; weight: number;
+  abv: number; volumeMl: number;
+  nose: string; noseEs: string; palate: string; palateEs: string; finish: string; finishEs: string;
   isActive: boolean; isFeatured: boolean; tags: string; images: string;
 }
 
@@ -20,6 +22,8 @@ const emptyForm: ProductForm = {
   name: '', nameEs: '', slug: '', description: '', descriptionEs: '',
   priceUSD: 0, priceEUR: 0, priceGBP: 0, priceCRC: 0, compareAtUSD: 0,
   categoryId: '', sku: '', stock: 0, weight: 0,
+  abv: 0, volumeMl: 0,
+  nose: '', noseEs: '', palate: '', palateEs: '', finish: '', finishEs: '',
   isActive: true, isFeatured: false, tags: '', images: '',
 };
 
@@ -94,6 +98,10 @@ export default function AdminProducts() {
       priceUSD: Number((p as any).priceUSD) || 0, priceEUR: (p as any).priceEUR || 0, priceGBP: (p as any).priceGBP || 0, priceCRC: (p as any).priceCRC || 0,
       compareAtUSD: p.compareAtUSD || 0, categoryId: p.categoryId, sku: p.sku,
       stock: p.stock, weight: p.weight || 0,
+      abv: (p as any).abv || 0, volumeMl: (p as any).volumeMl || 0,
+      nose: (p as any).nose || '', noseEs: (p as any).noseEs || '',
+      palate: (p as any).palate || '', palateEs: (p as any).palateEs || '',
+      finish: (p as any).finish || '', finishEs: (p as any).finishEs || '',
       isActive: p.isActive, isFeatured: p.isFeatured,
       tags: p.tags.join(', '), images: p.images.join('\n'),
     });
@@ -109,6 +117,8 @@ export default function AdminProducts() {
     try {
       const data = {
         ...form,
+        abv: form.abv || null,
+        volumeMl: form.volumeMl || null,
         tags: form.tags.split(',').map(t => t.trim()).filter(Boolean),
         images: form.images.split('\n').map(i => i.trim()).filter(Boolean),
       };
@@ -293,6 +303,47 @@ export default function AdminProducts() {
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1">Description (ES)</label>
                 <textarea value={form.descriptionEs} onChange={e => updateField('descriptionEs', e.target.value)} rows={3} className="w-full px-3 py-2 border rounded-lg text-sm" />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1">ABV % (e.g. 12.5)</label>
+                  <input type="number" step="0.1" min="0" value={form.abv || ''} onChange={e => updateField('abv', +e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" placeholder="—" />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1">Volume (ml)</label>
+                  <input type="number" min="0" value={form.volumeMl || ''} onChange={e => updateField('volumeMl', +e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" placeholder="750" />
+                </div>
+              </div>
+
+              <div className="border border-gray-200 rounded-lg p-4">
+                <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-3">Tasting Notes</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500 mb-1">Nose (EN)</label>
+                    <textarea value={form.nose} onChange={e => updateField('nose', e.target.value)} rows={2} className="w-full px-3 py-2 border rounded-lg text-sm" placeholder="Sweet palm sap, light tropical fruit..." />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500 mb-1">Nose (ES)</label>
+                    <textarea value={form.noseEs} onChange={e => updateField('noseEs', e.target.value)} rows={2} className="w-full px-3 py-2 border rounded-lg text-sm" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500 mb-1">Palate (EN)</label>
+                    <textarea value={form.palate} onChange={e => updateField('palate', e.target.value)} rows={2} className="w-full px-3 py-2 border rounded-lg text-sm" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500 mb-1">Palate (ES)</label>
+                    <textarea value={form.palateEs} onChange={e => updateField('palateEs', e.target.value)} rows={2} className="w-full px-3 py-2 border rounded-lg text-sm" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500 mb-1">Finish (EN)</label>
+                    <textarea value={form.finish} onChange={e => updateField('finish', e.target.value)} rows={2} className="w-full px-3 py-2 border rounded-lg text-sm" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500 mb-1">Finish (ES)</label>
+                    <textarea value={form.finishEs} onChange={e => updateField('finishEs', e.target.value)} rows={2} className="w-full px-3 py-2 border rounded-lg text-sm" />
+                  </div>
+                </div>
               </div>
 
               <div className="grid grid-cols-5 gap-4">
