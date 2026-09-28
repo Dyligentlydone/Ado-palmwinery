@@ -19,7 +19,7 @@ export default function Footer() {
 
       {/* Menu overlaid on the dunes — no background, just the image */}
       <div className="absolute bottom-0 inset-x-0 text-[#3a2413]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-3 md:pb-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-[calc(0.75rem+env(safe-area-inset-bottom))] md:pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
           {/* Top row: brand left, contact right */}
           <div className="flex items-start justify-between gap-6">
             <div className="max-w-xs">
