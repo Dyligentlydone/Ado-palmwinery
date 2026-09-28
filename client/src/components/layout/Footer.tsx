@@ -20,26 +20,16 @@ export default function Footer() {
       {/* Menu overlaid on the dunes — no background, just the image */}
       <div className="absolute bottom-0 inset-x-0 text-[#3a2413]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-3 md:pb-6">
-          <div className="grid grid-cols-3 gap-3 md:gap-8">
-            <div>
+          {/* Top row: brand left, contact right */}
+          <div className="flex items-start justify-between gap-6">
+            <div className="max-w-xs">
               <img src="/images/logo.png" alt="ADO Palmwinery" className="h-10 md:h-16 w-auto mb-2 md:mb-3" />
               <p className="hidden sm:block text-[#3a2413]/70 text-xs md:text-sm leading-relaxed">
                 {t('footer.aboutText')}
               </p>
             </div>
 
-            <div>
-              <ul className="space-y-1.5 md:space-y-2 text-[11px] md:text-sm text-[#3a2413]/70">
-                <li><Link to="/products" className="hover:text-[#3a2413] transition-colors">{t('nav.products')}</Link></li>
-                <li><Link to="/experience" className="hover:text-[#3a2413] transition-colors">{t('nav.experience')}</Link></li>
-                <li><Link to="/news" className="hover:text-[#3a2413] transition-colors">{t('nav.news')}</Link></li>
-                <li><Link to="/contact" className="hover:text-[#3a2413] transition-colors">{t('nav.contact')}</Link></li>
-                <li><Link to="/cart" className="hover:text-[#3a2413] transition-colors">{t('nav.cart')}</Link></li>
-                <li><Link to="/orders" className="hover:text-[#3a2413] transition-colors">{t('nav.myOrders')}</Link></li>
-              </ul>
-            </div>
-
-            <div>
+            <div className="text-right">
               <h4 className="font-semibold mb-2 md:mb-3 text-xs md:text-base">{t('footer.contact')}</h4>
               <ul className="space-y-1.5 md:space-y-2 text-[11px] md:text-sm text-[#3a2413]/70">
                 <li>info@adopalmwinery.com</li>
@@ -52,6 +42,21 @@ export default function Footer() {
               </ul>
             </div>
           </div>
+
+          {/* Editorial nav strip */}
+          <nav className="flex flex-wrap items-center justify-center gap-x-6 md:gap-x-9 gap-y-2 mt-4 md:mt-7 uppercase tracking-[0.18em] text-[10px] md:text-xs font-semibold">
+            <Link to="/products" className="text-[#3a2413]/70 hover:text-[#3a2413] underline-offset-4 decoration-2 decoration-transparent hover:decoration-[#d7b73f] underline transition-all">{t('nav.products')}</Link>
+            <span className="hidden md:inline text-[#3a2413]/25 select-none">·</span>
+            <Link to="/experience" className="text-[#3a2413]/70 hover:text-[#3a2413] underline-offset-4 decoration-2 decoration-transparent hover:decoration-[#d7b73f] underline transition-all">{t('nav.experience')}</Link>
+            <span className="hidden md:inline text-[#3a2413]/25 select-none">·</span>
+            <Link to="/news" className="text-[#3a2413]/70 hover:text-[#3a2413] underline-offset-4 decoration-2 decoration-transparent hover:decoration-[#d7b73f] underline transition-all">{t('nav.news')}</Link>
+            <span className="hidden md:inline text-[#3a2413]/25 select-none">·</span>
+            <Link to="/contact" className="text-[#3a2413]/70 hover:text-[#3a2413] underline-offset-4 decoration-2 decoration-transparent hover:decoration-[#d7b73f] underline transition-all">{t('nav.contact')}</Link>
+            <span className="hidden md:inline text-[#3a2413]/25 select-none">·</span>
+            <Link to="/cart" className="text-[#3a2413]/70 hover:text-[#3a2413] underline-offset-4 decoration-2 decoration-transparent hover:decoration-[#d7b73f] underline transition-all">{t('nav.cart')}</Link>
+            <span className="hidden md:inline text-[#3a2413]/25 select-none">·</span>
+            <Link to="/orders" className="text-[#3a2413]/70 hover:text-[#3a2413] underline-offset-4 decoration-2 decoration-transparent hover:decoration-[#d7b73f] underline transition-all">{t('nav.myOrders')}</Link>
+          </nav>
 
           <div className="border-t border-[#3a2413]/15 mt-4 md:mt-8 pt-3 md:pt-6 flex items-center justify-between text-[10px] md:text-sm text-[#3a2413]/50">
             <span>&copy; {new Date().getFullYear()} ADO Palmwinery. {t('footer.rights')}</span>
