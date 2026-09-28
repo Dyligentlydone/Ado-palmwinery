@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ShoppingCart, ArrowLeft, Check } from 'lucide-react';
+import { ShoppingCart, ArrowLeft, Check, Wind, GlassWater, Asterisk } from 'lucide-react';
 import { productsAPI } from '../../services/api';
 import { Product } from '../../types';
 import { useLocale } from '../../context/LocaleContext';
@@ -239,15 +239,16 @@ export default function ProductDetail() {
           <h2 className="text-2xl font-bold text-gray-900 mb-6 font-[family-name:var(--font-heading)]">
             {t('products.tastingNotes')}
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {[
-              { label: t('products.nose'), text: product.nose },
-              { label: t('products.palate'), text: product.palate },
-              { label: t('products.finish'), text: product.finish },
-            ].filter(n => n.text).map(note => (
-              <div key={note.label} className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-                <p className="text-xs uppercase tracking-widest text-primary-600 font-semibold mb-2">{note.label}</p>
-                <p className="text-gray-600 leading-relaxed text-sm">{note.text}</p>
+              { label: t('products.nose'), text: product.nose, Icon: Wind },
+              { label: t('products.palate'), text: product.palate, Icon: GlassWater },
+              { label: t('products.finish'), text: product.finish, Icon: Asterisk },
+            ].filter(n => n.text).map(({ label, text, Icon }) => (
+              <div key={label} className="flex flex-col items-center text-center">
+                <Icon size={36} strokeWidth={1.25} className="text-primary-600 mb-3" />
+                <p className="text-xs uppercase tracking-widest text-primary-600 font-semibold mb-2">{label}</p>
+                <p className="text-gray-700 font-medium">{text}</p>
               </div>
             ))}
           </div>
