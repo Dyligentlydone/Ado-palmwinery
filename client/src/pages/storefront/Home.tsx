@@ -158,12 +158,13 @@ export default function Home() {
             <p className="text-gray-600 text-lg">{t('home.categories.subtitle')}</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Mobile: horizontal snap carousel / Desktop: grid */}
+          <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-6 md:overflow-visible md:pb-0">
             {categories.map(cat => (
               <Link
                 key={cat.id}
                 to={`/products?category=${cat.slug}`}
-                className="group bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center hover:shadow-md transition-shadow"
+                className="group shrink-0 w-56 snap-start md:w-auto bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center hover:shadow-md transition-shadow"
               >
                 <div className="w-16 h-16 bg-primary-50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary-100 transition-colors">
                   <span className="text-2xl">🌴</span>
