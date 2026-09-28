@@ -56,7 +56,7 @@ export default function SunsetIntro() {
 
   return (
     <div
-      className="fixed inset-0 z-[100] overflow-hidden h-screen supports-[height:100lvh]:h-[100lvh]"
+      className="fixed inset-x-0 top-0 z-[100] overflow-hidden h-screen supports-[height:100lvh]:h-[100lvh]"
       style={{ opacity: fade }}
     >
       <img
