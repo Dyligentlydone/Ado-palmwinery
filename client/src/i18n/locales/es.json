@@ -107,7 +107,18 @@
     "paymentConfirmed": "Pago confirmado — ¡gracias!",
     "paymentPending": "Pedido recibido — el pago aún está pendiente.",
     "paymentDeclined": "El pago fue rechazado o cancelado. No se realizó ningún cargo.",
-    "chargeCurrencyNotice": "El pago se procesa en USD — tu tarjeta hace la conversión automáticamente con la tasa de tu banco."
+    "chargeCurrencyNotice": "El pago se procesa en USD — tu tarjeta hace la conversión automáticamente con la tasa de tu banco.",
+    "emptyCart": "Tu carrito está vacío",
+    "browseProducts": "Ver Productos",
+    "noAddresses": "No hay direcciones guardadas.",
+    "addAddressLink": "Agrega una desde tu cuenta",
+    "orGuest": ", o compra como invitado.",
+    "securePayment": "Pago Seguro con ONVO Pay",
+    "paymentDesc": "Serás redirigido a la página de pago segura de ONVO después de realizar tu pedido. Se aceptan tarjetas, SINPE Móvil y transferencia bancaria.",
+    "orderNotes": "Notas del Pedido (Opcional)",
+    "orderNotesPlaceholder": "Cualquier instrucción especial...",
+    "alcoholTitle": "Firma de adulto requerida en la entrega",
+    "alcoholNotice": "Debes tener la edad legal para beber (18+ en Costa Rica, 21+ en Estados Unidos). Un adulto con identificación válida con foto debe estar presente para aceptar la entrega. Es tu responsabilidad confirmar que la entrega de alcohol sea legal en tu dirección."
   },
   "orders": {
     "title": "Mis Pedidos",
@@ -162,8 +173,9 @@
     "quickLinks": "Enlaces Rápidos",
     "contact": "Contáctanos",
     "rights": "Todos los derechos reservados.",
-    "privacy": "Política de Privacidad",
-    "terms": "Términos de Servicio"
+    "privacy": "Privacidad",
+    "terms": "Términos",
+    "shipping": "Envío y Devoluciones"
   },
   "common": {
     "loading": "Cargando...",

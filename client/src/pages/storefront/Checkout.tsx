@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { MapPin, CreditCard, Check } from 'lucide-react';
+import { MapPin, CreditCard, Check, AlertTriangle } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { useLocale } from '../../context/LocaleContext';
 import { useAuth } from '../../context/AuthContext';
@@ -89,8 +89,8 @@ export default function Checkout() {
   if (!cart || cart.items.length === 0) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-        <p className="text-gray-500 mb-4">Your cart is empty</p>
-        <Link to="/products" className="text-primary-600 font-medium hover:underline">Browse Products</Link>
+        <p className="text-gray-500 mb-4">{t('checkout.emptyCart')}</p>
+        <Link to="/products" className="text-primary-600 font-medium hover:underline">{t('checkout.browseProducts')}</Link>
       </div>
     );
   }
@@ -158,7 +158,7 @@ export default function Checkout() {
               </h2>
               {addresses.length === 0 ? (
                 <p className="text-gray-500 text-sm">
-                  No addresses found. <Link to="/account" className="text-primary-600 font-medium hover:underline">Add one from your account</Link>, or check out as a guest.
+                  {t('checkout.noAddresses')} <Link to="/account" className="text-primary-600 font-medium hover:underline">{t('checkout.addAddressLink')}</Link>{t('checkout.orGuest')}
                 </p>
               ) : (
                 <div className="space-y-3">
@@ -242,19 +242,28 @@ export default function Checkout() {
               <CreditCard size={20} className="text-primary-600" /> {t('checkout.payment')}
             </h2>
             <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-600">
-              <p className="font-medium text-gray-900 mb-1">Secure Payment via ONVO Pay</p>
-              <p>You will be redirected to ONVO's secure payment page after placing your order. Cards, SINPE Móvil and bank transfer accepted.</p>
+              <p className="font-medium text-gray-900 mb-1">{t('checkout.securePayment')}</p>
+              <p>{t('checkout.paymentDesc')}</p>
+            </div>
+          </div>
+
+          {/* Alcohol delivery notice */}
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 flex gap-3">
+            <AlertTriangle size={20} className="text-amber-700 shrink-0 mt-0.5" />
+            <div className="text-sm text-amber-900">
+              <p className="font-semibold mb-1">{t('checkout.alcoholTitle')}</p>
+              <p className="leading-relaxed">{t('checkout.alcoholNotice')}</p>
             </div>
           </div>
 
           {/* Notes */}
           <div className="bg-white rounded-xl border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold mb-3">Order Notes (Optional)</h2>
+            <h2 className="text-lg font-semibold mb-3">{t('checkout.orderNotes')}</h2>
             <textarea
               value={notes}
               onChange={e => setNotes(e.target.value)}
               rows={3}
-              placeholder="Any special instructions..."
+              placeholder={t('checkout.orderNotesPlaceholder')}
               className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm resize-none"
             />
           </div>

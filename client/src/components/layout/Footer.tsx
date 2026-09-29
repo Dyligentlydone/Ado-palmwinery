@@ -58,9 +58,16 @@ export default function Footer() {
             <Link to="/orders" className="text-[#3a2413]/70 hover:text-[#3a2413] underline-offset-4 decoration-2 decoration-transparent hover:decoration-[#d7b73f] underline transition-all">{t('nav.myOrders')}</Link>
           </nav>
 
-          <div className="border-t border-[#3a2413]/15 mt-4 md:mt-8 pt-3 md:pt-6 flex items-center justify-between text-[10px] md:text-sm text-[#3a2413]/50">
-            <span>&copy; {new Date().getFullYear()} ADO Palmwinery. {t('footer.rights')}</span>
-            <span>
+          <div className="border-t border-[#3a2413]/15 mt-4 md:mt-8 pt-3 md:pt-6 flex flex-col md:flex-row items-center md:items-center gap-2 md:gap-4 justify-between text-[10px] md:text-sm text-[#3a2413]/50">
+            <span className="order-2 md:order-1">&copy; {new Date().getFullYear()} ADO Palmwinery. {t('footer.rights')}</span>
+            <div className="order-1 md:order-2 flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
+              <Link to="/privacy" className="hover:text-[#3a2413] transition-colors">{t('footer.privacy')}</Link>
+              <span className="text-[#3a2413]/25">·</span>
+              <Link to="/terms" className="hover:text-[#3a2413] transition-colors">{t('footer.terms')}</Link>
+              <span className="text-[#3a2413]/25">·</span>
+              <Link to="/shipping" className="hover:text-[#3a2413] transition-colors">{t('footer.shipping')}</Link>
+            </div>
+            <span className="order-3">
               Website by:&nbsp;
               <a href="https://www.dyligent.solutions/" target="_blank" rel="noopener noreferrer" className="text-[#d7b73f] hover:text-[#c9a935] transition-colors">
                 {'{'}Dyligent{'}'}

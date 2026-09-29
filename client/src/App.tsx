@@ -19,6 +19,7 @@ import Account from './pages/storefront/Account';
 import News from './pages/storefront/News';
 import Experience from './pages/storefront/Experience';
 import Contact from './pages/storefront/Contact';
+import Legal from './pages/storefront/Legal';
 
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
@@ -52,6 +53,9 @@ export default function App() {
                 <Route path="/orders" element={<Orders />} />
                 <Route path="/account" element={<Account />} />
                 <Route path="/news" element={<News />} />
+                <Route path="/privacy" element={<Legal />} />
+                <Route path="/terms" element={<Legal />} />
+                <Route path="/shipping" element={<Legal />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
               </Route>

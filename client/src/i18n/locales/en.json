@@ -107,7 +107,18 @@
     "paymentConfirmed": "Payment confirmed — thank you!",
     "paymentPending": "Order received — payment is still pending.",
     "paymentDeclined": "Payment was declined or cancelled. No charge was made.",
-    "chargeCurrencyNotice": "Payment is processed in USD — your card converts automatically at your bank's rate."
+    "chargeCurrencyNotice": "Payment is processed in USD — your card converts automatically at your bank's rate.",
+    "emptyCart": "Your cart is empty",
+    "browseProducts": "Browse Products",
+    "noAddresses": "No addresses found.",
+    "addAddressLink": "Add one from your account",
+    "orGuest": ", or check out as a guest.",
+    "securePayment": "Secure Payment via ONVO Pay",
+    "paymentDesc": "You will be redirected to ONVO's secure payment page after placing your order. Cards, SINPE Móvil and bank transfer accepted.",
+    "orderNotes": "Order Notes (Optional)",
+    "orderNotesPlaceholder": "Any special instructions...",
+    "alcoholTitle": "Adult signature required at delivery",
+    "alcoholNotice": "You must be of legal drinking age to purchase (18+ in Costa Rica, 21+ in the United States). An adult with valid photo ID must be present to accept delivery. It is your responsibility to confirm alcohol delivery is legal at your address."
   },
   "orders": {
     "title": "My Orders",
@@ -162,8 +173,9 @@
     "quickLinks": "Quick Links",
     "contact": "Contact Us",
     "rights": "All rights reserved.",
-    "privacy": "Privacy Policy",
-    "terms": "Terms of Service"
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "shipping": "Shipping & Returns"
   },
   "common": {
     "loading": "Loading...",
