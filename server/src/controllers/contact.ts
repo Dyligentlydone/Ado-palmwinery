@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import prisma from '../config/database';
+import { sendContactAutoReply, sendAdminContactAlert } from '../services/email';
 
 export const submitContact = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -8,6 +9,13 @@ export const submitContact = async (req: Request, res: Response): Promise<void> 
     const msg = await prisma.contactMessage.create({
       data: { name, email, subject: subject || null, message },
     });
+
+    // Fire-and-forget: reply to the visitor + notify the team. Never fail the submit
+    // because of email issues — the message is already saved for admin follow-up.
+    Promise.all([
+      sendContactAutoReply(email, name),
+      sendAdminContactAlert({ name, email, subject, message }),
+    ]).catch(err => console.error('Contact email dispatch failed:', err));
 
     res.status(201).json({ message: 'Message received', id: msg.id });
   } catch (error) {

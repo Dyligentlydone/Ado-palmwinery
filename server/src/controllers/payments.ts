@@ -2,10 +2,14 @@ import { Request, Response } from 'express';
 import prisma from '../config/database';
 import { onvoPayService } from '../services/onvopay';
 import { OnvoWebhookEvent } from '../types';
+import { sendOrderConfirmationEmail, sendAdminNewOrderAlert } from '../services/email';
 
 // Marks an order paid and stores the ONVO payment intent id.
 async function markPaid(orderId: string, intentId: string | undefined, payload: unknown) {
-  const order = await prisma.order.findUnique({ where: { id: orderId }, include: { payment: true } });
+  const order = await prisma.order.findUnique({
+    where: { id: orderId },
+    include: { payment: true, items: true, user: true },
+  });
   if (!order || order.status !== 'PENDING') return;
   await prisma.$transaction([
     order.payment
@@ -18,6 +22,34 @@ async function markPaid(orderId: string, intentId: string | undefined, payload: 
         }),
     prisma.order.update({ where: { id: order.id }, data: { status: 'CONFIRMED' } }),
   ]);
+
+  // Fire-and-forget email notifications. Failures are logged but never break the payment flow.
+  const customerEmail = order.user?.email || order.guestEmail;
+  if (customerEmail) {
+    const items = order.items.map(i => ({
+      name: i.productName,
+      quantity: i.quantity,
+      price: Number(i.unitPrice),
+    }));
+    Promise.all([
+      sendOrderConfirmationEmail(customerEmail, {
+        id: order.id,
+        total: Number(order.total),
+        subtotal: Number(order.subtotal),
+        shippingCost: Number(order.shippingCost),
+        currency: order.currency,
+        items,
+        guestOrder: !order.userId,
+      }),
+      sendAdminNewOrderAlert({
+        id: order.id,
+        total: Number(order.total),
+        currency: order.currency,
+        customerEmail,
+        itemCount: order.items.reduce((s, i) => s + i.quantity, 0),
+      }),
+    ]).catch(err => console.error('Order email dispatch failed:', err));
+  }
 }
 
 // Marks an order declined and releases reserved stock — only when the failure
