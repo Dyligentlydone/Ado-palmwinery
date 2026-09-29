@@ -64,12 +64,12 @@ export default function Home() {
                   >
                     {t('home.hero.cta')}
                   </Link>
-                  <a
-                    href="#about"
+                  <Link
+                    to="/experience"
                     className="inline-flex items-center px-8 py-3 border-2 border-white/70 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors backdrop-blur-sm"
                   >
                     {t('home.hero.secondary')}
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
