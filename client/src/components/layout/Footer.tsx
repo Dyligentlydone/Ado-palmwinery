@@ -7,8 +7,12 @@ export default function Footer() {
   return (
     <footer className="relative mt-auto overflow-x-clip">
       {/* The image IS the footer — transparent top lets the page show through
-          around the palms, the menu sits directly on the sand dunes. */}
-      <div className="relative left-1/2 -translate-x-1/2 w-full min-w-[900px] aspect-[163/100] -mt-[200px] md:-mt-[250px]">
+          around the palms, the menu sits directly on the sand dunes.
+          pointer-events-none is critical: this div overlaps the page above via
+          negative margin, and without it its invisible bounding box swallows
+          all touches on the sections underneath. Visual is unchanged — the
+          footer nav lives in a separate sibling div below and stays clickable. */}
+      <div className="relative left-1/2 -translate-x-1/2 w-full min-w-[900px] aspect-[163/100] -mt-[200px] md:-mt-[250px] pointer-events-none">
         <img
           src="/images/palms.png"
           alt=""
