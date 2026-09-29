@@ -50,8 +50,23 @@ model User {
   addresses     Address[]
   orders        Order[]
   cart          Cart?
+  resetTokens   PasswordResetToken[]
 
   @@map("users")
+}
+
+model PasswordResetToken {
+  id         String   @id @default(uuid())
+  userId     String
+  tokenHash  String   @unique  // sha256 of the raw token
+  expiresAt  DateTime
+  usedAt     DateTime?
+  createdAt  DateTime @default(now())
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("password_reset_tokens")
 }
 
 model Address {

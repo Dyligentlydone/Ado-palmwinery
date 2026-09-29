@@ -32,3 +32,15 @@ services:
         sync: false
       - key: ONVO_BASE_URL
         value: https://api.onvopay.com
+      # Required to bootstrap the first admin account. Set this in Render, then
+      # change the password via /account after first login. Leaving unset skips seeding.
+      - key: ADMIN_INITIAL_PASSWORD
+        sync: false
+      # Email (Resend). Without RESEND_API_KEY the app logs emails to stdout
+      # instead of sending — safe for staging, but production needs the real key.
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_FROM
+        value: ADO Palmwinery <no-reply@adopalmwinery.com>
+      - key: ADMIN_ALERT_EMAIL
+        value: info@adopalmwinery.com

@@ -6,55 +6,69 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('Seeding database...');
 
-  // Create admin user
-  const adminPassword = await bcrypt.hash('admin123456', 12);
-  const admin = await prisma.user.upsert({
-    where: { email: 'admin@adopalmwinery.com' },
-    update: {},
-    create: {
-      email: 'admin@adopalmwinery.com',
-      passwordHash: adminPassword,
-      firstName: 'Admin',
-      lastName: 'User',
-      role: 'ADMIN',
-    },
-  });
-  console.log('Admin user created:', admin.email);
+  const isProduction = process.env.NODE_ENV === 'production';
 
-  // Create demo customer
-  const customerPassword = await bcrypt.hash('customer123', 12);
-  const customer = await prisma.user.upsert({
-    where: { email: 'demo@example.com' },
-    update: {},
-    create: {
-      email: 'demo@example.com',
-      passwordHash: customerPassword,
-      firstName: 'Demo',
-      lastName: 'Customer',
-      role: 'CUSTOMER',
-      phone: '+1234567890',
-    },
-  });
+  // --- Admin bootstrap ---
+  // In production, the initial admin password MUST come from ADMIN_INITIAL_PASSWORD.
+  // The seed uses upsert(update: {}) so the password is only ever set on the first
+  // run — subsequent deploys never overwrite an existing admin.
+  const adminEmail = process.env.ADMIN_EMAIL || 'admin@adopalmwinery.com';
+  const initialAdminPassword = process.env.ADMIN_INITIAL_PASSWORD
+    || (isProduction ? null : 'admin123456');
 
-  // Create address for demo customer
-  await prisma.address.upsert({
-    where: { id: 'demo-address-1' },
-    update: {},
-    create: {
-      id: 'demo-address-1',
-      userId: customer.id,
-      label: 'Home',
-      firstName: 'Demo',
-      lastName: 'Customer',
-      street: '123 Palm Avenue',
-      city: 'Miami',
-      state: 'FL',
-      postalCode: '33101',
-      country: 'US',
-      phone: '+1234567890',
-      isDefault: true,
-    },
-  });
+  if (!initialAdminPassword) {
+    console.log('Skipping admin seed — set ADMIN_INITIAL_PASSWORD to bootstrap.');
+  } else {
+    const adminPasswordHash = await bcrypt.hash(initialAdminPassword, 12);
+    const admin = await prisma.user.upsert({
+      where: { email: adminEmail },
+      update: {}, // never overwrite an existing admin's password
+      create: {
+        email: adminEmail,
+        passwordHash: adminPasswordHash,
+        firstName: 'Admin',
+        lastName: 'User',
+        role: 'ADMIN',
+      },
+    });
+    console.log('Admin user ensured:', admin.email);
+  }
+
+  // --- Demo customer (dev only) ---
+  if (!isProduction) {
+    const customerPassword = await bcrypt.hash('customer123', 12);
+    const customer = await prisma.user.upsert({
+      where: { email: 'demo@example.com' },
+      update: {},
+      create: {
+        email: 'demo@example.com',
+        passwordHash: customerPassword,
+        firstName: 'Demo',
+        lastName: 'Customer',
+        role: 'CUSTOMER',
+        phone: '+1234567890',
+      },
+    });
+
+    await prisma.address.upsert({
+      where: { id: 'demo-address-1' },
+      update: {},
+      create: {
+        id: 'demo-address-1',
+        userId: customer.id,
+        label: 'Home',
+        firstName: 'Demo',
+        lastName: 'Customer',
+        street: '123 Palm Avenue',
+        city: 'Miami',
+        state: 'FL',
+        postalCode: '33101',
+        country: 'US',
+        phone: '+1234567890',
+        isDefault: true,
+      },
+    });
+  }
 
   // Create categories
   const categories = await Promise.all([

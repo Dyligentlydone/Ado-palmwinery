@@ -1,8 +1,7 @@
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { AuthRequest } from '../types';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret';
+import { JWT_SECRET } from '../config/jwt';
 
 export const authenticate = (req: AuthRequest, res: Response, next: NextFunction): void => {
   const token = req.headers.authorization?.replace('Bearer ', '') || req.cookies?.token;
