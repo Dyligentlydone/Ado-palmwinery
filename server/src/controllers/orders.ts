@@ -399,16 +399,76 @@ export const adminGetOrders = async (req: Request, res: Response): Promise<void>
   }
 };
 
+const ALLOWED_ORDER_STATUSES = ['PENDING', 'CONFIRMED', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED', 'REFUNDED'] as const;
+
 export const adminUpdateOrder = async (req: Request, res: Response): Promise<void> => {
   try {
     const { status, trackingNumber, shippingCarrier } = req.body;
 
-    const order = await prisma.order.update({
-      where: { id: req.params.id as string },
-      data: { status, trackingNumber, shippingCarrier },
+    if (status && !ALLOWED_ORDER_STATUSES.includes(status)) {
+      res.status(400).json({ error: `Invalid status. Must be one of: ${ALLOWED_ORDER_STATUSES.join(', ')}` });
+      return;
+    }
+
+    const orderId = req.params.id as string;
+    const before = await prisma.order.findUnique({
+      where: { id: orderId },
+      include: { items: true, payment: true },
+    });
+    if (!before) { res.status(404).json({ error: 'Order not found' }); return; }
+
+    // Side effects on status transitions:
+    // - CANCELLED (was not already cancelled/refunded): restock items so we don't lose inventory
+    // - REFUNDED (from a paid state): call ONVO refund + restock items + mark payment REFUNDED
+    const willCancel = status === 'CANCELLED' && before.status !== 'CANCELLED' && before.status !== 'REFUNDED';
+    const willRefund = status === 'REFUNDED' && before.status !== 'REFUNDED';
+
+    if (willRefund) {
+      const intentId = before.payment?.tiloPaymentId;
+      if (!intentId) {
+        res.status(400).json({ error: 'Cannot refund — no ONVO payment intent on file.' });
+        return;
+      }
+      if (before.payment?.status !== 'COMPLETED') {
+        res.status(400).json({ error: 'Cannot refund a payment that is not COMPLETED.' });
+        return;
+      }
+      try {
+        await onvoPayService.refundPaymentIntent(intentId);
+      } catch (err: any) {
+        console.error('ONVO refund failed:', err);
+        res.status(502).json({ error: `Refund failed at ONVO: ${err.message || 'unknown error'}` });
+        return;
+      }
+    }
+
+    // Apply the order update + side effects in one transaction
+    const ops: any[] = [
+      prisma.order.update({
+        where: { id: orderId },
+        data: { status, trackingNumber, shippingCarrier },
+      }),
+    ];
+    if (willCancel || willRefund) {
+      for (const item of before.items) {
+        ops.push(prisma.product.update({
+          where: { id: item.productId },
+          data: { stock: { increment: item.quantity } },
+        }));
+      }
+    }
+    if (willRefund && before.payment) {
+      ops.push(prisma.payment.update({
+        where: { orderId },
+        data: { status: 'REFUNDED' },
+      }));
+    }
+    await prisma.$transaction(ops);
+
+    const order = await prisma.order.findUnique({
+      where: { id: orderId },
       include: { items: true, payment: true, user: { select: { id: true, email: true, firstName: true, lastName: true } }, address: true },
     });
-
     res.json(order);
   } catch (error: any) {
     if (error.code === 'P2025') {
@@ -417,6 +477,58 @@ export const adminUpdateOrder = async (req: Request, res: Response): Promise<voi
     }
     console.error('Admin update order error:', error);
     res.status(500).json({ error: 'Failed to update order' });
+  }
+};
+
+// CSV export for fulfillment — includes shipping address + items.
+export const adminExportOrdersCsv = async (_req: Request, res: Response): Promise<void> => {
+  try {
+    const orders = await prisma.order.findMany({
+      orderBy: { createdAt: 'desc' },
+      include: {
+        items: true,
+        address: true,
+        user: { select: { email: true, firstName: true, lastName: true } },
+      },
+    });
+
+    const esc = (v: unknown) => {
+      const s = v == null ? '' : String(v);
+      return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+    };
+
+    const headers = [
+      'Order #', 'Date', 'Status', 'Currency', 'Subtotal', 'Shipping', 'Total',
+      'Customer Email', 'Customer Name', 'Phone',
+      'Ship Street', 'Ship City', 'Ship State', 'Ship Postal', 'Ship Country',
+      'Tracking', 'Carrier', 'Items',
+    ];
+
+    const rows = orders.map(o => {
+      const email = o.user?.email || o.guestEmail || '';
+      const name = o.user
+        ? `${o.user.firstName || ''} ${o.user.lastName || ''}`.trim()
+        : (o.guestName || `${o.address?.firstName || ''} ${o.address?.lastName || ''}`.trim());
+      const items = o.items.map(i => `${i.quantity}x ${i.productName}`).join(' | ');
+      return [
+        o.orderNumber, o.createdAt.toISOString(), o.status, o.currency,
+        Number(o.subtotal).toFixed(2), Number(o.shippingCost).toFixed(2), Number(o.total).toFixed(2),
+        email, name, o.address?.phone || '',
+        o.address?.street || '', o.address?.city || '', o.address?.state || '',
+        o.address?.postalCode || '', o.address?.country || '',
+        o.trackingNumber || '', o.shippingCarrier || '',
+        items,
+      ].map(esc).join(',');
+    });
+
+    const csv = [headers.join(','), ...rows].join('\n');
+    const date = new Date().toISOString().slice(0, 10);
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="orders-${date}.csv"`);
+    res.send(csv);
+  } catch (error) {
+    console.error('Admin export orders error:', error);
+    res.status(500).json({ error: 'Failed to export orders' });
   }
 };
 

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import {
   createOrder, getMyOrders, getOrderById, createGuestOrder, getGuestOrder,
-  adminGetOrders, adminUpdateOrder, adminGetAnalytics,
+  adminGetOrders, adminUpdateOrder, adminGetAnalytics, adminExportOrdersCsv,
 } from '../controllers/orders';
 import { authenticate, requireAdmin } from '../middleware/auth';
 import { validate, emailRegex } from '../middleware/validate';
@@ -29,6 +29,7 @@ router.get('/my/:id', authenticate, getOrderById);
 // Admin routes
 router.get('/admin/all', authenticate, requireAdmin, adminGetOrders);
 router.get('/admin/analytics', authenticate, requireAdmin, adminGetAnalytics);
+router.get('/admin/export.csv', authenticate, requireAdmin, adminExportOrdersCsv);
 router.put('/admin/:id', authenticate, requireAdmin, adminUpdateOrder);
 
 export default router;

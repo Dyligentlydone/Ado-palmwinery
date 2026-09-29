@@ -67,6 +67,21 @@ class OnvoPayService {
     return await response.json() as OnvoPaymentIntent;
   }
 
+  // Refund a completed payment intent. `amount` is optional (full refund if omitted)
+  // and, when given, must be in minor units of the payment currency (e.g. cents).
+  async refundPaymentIntent(paymentIntentId: string, amount?: number): Promise<unknown> {
+    const response = await fetch(`${this.baseUrl}/v1/refunds`, {
+      method: 'POST',
+      headers: this.headers(),
+      body: JSON.stringify({ paymentIntentId, ...(amount != null ? { amount } : {}) }),
+    });
+    const body: any = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(`ONVO refund failed: ${response.status} - ${JSON.stringify(body)}`);
+    }
+    return body;
+  }
+
   // Every webhook carries the dashboard-assigned secret in X-Webhook-Secret.
   verifyWebhook(headerSecret: string | undefined): boolean {
     if (!ONVO_WEBHOOK_SECRET || !headerSecret) return false;

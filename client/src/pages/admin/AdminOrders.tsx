@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from 'react';
-import { adminAPI } from '../../services/api';
+import { adminAPI, api } from '../../services/api';
 import { Order } from '../../types';
 
 const STATUS_OPTIONS = ['PENDING', 'CONFIRMED', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED', 'REFUNDED'];
@@ -63,16 +63,37 @@ export default function AdminOrders() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-6 gap-3 flex-wrap">
         <h1 className="text-2xl font-bold text-gray-900">Orders</h1>
-        <select
-          value={filter}
-          onChange={e => { setFilter(e.target.value); setPage(1); }}
-          className="px-3 py-2 border border-gray-200 rounded-lg text-sm"
-        >
-          <option value="">All Statuses</option>
-          {STATUS_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
-        </select>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={async () => {
+              try {
+                const r = await api.get('/orders/admin/export.csv', { responseType: 'blob' });
+                const url = URL.createObjectURL(r.data);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `orders-${new Date().toISOString().slice(0, 10)}.csv`;
+                a.click();
+                URL.revokeObjectURL(url);
+              } catch (err) {
+                console.error('CSV export failed:', err);
+              }
+            }}
+            className="px-3 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+          >
+            Export CSV
+          </button>
+          <select
+            value={filter}
+            onChange={e => { setFilter(e.target.value); setPage(1); }}
+            className="px-3 py-2 border border-gray-200 rounded-lg text-sm"
+          >
+            <option value="">All Statuses</option>
+            {STATUS_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
+          </select>
+        </div>
       </div>
 
       {loading ? (
