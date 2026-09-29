@@ -33,6 +33,7 @@ import AdminProducts from './pages/admin/AdminProducts';
 import AdminShipping from './pages/admin/AdminShipping';
 import AdminCustomers from './pages/admin/AdminCustomers';
 import AdminMessages from './pages/admin/AdminMessages';
+import AdminSettings from './pages/admin/AdminSettings';
 
 export default function App() {
   return (
@@ -73,6 +74,7 @@ export default function App() {
                 <Route path="shipping" element={<AdminShipping />} />
                 <Route path="customers" element={<AdminCustomers />} />
                 <Route path="messages" element={<AdminMessages />} />
+                <Route path="settings" element={<AdminSettings />} />
               </Route>
             </Routes>
           </CartProvider>
