@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /account
+Disallow: /orders
+Disallow: /checkout
+Disallow: /cart
+Disallow: /order-confirmation/*
+Disallow: /reset-password
+Disallow: /forgot-password
+
+Sitemap: https://ado-palmwinery.onrender.com/sitemap.xml
