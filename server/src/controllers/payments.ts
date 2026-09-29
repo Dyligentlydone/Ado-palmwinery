@@ -172,42 +172,61 @@ export const handleOnvoWebhook = async (req: Request, res: Response): Promise<vo
   }
 };
 
+// Reconciles a PENDING order against ONVO — used by the order-status endpoints
+// so the OrderConfirmation page can self-heal when the webhook is delayed or
+// missed (cold-start on Render's free tier, transient network, etc.). Safe to
+// call from any request path; markPaid/markFailed are already idempotent.
+export async function reconcileOrderPayment(orderId: string): Promise<void> {
+  const payment = await prisma.payment.findFirst({
+    where: { orderId },
+    include: { order: true },
+  });
+  if (!payment) return;
+  if (payment.status !== 'PENDING' || payment.order.status !== 'PENDING') return;
+
+  const sessionId = (payment.tiloPayResponse as any)?.sessionId;
+  if (!sessionId) return;
+
+  try {
+    const session = await onvoPayService.getCheckoutSession(sessionId);
+    if (session.paymentStatus === 'paid' || session.status === 'complete') {
+      await markPaid(orderId, session.paymentIntentId, session);
+    } else if (session.status === 'expired') {
+      await markFailed(orderId, session.paymentIntentId, session);
+    }
+  } catch (err) {
+    console.warn('reconcileOrderPayment: ONVO unreachable', err instanceof Error ? err.message : err);
+  }
+}
+
+// Sweeps orders that have been PENDING longer than the given threshold — reconciles
+// each with ONVO. Called on startup and periodically to catch abandoned checkouts
+// and missed webhooks so stock isn't held indefinitely.
+export async function sweepStaleOrders(olderThanMs = 60 * 60 * 1000): Promise<{ swept: number }> {
+  const cutoff = new Date(Date.now() - olderThanMs);
+  const stale = await prisma.order.findMany({
+    where: { status: 'PENDING', createdAt: { lt: cutoff } },
+    select: { id: true },
+  });
+  for (const o of stale) {
+    await reconcileOrderPayment(o.id);
+  }
+  return { swept: stale.length };
+}
+
 // Manual/authenticated status check — refreshes PENDING payments via the ONVO
 // API so admin (or a polling page) can reconcile orders whose webhook never
 // arrived or fired while the site was down.
 export const getPaymentStatus = async (req: Request, res: Response): Promise<void> => {
   try {
+    await reconcileOrderPayment(req.params.orderId as string);
     const payment = await prisma.payment.findFirst({
       where: { orderId: req.params.orderId as string },
-      include: { order: { include: { items: true } } },
     });
-
     if (!payment) {
       res.status(404).json({ error: 'Payment not found' });
       return;
     }
-
-    if (payment.status === 'PENDING' && payment.order.status === 'PENDING') {
-      try {
-        const sessionId = (payment.tiloPayResponse as any)?.sessionId;
-        if (sessionId) {
-          const session = await onvoPayService.getCheckoutSession(sessionId);
-          if (session.paymentStatus === 'paid' || session.status === 'complete') {
-            await markPaid(payment.orderId, session.paymentIntentId, session);
-            res.json({ ...payment, status: 'COMPLETED' });
-            return;
-          }
-          if (session.status === 'expired') {
-            await markFailed(payment.orderId, session.paymentIntentId, session);
-            res.json({ ...payment, status: 'FAILED' });
-            return;
-          }
-        }
-      } catch {
-        // ONVO unreachable — return cached status
-      }
-    }
-
     res.json(payment);
   } catch (error) {
     console.error('Get payment status error:', error);

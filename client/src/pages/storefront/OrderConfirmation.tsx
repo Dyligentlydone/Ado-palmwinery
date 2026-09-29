@@ -17,15 +17,37 @@ export default function OrderConfirmation() {
 
   useEffect(() => {
     if (!id || authLoading) return;
+    let cancelled = false;
+    let attempts = 0;
+    const MAX_ATTEMPTS = 10;   // ~40s total, then stop polling
+    const POLL_MS = 4000;
+
     // Members fetch via the authed endpoint; fall back to the guest link
-    // (covers guest orders re-opened after logging in)
-    const fetch = user
-      ? ordersAPI.getById(id).catch(() => ordersAPI.getGuestById(id))
-      : ordersAPI.getGuestById(id);
-    fetch
-      .then(r => setOrder(r.data))
-      .catch(() => setOrder(null))
-      .finally(() => setLoading(false));
+    // (covers guest orders re-opened after logging in). Both endpoints now
+    // reconcile PENDING orders with ONVO server-side, so polling this heals
+    // orders whose webhook was delayed by a cold-start.
+    const doFetch = () =>
+      user
+        ? ordersAPI.getById(id).catch(() => ordersAPI.getGuestById(id))
+        : ordersAPI.getGuestById(id);
+
+    const run = () => {
+      doFetch()
+        .then(r => {
+          if (cancelled) return;
+          setOrder(r.data);
+          setLoading(false);
+          attempts += 1;
+          // Keep polling while status is still pending and we're under the cap
+          if (r.data?.status === 'PENDING' && attempts < MAX_ATTEMPTS) {
+            setTimeout(run, POLL_MS);
+          }
+        })
+        .catch(() => { if (!cancelled) { setOrder(null); setLoading(false); } });
+    };
+
+    run();
+    return () => { cancelled = true; };
   }, [id, user, authLoading]);
 
   if (loading) {
@@ -35,8 +57,8 @@ export default function OrderConfirmation() {
   if (!order) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-16 text-center">
-        <p className="text-gray-500">Order not found</p>
-        {user && <Link to="/orders" className="text-primary-600 font-medium hover:underline mt-4 inline-block">View My Orders</Link>}
+        <p className="text-gray-500">{t('checkout.orderNotFound')}</p>
+        {user && <Link to="/orders" className="text-primary-600 font-medium hover:underline mt-4 inline-block">{t('checkout.viewMyOrders')}</Link>}
       </div>
     );
   }
@@ -61,7 +83,7 @@ export default function OrderConfirmation() {
       </p>
 
       <div className="bg-white rounded-xl border border-gray-100 p-6 text-left mb-8">
-        <h3 className="font-semibold mb-4">Order Details</h3>
+        <h3 className="font-semibold mb-4">{t('checkout.orderDetails')}</h3>
         <div className="space-y-3">
           {order.items.map(item => (
             <div key={item.id} className="flex justify-between text-sm">

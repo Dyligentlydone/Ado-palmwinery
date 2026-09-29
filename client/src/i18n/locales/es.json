@@ -118,7 +118,10 @@
     "orderNotes": "Notas del Pedido (Opcional)",
     "orderNotesPlaceholder": "Cualquier instrucción especial...",
     "alcoholTitle": "Firma de adulto requerida en la entrega",
-    "alcoholNotice": "Debes tener la edad legal para beber (18+ en Costa Rica, 21+ en Estados Unidos). Un adulto con identificación válida con foto debe estar presente para aceptar la entrega. Es tu responsabilidad confirmar que la entrega de alcohol sea legal en tu dirección."
+    "alcoholNotice": "Debes tener la edad legal para beber (18+ en Costa Rica, 21+ en Estados Unidos). Un adulto con identificación válida con foto debe estar presente para aceptar la entrega. Es tu responsabilidad confirmar que la entrega de alcohol sea legal en tu dirección.",
+    "orderNotFound": "Pedido no encontrado",
+    "orderDetails": "Detalles del Pedido",
+    "viewMyOrders": "Ver Mis Pedidos"
   },
   "orders": {
     "title": "Mis Pedidos",

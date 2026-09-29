@@ -118,7 +118,10 @@
     "orderNotes": "Order Notes (Optional)",
     "orderNotesPlaceholder": "Any special instructions...",
     "alcoholTitle": "Adult signature required at delivery",
-    "alcoholNotice": "You must be of legal drinking age to purchase (18+ in Costa Rica, 21+ in the United States). An adult with valid photo ID must be present to accept delivery. It is your responsibility to confirm alcohol delivery is legal at your address."
+    "alcoholNotice": "You must be of legal drinking age to purchase (18+ in Costa Rica, 21+ in the United States). An adult with valid photo ID must be present to accept delivery. It is your responsibility to confirm alcohol delivery is legal at your address.",
+    "orderNotFound": "Order not found",
+    "orderDetails": "Order Details",
+    "viewMyOrders": "View My Orders"
   },
   "orders": {
     "title": "My Orders",

@@ -98,9 +98,19 @@ app.use((err: Error, _req: express.Request, res: express.Response, _next: expres
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-  if (isProduction && (!process.env.JWT_SECRET || process.env.JWT_SECRET === 'dev-secret')) {
-    console.error('WARNING: JWT_SECRET is not set or uses the default value. All tokens are insecure!');
-  }
+
+  // Periodic stale-order sweep: reconciles PENDING orders older than 1h against
+  // ONVO and restocks the ones that failed/expired. Runs every 15 min so stuck
+  // orders self-heal without any manual intervention.
+  import('./controllers/payments').then(({ sweepStaleOrders }) => {
+    const runSweep = () => {
+      sweepStaleOrders().then(r => {
+        if (r.swept > 0) console.log(`Stale-order sweep: reconciled ${r.swept} PENDING order(s)`);
+      }).catch(err => console.error('Stale-order sweep failed:', err));
+    };
+    setTimeout(runSweep, 60_000);           // once after warm-up
+    setInterval(runSweep, 15 * 60 * 1000);  // then every 15 min
+  });
 });
 
 export default app;

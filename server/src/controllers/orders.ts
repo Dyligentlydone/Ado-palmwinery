@@ -3,6 +3,7 @@ import prisma from '../config/database';
 import { AuthRequest } from '../types';
 import { onvoPayService } from '../services/onvopay';
 import { shippingService } from '../services/shipping';
+import { reconcileOrderPayment } from './payments';
 import { SupportedCurrency } from '../config/constants';
 
 function generateOrderNumber(): string {
@@ -209,6 +210,10 @@ export const getMyOrders = async (req: AuthRequest, res: Response): Promise<void
 
 export const getOrderById = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
+    // Opportunistically reconcile a PENDING order with ONVO before we return —
+    // heals stale orders on the OrderConfirmation page without needing the webhook.
+    await reconcileOrderPayment(req.params.id as string);
+
     const order = await prisma.order.findFirst({
       where: { id: req.params.id as string, userId: req.user!.id },
       include: { items: { include: { product: true } }, payment: true, address: true },
@@ -333,6 +338,10 @@ export const createGuestOrder = async (req: Request, res: Response): Promise<voi
 
 export const getGuestOrder = async (req: Request, res: Response): Promise<void> => {
   try {
+    // Same opportunistic reconciliation — critical for guests who can't otherwise
+    // trigger it. UUID is their bearer, they polled the endpoint themselves.
+    await reconcileOrderPayment(req.params.id as string);
+
     // ID is an unguessable UUID — acts as the order's secret link for guests
     const order = await prisma.order.findUnique({
       where: { id: req.params.id as string },
