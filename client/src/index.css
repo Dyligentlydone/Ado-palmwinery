@@ -46,3 +46,12 @@
   }
 }
 
+/* Hide scrollbar on the category carousel while keeping swipe */
+.category-carousel {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.category-carousel::-webkit-scrollbar {
+  display: none;
+}
+
