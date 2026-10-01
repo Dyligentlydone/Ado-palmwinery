@@ -157,12 +157,12 @@ export default function Home() {
             <p className="text-gray-600 text-lg">{t('home.categories.subtitle')}</p>
           </div>
 
-          <div className="category-carousel flex gap-4 overflow-x-scroll snap-x snap-mandatory pb-2 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-6 md:overflow-visible md:pb-0" style={{ WebkitOverflowScrolling: 'touch' }}>
+          <div className="category-carousel flex gap-4 overflow-x-scroll snap-x snap-mandatory pb-2 md:flex-wrap md:justify-center md:gap-6 md:overflow-visible md:pb-0" style={{ WebkitOverflowScrolling: 'touch' }}>
             {categories.map(cat => (
               <Link
                 key={cat.id}
                 to={`/shop?category=${cat.slug}`}
-                className="group shrink-0 w-[70vw] snap-start md:shrink md:w-auto bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center hover:shadow-md transition-shadow"
+                className="group shrink-0 w-[70vw] snap-start md:w-[calc(50%-0.75rem)] lg:w-[calc(25%-1.125rem)] md:max-w-xs bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center hover:shadow-md transition-shadow"
               >
                 <div className="w-16 h-16 bg-primary-50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary-100 transition-colors">
                   <span className="text-2xl">🌴</span>
