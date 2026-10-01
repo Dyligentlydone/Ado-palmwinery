@@ -28,7 +28,7 @@ export const PRODUCT_NUTRITION: Record<string, NutritionFacts> = {
   'vino-de-coyol-passion-fruit': {
     servingSizeMl: 355, caloriesKcal: 125, carbsG: 19, sugarG: 15, proteinG: 1, fatG: 0, sodiumMg: 15,
   },
-  'el-fuego-de-coyol-palm-gin': {
+  'el-fuego-de-coyol': {
     servingSizeMl: 45, caloriesKcal: 105, carbsG: 0, sugarG: 0, proteinG: 0, fatG: 0, sodiumMg: 0,
   },
   'pineapple-sunset-cocktail': {
