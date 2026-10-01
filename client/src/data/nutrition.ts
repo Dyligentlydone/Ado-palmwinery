@@ -45,7 +45,6 @@ export const PRODUCT_NUTRITION: Record<string, NutritionFacts> = {
 // Maps a DB category slug to the Product Knowledge category slug it belongs to
 const KNOWLEDGE_CATEGORY_BY_CATEGORY: Record<string, string> = {
   'vino-de-coyol': 'palm-sap-wine',
-  'fruit-infusions': 'palm-sap-wine',
   'palm-spirits': 'palm-gin',
   'cocktails': 'sunset-cocktails',
 };

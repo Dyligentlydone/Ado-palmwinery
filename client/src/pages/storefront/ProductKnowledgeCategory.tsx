@@ -20,7 +20,7 @@ const CATEGORY_CONFIG: Record<Slug, {
   'palm-sap-wine': {
     titleKey: 'knowledge.palmWineTitle',
     introKey: 'knowledge.palmWineIntro',
-    productCategorySlugs: ['vino-de-coyol', 'fruit-infusions'],
+    productCategorySlugs: ['vino-de-coyol'],
     image: '/images/products/palmwine.jpg',
   },
   'palm-gin': {

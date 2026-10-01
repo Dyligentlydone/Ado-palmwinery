@@ -168,6 +168,9 @@ export default function Home() {
                   <span className="text-2xl">🌴</span>
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-1">{cat.name}</h3>
+                {cat.description && (
+                  <p className="text-xs text-primary-600 font-medium mb-1">{cat.description}</p>
+                )}
                 <p className="text-sm text-gray-500">{cat.productCount} {t('nav.shop').toLowerCase()}</p>
               </Link>
             ))}
