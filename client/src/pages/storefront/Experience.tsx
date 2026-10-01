@@ -1,8 +1,27 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { ArrowRight, BookOpen, ShoppingBag, CalendarDays } from 'lucide-react';
+import { eventsAPI } from '../../services/api';
+
+interface EventPreview {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string | null;
+  imageUrl: string | null;
+  publishedAt: string;
+}
 
 export default function Experience() {
   const { t } = useTranslation();
+  const [events, setEvents] = useState<EventPreview[]>([]);
+
+  useEffect(() => {
+    eventsAPI.list()
+      .then(r => setEvents((r.data as EventPreview[]).slice(0, 3)))
+      .catch(() => {});
+  }, []);
 
   return (
     <div>
@@ -132,6 +151,82 @@ export default function Experience() {
             innovation to supply all-natural, probiotic palm wines and spirits to consumers
             worldwide.
           </p>
+        </div>
+
+        {/* Explore more — cross-links to Product Knowledge, Shop, Events & Promotions */}
+        <div className="mt-16">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 font-[family-name:var(--font-heading)]">
+            {t('about.exploreMore')}
+          </h2>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Link
+              to="/product-knowledge"
+              className="group bg-white rounded-xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow"
+            >
+              <div className="w-11 h-11 rounded-full bg-primary-50 flex items-center justify-center text-primary-700 mb-3">
+                <BookOpen size={20} />
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-1 group-hover:text-primary-700 transition-colors">
+                {t('about.productKnowledgeCard')}
+              </h3>
+              <p className="text-sm text-gray-600">{t('about.productKnowledgeCardText')}</p>
+              <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-primary-600">
+                {t('knowledge.exploreCategory')} <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              </span>
+            </Link>
+
+            <Link
+              to="/shop"
+              className="group bg-white rounded-xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow"
+            >
+              <div className="w-11 h-11 rounded-full bg-primary-50 flex items-center justify-center text-primary-700 mb-3">
+                <ShoppingBag size={20} />
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-1 group-hover:text-primary-700 transition-colors">
+                {t('about.shopCard')}
+              </h3>
+              <p className="text-sm text-gray-600">{t('about.shopCardText')}</p>
+              <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-primary-600">
+                {t('nav.shop')} <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              </span>
+            </Link>
+          </div>
+
+          {/* Events & Promotions preview — latest 3 posts */}
+          <div className="mt-6 bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+                <CalendarDays size={18} className="text-primary-600" />
+                {t('about.eventsCard')}
+              </h3>
+              <Link to="/events" className="text-sm font-semibold text-primary-600 hover:underline">
+                {t('nav.events')} →
+              </Link>
+            </div>
+            <p className="text-sm text-gray-500 mb-4">{t('about.eventsCardText')}</p>
+            {events.length === 0 ? (
+              <p className="text-sm text-gray-400">{t('events.empty')}</p>
+            ) : (
+              <div className="space-y-3">
+                {events.map(ev => (
+                  <Link
+                    key={ev.id}
+                    to={`/events/${ev.slug}`}
+                    className="group flex items-center gap-3 py-2 border-b border-gray-50 last:border-0"
+                  >
+                    {ev.imageUrl && (
+                      <img src={ev.imageUrl} alt="" className="w-14 h-14 rounded-lg object-cover shrink-0" />
+                    )}
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-gray-900 truncate group-hover:text-primary-700">{ev.title}</p>
+                      <p className="text-xs text-gray-400">{new Date(ev.publishedAt).toLocaleDateString()}</p>
+                    </div>
+                    <ArrowRight size={16} className="text-primary-500 shrink-0 group-hover:translate-x-0.5 transition-transform" />
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </section>
     </div>

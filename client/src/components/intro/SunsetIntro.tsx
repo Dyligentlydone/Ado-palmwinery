@@ -15,8 +15,13 @@ type Phase = 'gate' | 'diving' | 'denied' | 'done';
 let hasEntered = false;
 
 export default function SunsetIntro() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [phase, setPhase] = useState<Phase>(hasEntered ? 'done' : 'gate');
+  const currentLang = i18n.language?.startsWith('es') ? 'es' : 'en';
+  const switchLang = (lng: 'en' | 'es') => {
+    i18n.changeLanguage(lng);
+    try { localStorage.setItem('language', lng); } catch { /* ignore */ }
+  };
   const [p, setP] = useState(0);
   const reducedMotion = useRef(
     window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -75,6 +80,24 @@ export default function SunsetIntro() {
         className="absolute inset-0"
         style={{ opacity: gateOpacity, pointerEvents: gateVisible ? 'auto' : 'none' }}
       >
+        {/* Language toggle — top of the gate */}
+        <div className="absolute top-[calc(env(safe-area-inset-top)+1rem)] inset-x-0 flex justify-center">
+          <div className="inline-flex items-center gap-1 rounded-full bg-black/25 backdrop-blur-sm px-1 py-1 text-xs font-semibold tracking-wider">
+            <button
+              onClick={() => switchLang('en')}
+              className={`px-3 py-1 rounded-full transition-colors ${currentLang === 'en' ? 'bg-white text-black' : 'text-white/85 hover:text-white'}`}
+            >
+              EN
+            </button>
+            <button
+              onClick={() => switchLang('es')}
+              className={`px-3 py-1 rounded-full transition-colors ${currentLang === 'es' ? 'bg-white text-black' : 'text-white/85 hover:text-white'}`}
+            >
+              ES
+            </button>
+          </div>
+        </div>
+
         <div className="absolute inset-x-0 top-[34%] flex justify-center px-4">
           <h1 className="text-4xl md:text-6xl font-bold text-white drop-shadow-lg font-[family-name:var(--font-heading)] tracking-wide text-center">
             {t('intro.headline')}

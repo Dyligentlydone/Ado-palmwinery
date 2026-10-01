@@ -115,6 +115,12 @@ export const contactAPI = {
     api.post('/contact', data),
 };
 
+// --- Events & Promotions ---
+export const eventsAPI = {
+  list: () => api.get('/events'),
+  getBySlug: (slug: string) => api.get(`/events/${slug}`),
+};
+
 // --- Admin ---
 export const adminAPI = {
   getProducts: (params?: Record<string, string | number>) =>
@@ -155,6 +161,11 @@ export const adminAPI = {
     api.put(`/contact/admin/${id}`, { isRead }),
   deleteMessage: (id: string) =>
     api.delete(`/contact/admin/${id}`),
+  // Events & Promotions
+  listEvents: () => api.get('/events/admin/all'),
+  createEvent: (data: Record<string, unknown>) => api.post('/events/admin', data),
+  updateEvent: (id: string, data: Record<string, unknown>) => api.put(`/events/admin/${id}`, data),
+  deleteEvent: (id: string) => api.delete(`/events/admin/${id}`),
 };
 
 export default api;

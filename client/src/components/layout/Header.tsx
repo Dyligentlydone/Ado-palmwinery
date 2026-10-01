@@ -31,14 +31,30 @@ export default function Header() {
   const overImage = isHome && !scrolled && !mobileOpen;
 
   const navLink = overImage
-    ? 'text-white/90 hover:text-white transition-colors font-medium drop-shadow-sm'
-    : 'text-gray-700 hover:text-primary-600 transition-colors font-medium';
+    ? 'text-white/90 hover:text-white transition-colors text-sm font-medium drop-shadow-sm whitespace-nowrap'
+    : 'text-gray-700 hover:text-primary-600 transition-colors text-sm font-medium whitespace-nowrap';
   const iconBtn = overImage
     ? 'p-2 text-white/90 hover:text-white transition-colors'
     : 'p-2 text-gray-600 hover:text-primary-600 transition-colors';
   const subtleLink = overImage
     ? 'text-sm text-white/80 hover:text-white transition-colors drop-shadow-sm'
     : 'text-sm text-gray-600 hover:text-primary-600 transition-colors';
+
+  // Owner-specified nav order. Items whose visibility depends on auth are
+  // added conditionally below.
+  const navItems: Array<{ to: string; labelKey: string; show?: boolean }> = [
+    { to: '/', labelKey: 'nav.home' },
+    { to: '/shop', labelKey: 'nav.shop' },
+    { to: '/login', labelKey: 'nav.loginRegister', show: !user },
+    { to: '/orders', labelKey: 'nav.myOrders', show: !!user },
+    { to: '/about', labelKey: 'nav.aboutUs' },
+    { to: '/product-knowledge', labelKey: 'nav.productKnowledge' },
+    { to: '/news', labelKey: 'nav.news' },
+    { to: '/events', labelKey: 'nav.events' },
+    { to: '/contact', labelKey: 'nav.contact' },
+  ];
+
+  const visibleNav = navItems.filter(n => n.show !== false);
 
   return (
     <header
@@ -47,24 +63,21 @@ export default function Header() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-16 gap-4">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2 shrink-0">
             <img src="/images/logo.png" alt="ADO Palmwinery" className="h-12 w-auto rounded-lg" />
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-6">
-            <Link to="/products" className={navLink}>{t('nav.products')}</Link>
-            <Link to="/experience" className={navLink}>{t('nav.experience')}</Link>
-            <Link to="/news" className={navLink}>{t('nav.news')}</Link>
-            <Link to="/contact" className={navLink}>{t('nav.contact')}</Link>
-            {user && <Link to="/account" className={navLink}>{t('nav.account')}</Link>}
-            {user && <Link to="/orders" className={navLink}>{t('nav.myOrders')}</Link>}
+          <nav className="hidden lg:flex items-center gap-5 flex-1 justify-center">
+            {visibleNav.map(item => (
+              <Link key={item.to} to={item.to} className={navLink}>{t(item.labelKey)}</Link>
+            ))}
           </nav>
 
           {/* Right side */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             {/* Locale Selector */}
             <div className="relative">
               <button
@@ -115,32 +128,26 @@ export default function Header() {
               )}
             </Link>
 
-            {/* User menu */}
-            {user ? (
-              <div className="hidden md:flex items-center gap-2">
+            {/* User menu (desktop) */}
+            {user && (
+              <div className="hidden lg:flex items-center gap-3">
+                <Link to="/account" className={subtleLink}>
+                  <span className="hidden xl:inline">{user.firstName || t('nav.account')}</span>
+                  <User className="xl:hidden" size={18} />
+                </Link>
                 {isAdmin && (
                   <Link to="/admin" className={`text-sm font-medium ${overImage ? 'text-white hover:text-white/80 drop-shadow-sm' : 'text-primary-600 hover:text-primary-700'}`}>
                     {t('nav.admin')}
                   </Link>
                 )}
-                <button
-                  onClick={() => { logout(); navigate('/'); }}
-                  className={subtleLink}
-                >
+                <button onClick={() => { logout(); navigate('/'); }} className={subtleLink}>
                   {t('nav.logout')}
                 </button>
-              </div>
-            ) : (
-              <div className="hidden md:flex items-center gap-2">
-                <Link to="/login" className={`${subtleLink} font-medium flex items-center gap-1`}>
-                  <User size={18} />
-                  {t('nav.login')}
-                </Link>
               </div>
             )}
 
             {/* Mobile menu toggle */}
-            <button onClick={() => setMobileOpen(!mobileOpen)} className={`md:hidden ${iconBtn}`}>
+            <button onClick={() => setMobileOpen(!mobileOpen)} className={`lg:hidden ${iconBtn}`}>
               {mobileOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
@@ -149,32 +156,23 @@ export default function Header() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden bg-[#fdf3d8] border-t border-black/5 shadow-lg">
+        <div className="lg:hidden bg-[#fdf3d8] border-t border-black/5 shadow-lg">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col gap-3">
-            <Link to="/products" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
-              {t('nav.products')}
-            </Link>
-            <Link to="/experience" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
-              {t('nav.experience')}
-            </Link>
-            <Link to="/news" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
-              {t('nav.news')}
-            </Link>
-            <Link to="/contact" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
-              {t('nav.contact')}
-            </Link>
-            {user && (
-              <Link to="/account" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
-                {t('nav.account')}
+            {visibleNav.map(item => (
+              <Link
+                key={item.to}
+                to={item.to}
+                onClick={() => setMobileOpen(false)}
+                className="text-gray-700 hover:text-primary-600 font-medium"
+              >
+                {t(item.labelKey)}
               </Link>
-            )}
+            ))}
             {user && (
-              <Link to="/orders" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
-                {t('nav.myOrders')}
-              </Link>
-            )}
-            {user ? (
               <>
+                <Link to="/account" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
+                  {t('nav.account')}
+                </Link>
                 {isAdmin && (
                   <Link to="/admin" onClick={() => setMobileOpen(false)} className="text-primary-600 font-medium">
                     {t('nav.admin')}
@@ -183,15 +181,6 @@ export default function Header() {
                 <button onClick={() => { logout(); navigate('/'); setMobileOpen(false); }} className="text-left text-gray-600 hover:text-primary-600">
                   {t('nav.logout')}
                 </button>
-              </>
-            ) : (
-              <>
-                <Link to="/login" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
-                  {t('nav.login')}
-                </Link>
-                <Link to="/register" onClick={() => setMobileOpen(false)} className="text-gray-700 hover:text-primary-600 font-medium">
-                  {t('nav.register')}
-                </Link>
               </>
             )}
           </div>

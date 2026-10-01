@@ -10,14 +10,6 @@ interface LocaleContextType {
   formatPrice: (amount: number, curr?: Currency) => string;
 }
 
-const isCostaRica = () => {
-  try {
-    return Intl.DateTimeFormat().resolvedOptions().timeZone === 'America/Costa_Rica';
-  } catch {
-    return false;
-  }
-};
-
 const LocaleContext = createContext<LocaleContextType | undefined>(undefined);
 
 export function LocaleProvider({ children }: { children: ReactNode }) {
@@ -27,8 +19,7 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
   );
   const [currency, setCurrencyState] = useState<Currency>(() => {
     const saved = localStorage.getItem('currency') as Currency | null;
-    if (saved) return saved;
-    return isCostaRica() ? 'CRC' : 'USD';
+    return saved || 'USD';
   });
 
   // Keep context in sync if i18n changes language elsewhere

@@ -49,15 +49,19 @@ export default function Footer() {
 
           {/* Editorial nav strip */}
           <nav className="flex flex-wrap items-center justify-center gap-x-6 md:gap-x-9 gap-y-2 mt-4 md:mt-7 uppercase tracking-[0.18em] text-[10px] md:text-xs font-semibold">
-            <Link to="/products" className="text-[#3a2413]/70 hover:text-[#3a2413] underline-offset-4 decoration-2 decoration-transparent hover:decoration-[#d7b73f] underline transition-all">{t('nav.products')}</Link>
+            <Link to="/" className="text-[#3a2413]/70 hover:text-[#3a2413] underline-offset-4 decoration-2 decoration-transparent hover:decoration-[#d7b73f] underline transition-all">{t('nav.home')}</Link>
             <span className="hidden md:inline text-[#3a2413]/25 select-none">·</span>
-            <Link to="/experience" className="text-[#3a2413]/70 hover:text-[#3a2413] underline-offset-4 decoration-2 decoration-transparent hover:decoration-[#d7b73f] underline transition-all">{t('nav.experience')}</Link>
+            <Link to="/shop" className="text-[#3a2413]/70 hover:text-[#3a2413] underline-offset-4 decoration-2 decoration-transparent hover:decoration-[#d7b73f] underline transition-all">{t('nav.shop')}</Link>
+            <span className="hidden md:inline text-[#3a2413]/25 select-none">·</span>
+            <Link to="/about" className="text-[#3a2413]/70 hover:text-[#3a2413] underline-offset-4 decoration-2 decoration-transparent hover:decoration-[#d7b73f] underline transition-all">{t('nav.aboutUs')}</Link>
+            <span className="hidden md:inline text-[#3a2413]/25 select-none">·</span>
+            <Link to="/product-knowledge" className="text-[#3a2413]/70 hover:text-[#3a2413] underline-offset-4 decoration-2 decoration-transparent hover:decoration-[#d7b73f] underline transition-all">{t('nav.productKnowledge')}</Link>
             <span className="hidden md:inline text-[#3a2413]/25 select-none">·</span>
             <Link to="/news" className="text-[#3a2413]/70 hover:text-[#3a2413] underline-offset-4 decoration-2 decoration-transparent hover:decoration-[#d7b73f] underline transition-all">{t('nav.news')}</Link>
             <span className="hidden md:inline text-[#3a2413]/25 select-none">·</span>
-            <Link to="/contact" className="text-[#3a2413]/70 hover:text-[#3a2413] underline-offset-4 decoration-2 decoration-transparent hover:decoration-[#d7b73f] underline transition-all">{t('nav.contact')}</Link>
+            <Link to="/events" className="text-[#3a2413]/70 hover:text-[#3a2413] underline-offset-4 decoration-2 decoration-transparent hover:decoration-[#d7b73f] underline transition-all">{t('nav.events')}</Link>
             <span className="hidden md:inline text-[#3a2413]/25 select-none">·</span>
-            <Link to="/cart" className="text-[#3a2413]/70 hover:text-[#3a2413] underline-offset-4 decoration-2 decoration-transparent hover:decoration-[#d7b73f] underline transition-all">{t('nav.cart')}</Link>
+            <Link to="/contact" className="text-[#3a2413]/70 hover:text-[#3a2413] underline-offset-4 decoration-2 decoration-transparent hover:decoration-[#d7b73f] underline transition-all">{t('nav.contact')}</Link>
             <span className="hidden md:inline text-[#3a2413]/25 select-none">·</span>
             <Link to="/orders" className="text-[#3a2413]/70 hover:text-[#3a2413] underline-offset-4 decoration-2 decoration-transparent hover:decoration-[#d7b73f] underline transition-all">{t('nav.myOrders')}</Link>
           </nav>

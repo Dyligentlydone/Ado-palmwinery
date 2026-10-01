@@ -6,13 +6,16 @@ import { productsAPI } from '../../services/api';
 import { Product } from '../../types';
 import { useLocale } from '../../context/LocaleContext';
 import { useCart } from '../../context/CartContext';
+import { useToast } from '../../context/ToastContext';
 import ProductCard from '../../components/product/ProductCard';
+import { PRODUCT_NUTRITION, knowledgeSlugForCategory } from '../../data/nutrition';
 
 export default function ProductDetail() {
   const { slug } = useParams<{ slug: string }>();
   const { t } = useTranslation();
   const { formatPrice } = useLocale();
   const { addToCart } = useCart();
+  const { showCartAdded } = useToast();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
@@ -48,6 +51,7 @@ export default function ProductDetail() {
     try {
       await addToCart(product, quantity);
       setAdded(true);
+      showCartAdded(product.name, product.images[0]);
       setTimeout(() => setAdded(false), 2000);
     } catch (err) {
       console.error('Failed to add to cart:', err);
@@ -84,12 +88,23 @@ export default function ProductDetail() {
 
   const isOutOfStock = product.stock <= 0;
   const hasDiscount = product.compareAtUSD && product.compareAtUSD > product.price;
+  const nutrition = product.slug ? PRODUCT_NUTRITION[product.slug] : undefined;
+  const knowledgeSlug = knowledgeSlugForCategory(product.category?.slug);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <Link to="/products" className="inline-flex items-center gap-2 text-gray-600 hover:text-primary-600 mb-6 text-sm font-medium">
-        <ArrowLeft size={16} /> {t('common.back')} to {t('nav.products')}
-      </Link>
+      <div className="flex flex-wrap items-center gap-4 mb-6">
+        <Link to="/shop" className="inline-flex items-center gap-2 text-gray-600 hover:text-primary-600 text-sm font-medium">
+          <ArrowLeft size={16} /> {t('common.back')} to {t('nav.shop')}
+        </Link>
+        <span className="text-gray-300">·</span>
+        <Link
+          to={`/product-knowledge/${knowledgeSlug}`}
+          className="inline-flex items-center gap-2 text-gray-600 hover:text-primary-600 text-sm font-medium"
+        >
+          <ArrowLeft size={16} /> {t('knowledge.backToCategory', { category: product.category?.name })}
+        </Link>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         {/* Images */}
@@ -252,6 +267,37 @@ export default function ProductDetail() {
               </div>
             ))}
           </div>
+        </section>
+      )}
+
+      {/* Nutritional overview */}
+      {nutrition && (
+        <section className="mt-16">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-heading)]">
+            {t('knowledge.nutritionTitle')}
+          </h2>
+          <p className="text-sm text-gray-500 mb-6">
+            {t('knowledge.servingSize')}: {nutrition.servingSizeMl} ml
+            {product.abv ? ` · ${t('knowledge.alcoholContent')}: ${product.abv}% ABV` : ''}
+          </p>
+          <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 divide-x divide-y sm:divide-y-0 divide-gray-100">
+              {[
+                { label: t('knowledge.calories'), value: `${nutrition.caloriesKcal} kcal` },
+                { label: t('knowledge.carbs'), value: `${nutrition.carbsG} g` },
+                { label: t('knowledge.sugar'), value: `${nutrition.sugarG} g` },
+                { label: t('knowledge.protein'), value: `${nutrition.proteinG} g` },
+                { label: t('knowledge.fat'), value: `${nutrition.fatG} g` },
+                { label: t('knowledge.sodium'), value: `${nutrition.sodiumMg} mg` },
+              ].map(({ label, value }) => (
+                <div key={label} className="p-4 text-center">
+                  <p className="text-xs uppercase tracking-wider text-gray-400 mb-1">{label}</p>
+                  <p className="font-semibold text-gray-900">{value}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <p className="text-xs text-gray-400 mt-3">{t('knowledge.nutritionNote')}</p>
         </section>
       )}
 

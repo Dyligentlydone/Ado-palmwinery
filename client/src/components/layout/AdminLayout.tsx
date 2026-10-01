@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation, Navigate } from 'react-router-dom';
-import { BarChart3, Package, ShoppingBag, Truck, Users, Mail, LogOut, Home, Settings } from 'lucide-react';
+import { BarChart3, Package, ShoppingBag, Truck, Users, Mail, LogOut, Home, Settings, Calendar } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const navItems = [
@@ -9,6 +9,7 @@ const navItems = [
   { to: '/admin/shipping', icon: Truck, label: 'Shipping' },
   { to: '/admin/customers', icon: Users, label: 'Customers' },
   { to: '/admin/messages', icon: Mail, label: 'Messages' },
+  { to: '/admin/events', icon: Calendar, label: 'Events' },
   { to: '/admin/settings', icon: Settings, label: 'Settings' },
 ];
 

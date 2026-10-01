@@ -260,3 +260,23 @@ model ShippingZone {
 
   @@map("shipping_zones")
 }
+
+model Event {
+  id           String   @id @default(uuid())
+  slug         String   @unique
+  title        String
+  titleEs      String?
+  excerpt      String?
+  excerptEs    String?
+  body         String   @db.Text
+  bodyEs       String?  @db.Text
+  imageUrl     String?
+  isPromotion  Boolean  @default(false)
+  isPublished  Boolean  @default(true)
+  publishedAt  DateTime @default(now())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([publishedAt])
+  @@map("events")
+}

@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { LocaleProvider } from './context/LocaleContext';
+import { ToastProvider } from './context/ToastContext';
 import './i18n';
 
 import Layout from './components/layout/Layout';
@@ -17,12 +18,15 @@ import OrderConfirmation from './pages/storefront/OrderConfirmation';
 import Orders from './pages/storefront/Orders';
 import Account from './pages/storefront/Account';
 import News from './pages/storefront/News';
-import Experience from './pages/storefront/Experience';
+import About from './pages/storefront/Experience';
 import Contact from './pages/storefront/Contact';
 import Legal from './pages/storefront/Legal';
+import ProductKnowledge from './pages/storefront/ProductKnowledge';
+import ProductKnowledgeCategory from './pages/storefront/ProductKnowledgeCategory';
+import Events from './pages/storefront/Events';
+import EventDetail from './pages/storefront/EventDetail';
 
 import Login from './pages/auth/Login';
-import Register from './pages/auth/Register';
 import ForgotPassword from './pages/auth/ForgotPassword';
 import ResetPassword from './pages/auth/ResetPassword';
 import AdminLogin from './pages/auth/AdminLogin';
@@ -34,6 +38,7 @@ import AdminShipping from './pages/admin/AdminShipping';
 import AdminCustomers from './pages/admin/AdminCustomers';
 import AdminMessages from './pages/admin/AdminMessages';
 import AdminSettings from './pages/admin/AdminSettings';
+import AdminEvents from './pages/admin/AdminEvents';
 
 export default function App() {
   return (
@@ -42,12 +47,19 @@ export default function App() {
       <AuthProvider>
         <LocaleProvider>
           <CartProvider>
+            <ToastProvider>
             <Routes>
               {/* Storefront */}
               <Route element={<Layout />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/products" element={<Products />} />
-                <Route path="/experience" element={<Experience />} />
+                <Route path="/shop" element={<Products />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/experience" element={<About />} />
+                <Route path="/product-knowledge" element={<ProductKnowledge />} />
+                <Route path="/product-knowledge/:slug" element={<ProductKnowledgeCategory />} />
+                <Route path="/events" element={<Events />} />
+                <Route path="/events/:slug" element={<EventDetail />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/products/:slug" element={<ProductDetail />} />
                 <Route path="/cart" element={<CartPage />} />
@@ -60,7 +72,7 @@ export default function App() {
                 <Route path="/terms" element={<Legal />} />
                 <Route path="/shipping" element={<Legal />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
+                <Route path="/register" element={<Login />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
               </Route>
@@ -74,9 +86,11 @@ export default function App() {
                 <Route path="shipping" element={<AdminShipping />} />
                 <Route path="customers" element={<AdminCustomers />} />
                 <Route path="messages" element={<AdminMessages />} />
+                <Route path="events" element={<AdminEvents />} />
                 <Route path="settings" element={<AdminSettings />} />
               </Route>
             </Routes>
+            </ToastProvider>
           </CartProvider>
         </LocaleProvider>
       </AuthProvider>
