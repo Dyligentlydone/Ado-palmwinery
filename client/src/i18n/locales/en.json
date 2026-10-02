@@ -199,7 +199,9 @@
     "fat": "Fat",
     "sodium": "Sodium",
     "alcoholContent": "Alcohol content",
-    "nutritionNote": "Nutritional values are approximate and may vary slightly by batch."
+    "nutritionNote": "Nutritional values are approximate and may vary slightly by batch.",
+    "fiber": "Dietary Fiber",
+    "potassium": "Potassium"
   },
   "events": {
     "title": "Events & Promotions",

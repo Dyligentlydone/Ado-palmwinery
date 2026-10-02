@@ -207,7 +207,9 @@
     "fat": "Grasa",
     "sodium": "Sodio",
     "alcoholContent": "Contenido de alcohol",
-    "nutritionNote": "Los valores nutricionales son aproximados y pueden variar ligeramente por lote."
+    "nutritionNote": "Los valores nutricionales son aproximados y pueden variar ligeramente por lote.",
+    "fiber": "Fibra Dietética",
+    "potassium": "Potasio"
   },
   "events": {
     "title": "Eventos y Promociones",

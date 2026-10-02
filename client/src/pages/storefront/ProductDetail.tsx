@@ -281,16 +281,18 @@ export default function ProductDetail() {
             {product.abv ? ` · ${t('knowledge.alcoholContent')}: ${product.abv}% ABV` : ''}
           </p>
           <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 divide-x divide-y sm:divide-y-0 divide-gray-100">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-gray-100">
               {[
                 { label: t('knowledge.calories'), value: `${nutrition.caloriesKcal} kcal` },
                 { label: t('knowledge.carbs'), value: `${nutrition.carbsG} g` },
                 { label: t('knowledge.sugar'), value: `${nutrition.sugarG} g` },
+                { label: t('knowledge.fiber'), value: `${nutrition.fiberG} g`, show: nutrition.fiberG != null },
                 { label: t('knowledge.protein'), value: `${nutrition.proteinG} g` },
                 { label: t('knowledge.fat'), value: `${nutrition.fatG} g` },
                 { label: t('knowledge.sodium'), value: `${nutrition.sodiumMg} mg` },
-              ].map(({ label, value }) => (
-                <div key={label} className="p-4 text-center">
+                { label: t('knowledge.potassium'), value: `${nutrition.potassiumMg} mg`, show: nutrition.potassiumMg != null },
+              ].filter(i => i.show !== false).map(({ label, value }) => (
+                <div key={label} className="bg-white p-4 text-center">
                   <p className="text-xs uppercase tracking-wider text-gray-400 mb-1">{label}</p>
                   <p className="font-semibold text-gray-900">{value}</p>
                 </div>
