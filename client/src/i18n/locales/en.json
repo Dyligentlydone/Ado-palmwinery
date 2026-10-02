@@ -294,5 +294,9 @@
     "sending": "Sending...",
     "success": "Message sent! We'll get back to you soon.",
     "error": "Something went wrong. Please try again."
+  },
+  "navButtons": {
+    "back": "Back",
+    "forward": "Forward"
   }
 }
