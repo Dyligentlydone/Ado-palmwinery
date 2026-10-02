@@ -61,3 +61,13 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+
+/* Age-gate dive: zoom target = sun center, differs per image crop */
+.intro-sunset-img {
+  transform-origin: 52% 52%;
+}
+@media (max-width: 767px) {
+  .intro-sunset-img {
+    transform-origin: 50% 46%;
+  }
+}

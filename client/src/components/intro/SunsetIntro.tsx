@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-// Tuning constants
-const SUN_X = 50;             // sun center, % across image width
-const SUN_Y = 62;             // sun center, % down image height
+// Tuning constants — sun center per breakpoint, applied via .intro-sunset-img
+// (see index.css; desktop ~52%/52%, mobile ~50%/46%)
 const SUN_COLOR = '#fdf3d8';  // sampled sun color — matches the page-top gradient
 const MAX_SCALE = 16;         // final zoom level
 const DIVE_MS = 2200;         // how long the dive into the sun takes
@@ -64,15 +63,17 @@ export default function SunsetIntro() {
       className="fixed inset-x-0 top-0 z-[100] overflow-hidden h-screen supports-[height:100lvh]:h-[100lvh]"
       style={{ opacity: fade }}
     >
-      <img
-        src="/images/sunset-intro.jpg"
-        alt=""
-        className="w-full h-full object-cover will-change-transform"
-        style={{
-          transform: `scale(${scale})`,
-          transformOrigin: `${SUN_X}% ${SUN_Y}%`,
-        }}
-      />
+      <picture className="block w-full h-full">
+        <source media="(max-width: 767px)" srcSet="/images/sunset-intro-mobile.jpg" />
+        <img
+          src="/images/sunset-intro.jpg"
+          alt=""
+          className="intro-sunset-img w-full h-full object-cover will-change-transform"
+          style={{
+            transform: `scale(${scale})`,
+          }}
+        />
+      </picture>
       <div className="absolute inset-0" style={{ background: SUN_COLOR, opacity: wash }} />
 
       {/* Age gate over the scene */}
