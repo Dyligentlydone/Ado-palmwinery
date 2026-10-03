@@ -16,8 +16,8 @@ let hasEntered = false;
 export default function SunsetIntro() {
   const { t, i18n } = useTranslation();
   const [phase, setPhase] = useState<Phase>(hasEntered ? 'done' : 'gate');
-  const currentLang = i18n.language?.startsWith('es') ? 'es' : 'en';
-  const switchLang = (lng: 'en' | 'es') => {
+  const currentLang = (['es', 'fr'] as const).find(l => i18n.language?.startsWith(l)) ?? 'en';
+  const switchLang = (lng: 'en' | 'es' | 'fr') => {
     i18n.changeLanguage(lng);
     try { localStorage.setItem('language', lng); } catch { /* ignore */ }
   };
@@ -84,18 +84,15 @@ export default function SunsetIntro() {
         {/* Language toggle — top of the gate */}
         <div className="absolute top-[calc(env(safe-area-inset-top)+1rem)] inset-x-0 flex justify-center">
           <div className="inline-flex items-center gap-1 rounded-full bg-black/25 backdrop-blur-sm px-1 py-1 text-xs font-semibold tracking-wider">
-            <button
-              onClick={() => switchLang('en')}
-              className={`px-3 py-1 rounded-full transition-colors ${currentLang === 'en' ? 'bg-white text-black' : 'text-white/85 hover:text-white'}`}
-            >
-              EN
-            </button>
-            <button
-              onClick={() => switchLang('es')}
-              className={`px-3 py-1 rounded-full transition-colors ${currentLang === 'es' ? 'bg-white text-black' : 'text-white/85 hover:text-white'}`}
-            >
-              ES
-            </button>
+            {(['en', 'es', 'fr'] as const).map(lng => (
+              <button
+                key={lng}
+                onClick={() => switchLang(lng)}
+                className={`px-3 py-1 rounded-full transition-colors ${currentLang === lng ? 'bg-white text-black' : 'text-white/85 hover:text-white'}`}
+              >
+                {lng.toUpperCase()}
+              </button>
+            ))}
           </div>
         </div>
 

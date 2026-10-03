@@ -122,7 +122,7 @@ export interface Order {
 }
 
 export type Currency = 'USD' | 'EUR' | 'GBP' | 'CRC';
-export type Language = 'en' | 'es';
+export type Language = 'en' | 'es' | 'fr';
 export type OrderStatus = 'PENDING' | 'CONFIRMED' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED' | 'REFUNDED';
 export type PaymentStatus = 'PENDING' | 'COMPLETED' | 'FAILED' | 'REFUNDED';
 

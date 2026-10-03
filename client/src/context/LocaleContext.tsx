@@ -15,7 +15,7 @@ const LocaleContext = createContext<LocaleContextType | undefined>(undefined);
 export function LocaleProvider({ children }: { children: ReactNode }) {
   const { i18n } = useTranslation();
   const [language, setLanguageState] = useState<Language>(() =>
-    i18n.language?.startsWith('es') ? 'es' : 'en'
+    (['es', 'fr'] as const).find(l => i18n.language?.startsWith(l)) ?? 'en'
   );
   const [currency, setCurrencyState] = useState<Currency>(() => {
     const saved = localStorage.getItem('currency') as Currency | null;
@@ -24,7 +24,8 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
 
   // Keep context in sync if i18n changes language elsewhere
   useEffect(() => {
-    const onChange = (lng: string) => setLanguageState(lng.startsWith('es') ? 'es' : 'en');
+    const onChange = (lng: string) =>
+      setLanguageState((['es', 'fr'] as const).find(l => lng.startsWith(l)) ?? 'en');
     i18n.on('languageChanged', onChange);
     return () => { i18n.off('languageChanged', onChange); };
   }, [i18n]);

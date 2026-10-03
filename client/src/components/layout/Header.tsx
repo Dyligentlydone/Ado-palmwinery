@@ -92,13 +92,13 @@ export default function Header() {
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border p-3 z-50">
                   <div className="mb-3">
                     <p className="text-xs font-semibold text-gray-500 mb-1">Language</p>
-                    {(['en', 'es'] as Language[]).map(lang => (
+                    {(['en', 'es', 'fr'] as Language[]).map(lang => (
                       <button
                         key={lang}
                         onClick={() => { setLanguage(lang); setLocaleOpen(false); }}
                         className={`block w-full text-left px-2 py-1 rounded text-sm ${language === lang ? 'bg-primary-50 text-primary-700 font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
                       >
-                        {lang === 'en' ? 'English' : 'Espanol'}
+                        {{ en: 'English', es: 'Español', fr: 'Français' }[lang]}
                       </button>
                     ))}
                   </div>
