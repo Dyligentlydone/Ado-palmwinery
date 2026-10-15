@@ -79,10 +79,10 @@ export default function News() {
           </h2>
           <p className="mt-3 text-gray-600 max-w-xl mx-auto">{t('news.mediaText')}</p>
           <a
-            href="mailto:info@adopalmwinery.com?subject=Media%20Inquiry"
+            href="mailto:info@drinkado.com?subject=Media%20Inquiry"
             className="mt-6 inline-flex items-center gap-2 bg-primary-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors"
           >
-            <Mail size={18} /> info@adopalmwinery.com
+            <Mail size={18} /> info@drinkado.com
           </a>
         </div>
       </section>

@@ -10,4 +10,4 @@ Disallow: /order-confirmation/*
 Disallow: /reset-password
 Disallow: /forgot-password
 
-Sitemap: https://ado-palmwinery.onrender.com/sitemap.xml
+Sitemap: https://www.drinkado.com/sitemap.xml

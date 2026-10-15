@@ -36,7 +36,7 @@ export default function Footer() {
             <div className="text-right">
               <h4 className="font-semibold mb-2 md:mb-3 text-xs md:text-base">{t('footer.contact')}</h4>
               <ul className="space-y-1.5 md:space-y-2 text-[11px] md:text-sm text-[#3a2413]/70">
-                <li>info@adopalmwinery.com</li>
+                <li>info@drinkado.com</li>
                 <li>
                   <a href="https://wa.me/50671577049" target="_blank" rel="noopener noreferrer" className="hover:text-[#3a2413] transition-colors">
                     WhatsApp: +506 7157 7049

@@ -25,7 +25,7 @@ services:
           name: ado-palmwinery-db
           property: connectionString
       - key: CLIENT_URL
-        value: https://ado-palmwinery.onrender.com
+        value: https://www.drinkado.com
       - key: ONVO_SECRET_KEY
         sync: false
       - key: ONVO_WEBHOOK_SECRET
@@ -41,6 +41,6 @@ services:
       - key: RESEND_API_KEY
         sync: false
       - key: EMAIL_FROM
-        value: ADO Palmwinery <no-reply@adopalmwinery.com>
+        value: ADO Palmwinery <no-reply@drinkado.com>
       - key: ADMIN_ALERT_EMAIL
-        value: info@adopalmwinery.com
+        value: info@drinkado.com

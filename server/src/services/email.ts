@@ -6,8 +6,8 @@
 import { Resend } from 'resend';
 
 const apiKey = process.env.RESEND_API_KEY;
-const FROM = process.env.EMAIL_FROM || 'ADO Palmwinery <no-reply@adopalmwinery.com>';
-const ADMIN_EMAIL = process.env.ADMIN_ALERT_EMAIL || 'info@adopalmwinery.com';
+const FROM = process.env.EMAIL_FROM || 'ADO Palmwinery <no-reply@drinkado.com>';
+const ADMIN_EMAIL = process.env.ADMIN_ALERT_EMAIL || 'info@drinkado.com';
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
 
 const resend = apiKey ? new Resend(apiKey) : null;
@@ -33,7 +33,7 @@ function shell(title: string, body: string): string {
     <h1 style="margin:0 0 20px;font-size:22px;color:#3a2413;">${title}</h1>
     ${body}
     <hr style="border:none;border-top:1px solid #eee;margin:28px 0;" />
-    <p style="font-size:12px;color:#888;margin:0;">ADO Palm Winery · Liberia, Costa Rica · info@adopalmwinery.com</p>
+    <p style="font-size:12px;color:#888;margin:0;">ADO Palm Winery · Liberia, Costa Rica · info@drinkado.com</p>
   </div></body></html>`;
 }
 

@@ -47,7 +47,7 @@ const CONTENT: Record<'privacy' | 'terms' | 'shipping', { en: Doc; es: Doc }> = 
         {
           heading: 'Your rights',
           body: [
-            'You may request access to, correction of, or deletion of your personal information by emailing info@adopalmwinery.com.',
+            'You may request access to, correction of, or deletion of your personal information by emailing info@drinkado.com.',
             'You may close your account at any time. We retain order records as required by applicable tax and alcohol-sale laws.',
           ],
         },
@@ -59,7 +59,7 @@ const CONTENT: Record<'privacy' | 'terms' | 'shipping', { en: Doc; es: Doc }> = 
         },
         {
           heading: 'Contact',
-          body: ['Questions about this policy: info@adopalmwinery.com'],
+          body: ['Questions about this policy: info@drinkado.com'],
         },
       ],
     },
@@ -99,7 +99,7 @@ const CONTENT: Record<'privacy' | 'terms' | 'shipping', { en: Doc; es: Doc }> = 
         {
           heading: 'Tus derechos',
           body: [
-            'Puedes solicitar acceso, correccion o eliminacion de tu informacion personal enviando un correo a info@adopalmwinery.com.',
+            'Puedes solicitar acceso, correccion o eliminacion de tu informacion personal enviando un correo a info@drinkado.com.',
             'Puedes cerrar tu cuenta en cualquier momento. Conservamos los registros de pedidos segun lo requieran las leyes fiscales y de venta de alcohol aplicables.',
           ],
         },
@@ -111,7 +111,7 @@ const CONTENT: Record<'privacy' | 'terms' | 'shipping', { en: Doc; es: Doc }> = 
         },
         {
           heading: 'Contacto',
-          body: ['Preguntas sobre esta politica: info@adopalmwinery.com'],
+          body: ['Preguntas sobre esta politica: info@drinkado.com'],
         },
       ],
     },
@@ -121,7 +121,7 @@ const CONTENT: Record<'privacy' | 'terms' | 'shipping', { en: Doc; es: Doc }> = 
       title: 'Terms of Service',
       updated: LAST_UPDATED,
       intro:
-        'By using adopalmwinery.com and purchasing from us, you agree to these Terms. Please read them carefully.',
+        'By using drinkado.com and purchasing from us, you agree to these Terms. Please read them carefully.',
       sections: [
         {
           heading: 'Age requirement',
@@ -151,7 +151,7 @@ const CONTENT: Record<'privacy' | 'terms' | 'shipping', { en: Doc; es: Doc }> = 
           heading: 'Returns and refunds',
           body: [
             'Due to the nature of alcohol, we do not accept returns of opened bottles.',
-            'If your order arrives damaged or incorrect, contact info@adopalmwinery.com within 48 hours with photos. We will arrange a replacement or refund.',
+            'If your order arrives damaged or incorrect, contact info@drinkado.com within 48 hours with photos. We will arrange a replacement or refund.',
             'Refunds are issued to the original payment method through ONVO Pay.',
           ],
         },
@@ -175,7 +175,7 @@ const CONTENT: Record<'privacy' | 'terms' | 'shipping', { en: Doc; es: Doc }> = 
         },
         {
           heading: 'Contact',
-          body: ['Questions about these Terms: info@adopalmwinery.com'],
+          body: ['Questions about these Terms: info@drinkado.com'],
         },
       ],
     },
@@ -183,7 +183,7 @@ const CONTENT: Record<'privacy' | 'terms' | 'shipping', { en: Doc; es: Doc }> = 
       title: 'Terminos de Servicio',
       updated: LAST_UPDATED,
       intro:
-        'Al usar adopalmwinery.com y comprar con nosotros, aceptas estos Terminos. Por favor leelos con atencion.',
+        'Al usar drinkado.com y comprar con nosotros, aceptas estos Terminos. Por favor leelos con atencion.',
       sections: [
         {
           heading: 'Requisito de edad',
@@ -213,7 +213,7 @@ const CONTENT: Record<'privacy' | 'terms' | 'shipping', { en: Doc; es: Doc }> = 
           heading: 'Devoluciones y reembolsos',
           body: [
             'Debido a la naturaleza del alcohol, no aceptamos devoluciones de botellas abiertas.',
-            'Si tu pedido llega danado o incorrecto, contactanos a info@adopalmwinery.com dentro de 48 horas con fotos. Coordinaremos un reemplazo o reembolso.',
+            'Si tu pedido llega danado o incorrecto, contactanos a info@drinkado.com dentro de 48 horas con fotos. Coordinaremos un reemplazo o reembolso.',
             'Los reembolsos se emiten al metodo de pago original a traves de ONVO Pay.',
           ],
         },
@@ -237,7 +237,7 @@ const CONTENT: Record<'privacy' | 'terms' | 'shipping', { en: Doc; es: Doc }> = 
         },
         {
           heading: 'Contacto',
-          body: ['Preguntas sobre estos Terminos: info@adopalmwinery.com'],
+          body: ['Preguntas sobre estos Terminos: info@drinkado.com'],
         },
       ],
     },
@@ -281,7 +281,7 @@ const CONTENT: Record<'privacy' | 'terms' | 'shipping', { en: Doc; es: Doc }> = 
         {
           heading: 'Damaged or incorrect orders',
           body: [
-            'Contact info@adopalmwinery.com within 48 hours of delivery with your order number and photos of the damage or incorrect items.',
+            'Contact info@drinkado.com within 48 hours of delivery with your order number and photos of the damage or incorrect items.',
             'We will arrange a replacement shipment or issue a refund via ONVO Pay to your original payment method.',
           ],
         },
@@ -338,7 +338,7 @@ const CONTENT: Record<'privacy' | 'terms' | 'shipping', { en: Doc; es: Doc }> = 
         {
           heading: 'Pedidos danados o incorrectos',
           body: [
-            'Contactanos a info@adopalmwinery.com dentro de 48 horas de la entrega con tu numero de pedido y fotos del dano o los articulos incorrectos.',
+            'Contactanos a info@drinkado.com dentro de 48 horas de la entrega con tu numero de pedido y fotos del dano o los articulos incorrectos.',
             'Coordinaremos un reemplazo o emitiremos un reembolso via ONVO Pay al metodo de pago original.',
           ],
         },
