@@ -41,7 +41,8 @@
     },
     "categories": {
       "title": "Choisir une Catégorie",
-      "subtitle": "Choisissez et commandez parmi notre gamme de boissons avec livraison à domicile / entreprise"
+      "subtitle": "Choisissez et commandez parmi notre gamme de boissons avec livraison à domicile / entreprise",
+      "comingSoon": "Bientôt disponible"
     },
     "about": {
       "title": "Notre Héritage",

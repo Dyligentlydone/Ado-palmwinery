@@ -41,7 +41,8 @@
     },
     "categories": {
       "title": "Category Select",
-      "subtitle": "Choose & order from our range of drinks for delivery to your home / business"
+      "subtitle": "Choose & order from our range of drinks for delivery to your home / business",
+      "comingSoon": "Coming soon"
     },
     "about": {
       "title": "Our Heritage",
