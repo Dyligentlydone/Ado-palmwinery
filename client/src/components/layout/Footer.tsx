@@ -41,7 +41,6 @@ export default function Footer() {
                   <a href="https://wa.me/50671577049" target="_blank" rel="noopener noreferrer" className="hover:text-[#3a2413] transition-colors">
                     WhatsApp: +506 7157 7049
                   </a>
-                  <p className="text-[#3a2413]/50 text-[10px] md:text-xs mt-0.5">{t('contact.directLine')}</p>
                 </li>
               </ul>
             </div>
