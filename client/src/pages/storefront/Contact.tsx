@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Mail, MapPin, Store, CheckCircle, MessageCircle } from 'lucide-react';
+import { Mail, MapPin, Phone, CheckCircle, MessageCircle } from 'lucide-react';
 import { contactAPI } from '../../services/api';
 
 export default function Contact() {
@@ -26,10 +26,10 @@ export default function Contact() {
   };
 
   const infoCards = [
-    { icon: Mail, label: t('contact.emailLabel'), value: 'info@adopalmwinery.com' },
+    { icon: Mail, label: t('contact.emailLabel'), value: 'info@drinkado.com', href: 'mailto:info@drinkado.com' },
+    { icon: Phone, label: t('contact.phoneLabel'), value: '+506 7157 7049', href: 'tel:+50671577049' },
+    { icon: MessageCircle, label: 'WhatsApp', value: '+506 7157 7049', href: 'https://wa.me/50671577049' },
     { icon: MapPin, label: t('contact.locationLabel'), value: t('contact.locationValue') },
-    { icon: Store, label: t('contact.wholesaleLabel'), value: t('contact.wholesaleValue') },
-    { icon: MessageCircle, label: 'WhatsApp', value: '+506 7157 7049', href: 'https://wa.me/50671577049', sub: t('contact.directLine') },
   ];
 
   return (
@@ -47,7 +47,7 @@ export default function Contact() {
       <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
         {/* Info cards */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-12">
-          {infoCards.map(({ icon: Icon, label, value, href, sub }) => {
+          {infoCards.map(({ icon: Icon, label, value, href }) => {
             const card = (
               <div className="bg-white rounded-xl border border-gray-100 p-5 text-center h-full">
                 <div className="w-10 h-10 mx-auto rounded-lg bg-primary-50 text-primary-600 flex items-center justify-center mb-3">
@@ -55,7 +55,6 @@ export default function Contact() {
                 </div>
                 <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{label}</p>
                 <p className="mt-1 text-sm text-gray-800">{value}</p>
-                {sub && <p className="text-xs text-gray-500">{sub}</p>}
               </div>
             );
             return href ? (

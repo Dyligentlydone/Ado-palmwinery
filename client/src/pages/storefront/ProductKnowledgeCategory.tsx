@@ -48,9 +48,16 @@ export default function ProductKnowledgeCategory() {
   const { slug } = useParams<{ slug: string }>();
   const { t } = useTranslation();
   const [products, setProducts] = useState<Product[]>([]);
+  const [featured, setFeatured] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
   const config = slug && (slug in CATEGORY_CONFIG) ? CATEGORY_CONFIG[slug as Slug] : null;
+
+  useEffect(() => {
+    productsAPI.getFeatured()
+      .then(r => setFeatured((r.data as Product[]).slice(0, 3)))
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (!config || !config.productCategorySlugs.length) {
@@ -140,6 +147,36 @@ export default function ProductKnowledgeCategory() {
               ))}
             </div>
           )}
+        </section>
+      )}
+
+      {/* Shop Now — featured picks + link to full range */}
+      {featured.length > 0 && (
+        <section className="border-t border-gray-100 bg-[#fdf3d8]/50">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+            <div className="flex items-end justify-between gap-4 mb-6">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 uppercase tracking-wide font-[family-name:var(--font-heading)]">
+                {t('knowledge.shopNow')}
+              </h2>
+              <Link
+                to="/shop"
+                className="shrink-0 inline-flex items-center gap-2 text-sm font-bold text-primary-700 uppercase tracking-wider hover:text-primary-800"
+              >
+                {t('knowledge.shopFullRange')} <ArrowRight size={16} />
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {featured.map(p => <ProductCard key={p.id} product={p} />)}
+            </div>
+            <div className="mt-8 text-center sm:hidden">
+              <Link
+                to="/shop"
+                className="inline-flex items-center gap-2 bg-primary-600 text-white font-semibold px-8 py-3 rounded-full hover:bg-primary-700 transition-colors"
+              >
+                {t('knowledge.shopFullRange')} <ArrowRight size={16} />
+              </Link>
+            </div>
+          </div>
         </section>
       )}
     </div>

@@ -18,8 +18,6 @@ export default function Products() {
   const page = parseInt(searchParams.get('page') || '1');
   const category = searchParams.get('category') || '';
   const search = searchParams.get('search') || '';
-  const sortBy = searchParams.get('sortBy') || 'createdAt';
-  const sortOrder = searchParams.get('sortOrder') || 'desc';
 
   useEffect(() => {
     productsAPI.getCategories().then(r => setCategories(r.data));
@@ -27,8 +25,10 @@ export default function Products() {
 
   useEffect(() => {
     setLoading(true);
-    const params: Record<string, string | number> = { page, sortBy, sortOrder };
-    if (category) params.category = category;
+    const params: Record<string, string | number> = { page, sortBy: 'createdAt', sortOrder: 'desc' };
+    // When a search term is present it always scans the entire range —
+    // the category filter is dropped so results aren't scoped to one category.
+    if (category && !search) params.category = category;
     if (search) params.search = search;
 
     productsAPI.getAll(params)
@@ -37,7 +37,7 @@ export default function Products() {
         setTotalPages(r.data.pagination.totalPages);
       })
       .finally(() => setLoading(false));
-  }, [page, category, search, sortBy, sortOrder]);
+  }, [page, category, search]);
 
   const updateParams = (updates: Record<string, string>) => {
     const newParams = new URLSearchParams(searchParams);
@@ -45,6 +45,8 @@ export default function Products() {
       if (v) newParams.set(k, v);
       else newParams.delete(k);
     });
+    // Typing in search jumps to whole-range results, so clear the category scope
+    if (updates.search) newParams.delete('category');
     if (updates.category !== undefined || updates.search !== undefined) newParams.set('page', '1');
     setSearchParams(newParams);
   };
@@ -67,28 +69,12 @@ export default function Products() {
             className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           />
         </div>
-        <div className="flex gap-3">
-          <select
-            value={sortBy + '_' + sortOrder}
-            onChange={e => {
-              const [sb, so] = e.target.value.split('_');
-              updateParams({ sortBy: sb, sortOrder: so });
-            }}
-            className="px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
-          >
-            <option value="createdAt_desc">Newest</option>
-            <option value="createdAt_asc">Oldest</option>
-            <option value="priceUSD_asc">Price: Low to High</option>
-            <option value="priceUSD_desc">Price: High to Low</option>
-            <option value="name_asc">Name: A-Z</option>
-          </select>
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className="flex items-center gap-2 px-4 py-2.5 border border-gray-200 rounded-lg hover:bg-gray-50 text-sm sm:hidden"
-          >
-            <SlidersHorizontal size={16} /> {t('products.filter')}
-          </button>
-        </div>
+        <button
+          onClick={() => setShowFilters(!showFilters)}
+          className="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-200 rounded-lg hover:bg-gray-50 text-sm sm:hidden"
+        >
+          <SlidersHorizontal size={16} /> {t('products.filter')}
+        </button>
       </div>
 
       <div className="flex gap-8">

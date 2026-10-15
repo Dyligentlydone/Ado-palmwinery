@@ -40,8 +40,8 @@
       "subtitle": "Our most popular selections, handpicked for you"
     },
     "categories": {
-      "title": "Browse by Category",
-      "subtitle": "Explore our full range of palm-based products"
+      "title": "Category Select",
+      "subtitle": "Choose & order from our range of drinks for delivery to your home / business"
     },
     "about": {
       "title": "Our Heritage",
@@ -201,7 +201,9 @@
     "alcoholContent": "Alcohol content",
     "nutritionNote": "Nutritional values are approximate and may vary slightly by batch.",
     "fiber": "Dietary Fiber",
-    "potassium": "Potassium"
+    "potassium": "Potassium",
+    "shopNow": "Shop Now",
+    "shopFullRange": "Shop Full Range"
   },
   "events": {
     "title": "Events & Promotions",
@@ -282,8 +284,8 @@
     "title": "Contact Us",
     "subtitle": "Questions, wholesale inquiries, press requests, or direct orders — we'd love to hear from you.",
     "emailLabel": "Email",
-    "locationLabel": "Headquarters",
-    "locationValue": "Liberia, Guanacaste, Costa Rica",
+    "locationLabel": "Address",
+    "locationValue": "Unit 8, The Solarium Village, Liberia, Guanacaste, Costa Rica",
     "wholesaleLabel": "Wholesale & Press",
     "wholesaleValue": "For wholesale inquiries, press requests, or direct orders, reach out anytime.",
     "directLine": "Contact Frank Jr directly",
@@ -295,7 +297,8 @@
     "send": "Send Message",
     "sending": "Sending...",
     "success": "Message sent! We'll get back to you soon.",
-    "error": "Something went wrong. Please try again."
+    "error": "Something went wrong. Please try again.",
+    "phoneLabel": "Phone"
   },
   "navButtons": {
     "back": "Back",
