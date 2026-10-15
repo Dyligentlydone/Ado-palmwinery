@@ -303,5 +303,11 @@
   "navButtons": {
     "back": "Atrás",
     "forward": "Adelante"
+  },
+  "newsletter": {
+    "title": "Únete a la familia ADO",
+    "subtitle": "Acceso anticipado a nuevos lanzamientos, eventos y ofertas.",
+    "placeholder": "Tu correo electrónico",
+    "button": "Registrarse"
   }
 }

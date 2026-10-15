@@ -10,7 +10,7 @@ export default function Login() {
   const { t } = useTranslation();
   const { login, register } = useAuth();
   const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
   const [tab, setTab] = useState<Tab>(pathname === '/register' ? 'register' : 'login');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -20,8 +20,12 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [showPwLogin, setShowPwLogin] = useState(false);
 
-  // register state
-  const [reg, setReg] = useState({ firstName: '', lastName: '', email: '', password: '', confirmPassword: '' });
+  // register state — email can be prefilled via ?email= (e.g. from the footer newsletter box)
+  const [reg, setReg] = useState(() => ({
+    firstName: '', lastName: '',
+    email: new URLSearchParams(search).get('email') ?? '',
+    password: '', confirmPassword: '',
+  }));
   const [showPwReg, setShowPwReg] = useState(false);
   const [showPwRegConfirm, setShowPwRegConfirm] = useState(false);
 

@@ -1,6 +1,30 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+const socialIcon = 'w-8 h-8 md:w-9 md:h-9 rounded-full border border-[#3a2413]/25 text-[#3a2413]/70 flex items-center justify-center hover:text-[#3a2413] hover:border-[#3a2413]/50 transition-colors';
+
+const InstagramIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="2" width="20" height="20" rx="5" />
+    <circle cx="12" cy="12" r="4.5" />
+    <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" />
+  </svg>
+);
+
+const FacebookIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M13.5 22v-8h2.7l.4-3.1h-3.1V8.9c0-.9.25-1.5 1.55-1.5h1.65V4.6c-.3-.04-1.3-.13-2.45-.13-2.45 0-4.1 1.5-4.1 4.2v2.3H7.5V14h2.7v8h3.3z" />
+  </svg>
+);
+
+const TikTokIcon = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M16.6 3c.4 2 1.8 3.6 3.9 3.9v3.1c-1.5 0-2.8-.5-3.9-1.2v6.6c0 3.9-2.8 6.6-6.4 6.6-3.5 0-6.2-2.6-6.2-6.1 0-3.4 2.7-6 6.1-6 .3 0 .7 0 1 .1v3.2c-.3-.1-.6-.2-1-.2-1.7 0-3 1.4-3 3 0 1.7 1.3 3 3 3 1.9 0 3.2-1.5 3.2-3.7V3h3.3z" />
+  </svg>
+);
+
+const chip = 'h-6 md:h-7 px-2.5 rounded bg-white/85 border border-[#3a2413]/10 flex items-center justify-center shadow-sm';
+
 export default function Footer() {
   const { t } = useTranslation();
 
@@ -64,6 +88,40 @@ export default function Footer() {
             <span className="hidden md:inline text-[#3a2413]/25 select-none">·</span>
             <Link to="/orders" className="text-[#3a2413]/70 hover:text-[#3a2413] underline-offset-4 decoration-2 decoration-transparent hover:decoration-[#d7b73f] underline transition-all">{t('nav.myOrders')}</Link>
           </nav>
+
+          {/* Social + payment trust badges */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-4 md:mt-6">
+            <div className="flex items-center gap-2.5">
+              <a href="https://instagram.com/drinkado" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className={socialIcon}>
+                <InstagramIcon />
+              </a>
+              <a href="https://facebook.com/drinkado" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className={socialIcon}>
+                <FacebookIcon />
+              </a>
+              <a href="https://tiktok.com/@drinkado" target="_blank" rel="noopener noreferrer" aria-label="TikTok" className={socialIcon}>
+                <TikTokIcon />
+              </a>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className={chip}>
+                <svg viewBox="0 0 48 16" className="h-3 md:h-3.5 w-auto" aria-label="Visa">
+                  <text x="24" y="13" textAnchor="middle" fontFamily="Arial, sans-serif" fontWeight="800" fontStyle="italic" fontSize="15" fill="#1A1F71">VISA</text>
+                </svg>
+              </span>
+              <span className={chip}>
+                <svg viewBox="0 0 36 22" className="h-3.5 md:h-4 w-auto" aria-label="Mastercard">
+                  <circle cx="14" cy="11" r="8" fill="#EB001B" />
+                  <circle cx="22" cy="11" r="8" fill="#F79E1B" fillOpacity="0.9" />
+                </svg>
+              </span>
+              <span className={chip}>
+                <svg viewBox="0 0 52 16" className="h-2.5 md:h-3 w-auto" aria-label="American Express">
+                  <rect width="52" height="16" rx="2" fill="#2E77BC" />
+                  <text x="26" y="12" textAnchor="middle" fontFamily="Arial, sans-serif" fontWeight="800" fontSize="9.5" fill="#fff">AMEX</text>
+                </svg>
+              </span>
+            </div>
+          </div>
 
           <div className="border-t border-[#3a2413]/15 mt-4 md:mt-8 pt-3 md:pt-6 flex flex-col md:flex-row items-center md:items-center gap-2 md:gap-4 justify-between text-[10px] md:text-sm text-[#3a2413]/50">
             <span className="order-2 md:order-1">&copy; {new Date().getFullYear()} ADO Palmwinery. {t('footer.rights')}</span>
