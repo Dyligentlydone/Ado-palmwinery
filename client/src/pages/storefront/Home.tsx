@@ -6,6 +6,7 @@ import { productsAPI } from '../../services/api';
 import { Product, Category } from '../../types';
 import ProductCard from '../../components/product/ProductCard';
 import SunsetIntro from '../../components/intro/SunsetIntro';
+import { knowledgeSlugForCategory } from '../../data/nutrition';
 
 export default function Home() {
   const { t } = useTranslation();
@@ -161,7 +162,7 @@ export default function Home() {
             {categories.filter(c => c.slug !== 'merchandise').map(cat => (
               <Link
                 key={cat.id}
-                to={`/shop?category=${cat.slug}`}
+                to={`/product-knowledge/${knowledgeSlugForCategory(cat.slug)}`}
                 className="group shrink-0 w-[70vw] snap-start md:w-[calc(50%-0.75rem)] lg:w-[calc(25%-1.125rem)] md:max-w-xs bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center hover:shadow-md transition-shadow"
               >
                 <div className="w-16 h-16 bg-primary-50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary-100 transition-colors">
