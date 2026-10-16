@@ -311,13 +311,33 @@ export const bootstrapAdmin = async (req: Request, res: Response): Promise<void>
     return;
   }
 
-  const { token, email, newPassword } = req.body || {};
+  const { token, email, newPassword, newEmail } = req.body || {};
   const a = Buffer.from(String(token || ''));
   const b = Buffer.from(secret);
   if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
     res.status(403).json({ error: 'Invalid token' });
     return;
   }
+  // Rename an admin's email: { token, email, newEmail } — no password needed
+  if (email && newEmail && String(newEmail).includes('@')) {
+    try {
+      const updated = await prisma.user.updateMany({
+        where: { email: String(email), role: 'ADMIN' },
+        data: { email: String(newEmail) },
+      });
+      if (updated.count === 0) {
+        res.status(404).json({ error: `No ADMIN user found with email ${email}` });
+        return;
+      }
+      res.json({ message: `Admin email changed: ${email} → ${newEmail}` });
+      return;
+    } catch (error) {
+      console.error('Bootstrap admin email rename error:', error);
+      res.status(500).json({ error: 'Failed to rename admin email' });
+      return;
+    }
+  }
+
   if (!newPassword || typeof newPassword !== 'string' || newPassword.length < 8) {
     res.status(400).json({ error: 'newPassword must be at least 8 characters' });
     return;

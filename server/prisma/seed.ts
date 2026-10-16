@@ -12,7 +12,7 @@ async function main() {
   // In production, the initial admin password MUST come from ADMIN_INITIAL_PASSWORD.
   // The seed uses upsert(update: {}) so the password is only ever set on the first
   // run — subsequent deploys never overwrite an existing admin.
-  const adminEmail = process.env.ADMIN_EMAIL || 'admin@adopalmwinery.com';
+  const adminEmail = process.env.ADMIN_EMAIL || 'admin@drinkado.com';
   const initialAdminPassword = process.env.ADMIN_INITIAL_PASSWORD
     || (isProduction ? null : 'admin123456');
 
