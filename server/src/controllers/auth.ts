@@ -302,6 +302,57 @@ export const resetPassword = async (req: Request, res: Response): Promise<void> 
   }
 };
 
+// One-off admin bootstrap: resets an admin password when locked out.
+// Only active while ADMIN_BOOTSTRAP_TOKEN is set in env — disabled (404) otherwise.
+export const bootstrapAdmin = async (req: Request, res: Response): Promise<void> => {
+  const secret = process.env.ADMIN_BOOTSTRAP_TOKEN;
+  if (!secret) {
+    res.status(404).json({ error: 'Not found' });
+    return;
+  }
+
+  const { token, email, newPassword } = req.body || {};
+  const a = Buffer.from(String(token || ''));
+  const b = Buffer.from(secret);
+  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
+    res.status(403).json({ error: 'Invalid token' });
+    return;
+  }
+  if (!newPassword || typeof newPassword !== 'string' || newPassword.length < 8) {
+    res.status(400).json({ error: 'newPassword must be at least 8 characters' });
+    return;
+  }
+
+  try {
+    const passwordHash = await bcrypt.hash(newPassword, 12);
+
+    if (email && String(email).includes('@')) {
+      const updated = await prisma.user.updateMany({
+        where: { email: String(email), role: 'ADMIN' },
+        data: { passwordHash },
+      });
+      if (updated.count === 0) {
+        await prisma.user.create({
+          data: { email: String(email), passwordHash, firstName: 'Admin', lastName: 'User', role: 'ADMIN' },
+        });
+        res.json({ message: `Admin created: ${email}` });
+        return;
+      }
+      res.json({ message: `Password reset for ${email}` });
+      return;
+    }
+
+    const updated = await prisma.user.updateMany({
+      where: { role: 'ADMIN' },
+      data: { passwordHash },
+    });
+    res.json({ message: `Password reset for ${updated.count} admin user(s)` });
+  } catch (error) {
+    console.error('Bootstrap admin error:', error);
+    res.status(500).json({ error: 'Failed to reset admin password' });
+  }
+};
+
 export const adminGetUsers = async (_req: Request, res: Response): Promise<void> => {
   try {
     const users = await prisma.user.findMany({

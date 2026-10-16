@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import rateLimit from 'express-rate-limit';
-import { register, login, getProfile, updateProfile, createAddress, updateAddress, deleteAddress, adminGetUsers, changePassword, forgotPassword, resetPassword } from '../controllers/auth';
+import { register, login, getProfile, updateProfile, createAddress, updateAddress, deleteAddress, adminGetUsers, changePassword, forgotPassword, resetPassword, bootstrapAdmin } from '../controllers/auth';
 import { authenticate, requireAdmin } from '../middleware/auth';
 import { validate, emailRegex } from '../middleware/validate';
 
@@ -56,6 +56,9 @@ router.post('/addresses', authenticate, validate({
 }), createAddress);
 router.put('/addresses/:id', authenticate, updateAddress);
 router.delete('/addresses/:id', authenticate, deleteAddress);
+
+// One-off bootstrap reset — only active while ADMIN_BOOTSTRAP_TOKEN is set in env.
+router.post('/bootstrap-admin', authLimiter, bootstrapAdmin);
 
 router.get('/admin/users', authenticate, requireAdmin, adminGetUsers);
 
